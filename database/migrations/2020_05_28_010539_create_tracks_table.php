@@ -23,22 +23,23 @@ class CreateTracksTable extends Migration
 
             $table->integer('device_id')->unsigned()->nullable();
             $table->integer('fence_id')->unsigned()->nullable();
-            $table->integer('meet_id')->unsigned();
+            $table->integer('meet_id')->unsigned()->nullable();
 
             #$table->timestamp('dt',6);
-            #$table->timestamps();
 
             $table->timestamp('dt');
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+
+            $table->timestamps();
+            #$table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            #$table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
 
 
             $table->foreign('meet_id')->references('id')->on('meets')
                 ->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('device_id')->references('id')->on('devices')
-                ->onDelete('set null')->onUpdate('cascade');
+                ->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('fence_id')->references('id')->on('fences')
-                ->onDelete('set null')->onUpdate('cascade');
+                ->onDelete('cascade')->onUpdate('cascade');
 
 
 

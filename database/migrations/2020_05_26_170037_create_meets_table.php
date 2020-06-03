@@ -19,24 +19,12 @@ class CreateMeetsTable extends Migration
             $table->decimal('lat',10,8)->nullable();
             $table->decimal('lng',11,8)->nullable();
             $table->json('coords')->nullable();
-            $table->integer('device_id')->unsigned()->nullable();
-            #$table->timestamps();
+            $table->json('devices')->nullable();
+            # depois aqui faz um casting para array na model
+            # protected $casts = [ 'devices' => 'array' ];
             $table->timestamp('dt');
+            $table->timestamps();
 
-
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
-
-
-            #$table->integer('alert_id_1')->unsigned()->nullable();
-            #$table->integer('alert_id_2')->unsigned()->nullable();
-            #$table->integer('dist')->unsigned()->nullable();
-            #$table->integer('time')->unsigned()->nullable();
-            #$table->foreign('device_id')->references('id')->on('devices')
-            #->onDelete('cascade')->onUpdate('cascade');
-
-            #$table->foreign('alert_id_1')->references('id')->on('alertas')->onDelete('cascade')->onUpdate('cascade');
-            #$table->foreign('alert_id_2')->references('id')->on('alertas')->onDelete('cascade')->onUpdate('cascade');
 
         });
     }

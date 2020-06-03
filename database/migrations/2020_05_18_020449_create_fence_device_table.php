@@ -16,6 +16,8 @@ class CreateFenceDeviceTable extends Migration
         Schema::create('fence_device', function (Blueprint $table) {
             $table->increments('id');
 
+            $table->integer('device_id')->unsigned()->nullable();
+            $table->integer('fence_id')->unsigned()->nullable();
 
             $table->unique(['device_id', 'fence_id' ]);
 

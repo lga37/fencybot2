@@ -17,17 +17,21 @@ class CreateAlertsTable extends Migration
             $table->increments('id');
             $table->decimal('lat',10,8);
             $table->decimal('lng',11,8);
-            #dist
-            #dt
-            #type 0,1,2
+            $table->decimal('lat_fence',10,8)->nullable();
+            $table->decimal('lng_fence',11,8)->nullable();
 
-            #$table->integer('fence_id')->unsigned();
-            #$table->integer('device_id')->unsigned();
-            #'tem q ser pois se excluir os fencedevice deixa nulo aqui'
-            $table->integer('fencedevice_id')->unsigned()->nullable();
+            $table->unsignedFloat('dist')->nullable();
+            $table->timestamp('dt')->nullable();
+            $table->char('type',1)->default(0);
+            $table->integer('fence_id')->unsigned()->nullable();
+            $table->integer('device_id')->unsigned()->nullable();
+
             $table->timestamps();
-            $table->foreign('fencedevice_id')->references('id')->on('fence_device')
-                ->onDelete('set null')->onUpdate('set null');
+            $table->foreign('fence_id')->references('id')->on('fences')
+                ->onDelete('cascade')->onUpdate('cascade');
+
+            $table->foreign('device_id')->references('id')->on('devices')
+                ->onDelete('cascade')->onUpdate('cascade');
 
         });
     }

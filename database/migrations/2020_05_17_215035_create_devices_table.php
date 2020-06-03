@@ -18,6 +18,7 @@ class CreateDevicesTable extends Migration
             $table->string('name');
             $table->char('tel',13);
             $table->integer('r')->unsigned();
+            $table->integer('d')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->timestamps();
             $table->unique(['name', 'user_id']);

@@ -8,14 +8,6 @@
 <?php endif; ?>
 
 
-<?php if(Session::has('status')): ?>
-    <div class="alert alert-<?php echo e(session('status')['type']); ?>">
-        <?php echo e(session('status')['text']); ?>
-
-    </div>
-<?php endif; ?>
-
-
 
 
 <h1>Devices para usuario </h1>
@@ -41,8 +33,8 @@
         <th><input type="text" name="tel" class="form-control"></th>
         <th><input type="text" name="d" value="1" class="form-control"></th>
         <th><input type="text" name="r" value="10" class="form-control"></th>
-        <th colspan="3" class="">
-            <button class="btn btn-outline-success">add</button>
+        <th colspan="4" class="">
+            <button class="btn btn-block btn-outline-success">add</button>
             </form>
         </th>
     </tr>
@@ -110,7 +102,7 @@
         </td>
         <td>
             <a target="_blank" href="<?php echo e(route('device.show',['device'=>$device])); ?>"
-            class="btn btn-warning">map</a>
+            class="btn btn-primary">map</a>
         </td>
     </tr>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
@@ -139,7 +131,7 @@
         <td class=""><?php echo e($fencedevice->fence->name ?? ''); ?> </td>
         <td class=""><?php echo e($fencedevice->device->name ?? ''); ?> </td>
 
-        <td class=""><?php echo e($fencedevice->alerts->count()); ?> </td>
+        <td class="">-- nao tem mais fencedevice_id</td>
 
         <td class="">
             <form method="POST" action="<?php echo e(route('fencedevice.destroy',['fencedevice'=>$fencedevice])); ?>">

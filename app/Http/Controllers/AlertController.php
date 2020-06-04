@@ -120,49 +120,69 @@ class AlertController extends Controller
         //
     }
 
+    private function getDevicesByTel($tel){
+        $devices_id = Device::where('tel',$tel)->select('id','name')->get();
+
+        return $devices_id;
+    }
+
+    #public function postAlerts(Request $request, string $tel=false)
     public function postAlerts(Request $request, string $tel)
     {
 
-        /*
-        [ { "id":99, "type": 2, "lat":-22.921545, "lng":-43.232289,
-            "dist": 15.3, "dt":26052020151345 },
-          { "id":99, "type": 1, "lat":-22.921545, "lng":-43.232289,
-            "dist": 0, "dt":26052020151357 } ]
-*/
-        foreach($request as $k=>$v){
-            $alert = new Alert();
-            $alert->fence_id = $v['id'];
-            $alert->lat = $v['lat'];
-            $alert->lng = $v['lng'];
-            $alert->dist = $v['dist'];
-            $alert->dt = $v['dt'];
-            $alert->create();
+        $devices = $this->getDevicesByTel($tel);
+        $lotes = $request->json();
+        #dd($lotes);
+        if($devices->count() > 0){
+            $devices->each(function ($item,$key) use ($lotes){
+                foreach($lotes as $v){
+                    $alert = new Alert();
+                    $alert->device_id = (int) $item->id;
+
+                    $alert->fence_id = $v['fence_id'];
+                    $alert->lat = $v['lat'];
+                    $alert->lng = $v['lng'];
+                    $alert->lat_fence = $v['lat_fence']??null;
+                    $alert->lng_fence = $v['lng_fence']??null;
+                    $alert->dist = $v['dist']??null;
+                    $alert->type = $v['type'];
+                    $alert->dt = $v['dt']??null;
+                    $alert->save();
+                }
+
+            });
+        } else {
+            return response()->json(['status' => 'ERRO'], 406);
         }
         return response()->json(['status' => 'OK'], 201);
     }
 
-    public function batch(Request $request)
+    public function batch(Request $request, string $tel)
     {
 
-        /*
-[ { "id":99, "lat":-22.921545, "lng":-43.232289,
-    "dt":”26/05/2020 15:13:45" },
-  { "id":99, "lat":-21.914743, "lng":-42.212672,
-    "dt":"26/05/2020 15:13:57" } ]
-
-*/
+        $devices = $this->getDevicesByTel($tel);
         $lotes = $request->json();
-        //var_dump($lotes);
-        //dd($lotes);
-        foreach($lotes as $k=>$v){
-            $alert = new Alert();
-            $alert->device_id = (int) $v['id'];
-            $alert->lat = $v['lat'];
-            $alert->lng = $v['lng'];
-            $alert->dt = $v['dt'];
-            $alert->save();
+        #dd($lotes);
+        if($devices->count() > 0){
+            $devices->each(function ($item,$key) use ($lotes){
+                foreach($lotes as $v){
+                    $alert = new Alert();
+                    $alert->device_id = (int) $item->id;
+
+                    $alert->lat = $v['lat'];
+                    $alert->lng = $v['lng'];
+                    $alert->dt = $v['dt']??null;
+                    $alert->save();
+
+                }
+
+            });
+        } else {
+            return response()->json(['status' => 'ERRO'], 406);
         }
         return response()->json(['status' => 'OK'], 201);
+
+
     }
 
 

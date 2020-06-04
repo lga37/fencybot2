@@ -9,13 +9,6 @@
 @endif
 
 
-@if(Session::has('status'))
-    <div class="alert alert-{{ session('status')['type'] }}">
-        {{session('status')['text']}}
-    </div>
-@endif
-
-
 
 
 <h1>Devices para usuario </h1>
@@ -41,8 +34,8 @@
         <th><input type="text" name="tel" class="form-control"></th>
         <th><input type="text" name="d" value="1" class="form-control"></th>
         <th><input type="text" name="r" value="10" class="form-control"></th>
-        <th colspan="3" class="">
-            <button class="btn btn-outline-success">add</button>
+        <th colspan="4" class="">
+            <button class="btn btn-block btn-outline-success">add</button>
             </form>
         </th>
     </tr>
@@ -110,7 +103,7 @@
         </td>
         <td>
             <a target="_blank" href="{{ route('device.show',['device'=>$device]) }}"
-            class="btn btn-warning">map</a>
+            class="btn btn-primary">map</a>
         </td>
     </tr>
     @empty
@@ -139,7 +132,7 @@
         <td class="">{{ $fencedevice->fence->name ?? '' }} </td>
         <td class="">{{ $fencedevice->device->name ?? '' }} </td>
 
-        <td class="">{{ $fencedevice->alerts->count() }} </td>
+        <td class="">-- nao tem mais fencedevice_id</td>
 
         <td class="">
             <form method="POST" action="{{ route('fencedevice.destroy',['fencedevice'=>$fencedevice]) }}">

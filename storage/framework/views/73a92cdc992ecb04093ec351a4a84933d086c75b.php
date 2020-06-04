@@ -48,7 +48,10 @@
 <?php endif; ?>
 
 
-<h2 class="shadow p-3 m-3 bg-white rounded-lg border border-info rounded">Cercas</h2>
+<h2 class="shadow p-3 m-3 bg-white rounded-lg border border-info rounded">Cercas
+    <?php echo e(Auth::id()); ?>
+
+</h2>
 
 
 <table class="table table-hover table-striped">
@@ -142,8 +145,6 @@
         <span class="help-block"></span>
     </div>
 
-    <!--     <div style="border: 1px solid green; width: 100%; height: 400px;" id="map"></div>
- -->
     <div id="mapa" class="border border-danger"></div>
 
 
@@ -154,6 +155,8 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
         <div class="row">
+            <input type="hidden" id="user_id" value="<?php echo e(Auth::user()->id); ?>">
+
             <div class="col-md-3">
                 <input class="form-control-lg  border border-success" id="nome_cerca" placeholder="Nome da Cerca">
             </div>

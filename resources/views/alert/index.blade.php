@@ -8,37 +8,40 @@
 </div>
 @endif
 
-
 <h1>Alertas </h1>
 <table class="table table-striped">
     <tr>
         <th>id</th>
         <th>ts</th>
-        <th>lat/lng</th>
+        <th>type</th>
         <th>dt</th>
+        <th>lat/lng</th>
+        <th>lat/lng</th>
+        <th>dist</th>
         <th>device</th>
+        <th>cerca</th>
         <th>map</th>
         <th>del</th>
     </tr>
-
-
     @forelse ($alerts as $alert)
-
     <tr>
         <td>{{ $alert->id }}</td>
         <td>{{ $alert->created_at }}</td>
-        <td>{{ $alert->lat }} {{ $alert->lng }} </td>
+        <td>{{ $alert->type }}</td>
         <td>{{ $alert->dt }}</td>
+        <td>{{ $alert->lat }} {{ $alert->lng }} </td>
+        <td>{{ $alert->lat_fence }} {{ $alert->lng_fence }} </td>
+        <td>{{ $alert->dist }}</td>
 
         <td>{{ $alert->device->name ?? '' }}</td>
+        <td>{{ $alert->fence->name ?? '' }}</td>
 
         <td class="px-4 py-4">
             <button class="btn btn-primary"
-            data-lat="{{ $alert->lat }}"
-                data-lng="{{ $alert->lng }}" data-toggle="modal" data-target="#modal">map</button>
+            data-lat="{{ $alert->lat }}" data-lng="{{ $alert->lng }}"
+            data-cerca="{{ $alert->fence->fence ?? false }}"
+            data-toggle="modal" data-target="#modal">map</button>
         </td>
-
-
         <td class="px-4 py-4">
             <form method="POST" action="{{ route('alert.destroy',['alert'=>$alert]) }}">
                 @method('DELETE')
@@ -67,11 +70,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div id="map" class="mb-2" style="width:700px;height:600px; ">
-                    <!--                     <div style="width: 100%; height: 100%" id="address-map"></div>
- -->
-                </div>
-
+                <div id="map" class="mb-2" style="width:98%;height:600px; "></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -94,17 +93,12 @@
 
         $('#modal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget)
-            var lat = parseFloat(button.data('lat'));
-            var lng = parseFloat(button.data('lng'));
-            var cerca = button.data('cerca');
-            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var lat = parseFloat(button.data('lat')) || -22.90278;
+            var lng = parseFloat(button.data('lng')) || -43.2075;
+            var cerca = button.data('cerca') || false;
             var modal = $(this)
-            //modal.find('.modal-title').text('New message to ' + recipient)
+            modal.find('.modal-title').text(' Detalhamento:'+ lat +' / '+ lng)
             //modal.find('.modal-body input').val(recipient)
-
-            lat = -22.90278;
-            lng = -43.2075;
 
             var map = new google.maps.Map(document.getElementById('map'), {
                 center: { lat: lat, lng: lng },
@@ -119,39 +113,35 @@
                 map: map,
                 position: { lat: lat, lng: lng }
             });
+            //alert(cerca);
+            if(cerca){
+                var fence = new GMapFence();
+                for (let i = 0; i < cerca.length; i++) {
+                    fence.addVertex(cerca[i]);
+                }
 
-            var fence = new GMapFence();
-            for (let i = 0; i < cerca.length; i++) {
-                fence.addVertex(cerca[i]);
-            }
+                if (fence.isValid()) {
+                    /*                 var bounds = new google.maps.LatLngBounds(
+                                        marker1.getPosition(), marker2.getPosition()
+                                        fence.getBounds()
+                                    );
+                                    map.fitBounds(bounds); */
+                    var pl = new google.maps.Polygon({
+                        path: fence.generatePath(),
+                        strokeColor: "#0000FF",
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        fillColor: "#0000FF",
+                        fillOpacity: 0.1
+                    });
+                    pl.setMap(map);
 
-            if (fence.isValid()) {
-
-
-                /*                 var bounds = new google.maps.LatLngBounds(
-                                    marker1.getPosition(), marker2.getPosition()
-                                    fence.getBounds()
-                                );
-                                map.fitBounds(bounds); */
-
-                var pl = new google.maps.Polygon({
-                    path: fence.generatePath(),
-                    strokeColor: "#0000FF",
-                    strokeOpacity: 0.8,
-                    strokeWeight: 2,
-                    fillColor: "#0000FF",
-                    fillOpacity: 0.1
-                });
-
-                pl.setMap(map);
-
-            } else {
-                alert('cerca invalida');
+                } else {
+                    alert('cerca invalida');
+                }
             }
 
         });
-
-
 
 
     }

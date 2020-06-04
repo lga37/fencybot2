@@ -9,7 +9,7 @@ class Device extends Model
 {
     use TenantScoped;
 
-    protected $fillable = [ 'name','tel','r','d' ];
+    protected $fillable = [ 'name','tel','r','d','user_id' ];
 
     public function user()
     {

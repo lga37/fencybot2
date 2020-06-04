@@ -13,13 +13,13 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
 
-        '/fence/add',
-        '/fence',
-        '/alert',
-        '/alert/batch',
-        '/device',
-        '/meet',
-        '/track',
+        '/adm/fence/add',
+        '/adm/fence',
+        '/adm/alert/*',
+        '/adm/alert/batch',
+        '/adm/device',
+        '/adm/meet',
+        '/adm/track',
         '/logout',
 
 

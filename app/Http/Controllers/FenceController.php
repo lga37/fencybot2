@@ -70,14 +70,18 @@ class FenceController extends Controller
     public function add(Request $request)
     {
         $name = $request->json('name');
-
         ### atencao aqui, pois se usar fence p json e fence p model da aquela baita confusao
         $cerca = $request->json('fence');
+        $user_id = $request->json('user_id');
+
+        #dd((int) $user_id);
+
+
 
         $fence = new Fence();
         $fence->name =  $name;
-        $fence->fence =  json_encode($cerca);
-        $fence->user_id = 5;
+        $fence->fence =  json_encode($cerca,true);
+        $fence->user_id = (int) $user_id;
         $fence->save();
         return response()->json(['status' => 'OK'], 201);
 

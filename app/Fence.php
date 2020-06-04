@@ -9,7 +9,7 @@ class Fence extends Model
 {
     use TenantScoped;
 
-    protected $fillable = ['name', 'fence', 'user_id', 'tenant_id'];
+    protected $fillable = ['name', 'fence', 'user_id'];
 
     public function user()
     {

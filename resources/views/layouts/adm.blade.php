@@ -191,18 +191,6 @@
                                 Alerts
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('track.index') }}">
-                                <span data-feather="bar-chart-2"></span>
-                                Tracks nao
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('meet.index') }}">
-                                <span data-feather="layers"></span>
-                                Meetings nao
-                            </a>
-                        </li>
                     </ul>
 
                     <h6

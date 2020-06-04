@@ -41,6 +41,7 @@ class DeviceController extends Controller
             $device->tel =  $request->get('tel');
             $device->r =  $request->get('r');
             $device->d =  $request->get('d');
+            $device->user_id = (int) Auth::id();
             $device->save();
 
             $fences_id = $request->get('fences_id');

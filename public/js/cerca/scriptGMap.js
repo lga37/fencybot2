@@ -1156,12 +1156,13 @@ function saveFence() {
         //modal.header = "Dados para o servidor";
         //modal.html = "<textarea rows='10' cols='60'>" + JSON.stringify(fence.vertex) + "</textarea>";
         //modal.show();
+        var user_id = document.getElementById('user_id').value;
         var nome_cerca = document.getElementById('nome_cerca').value;
-        var data = JSON.stringify({name:nome_cerca,fence:fence.vertex});
+        var data = JSON.stringify({name:nome_cerca,user_id:user_id,fence:fence.vertex});
         console.log(data);
 
         $.ajax({
-            url: "http://localhost:8000/fence/add",
+            url: "http://localhost/cerca/public/adm/fence/add",
             type: 'POST',
             contentType: "application/json; charset=utf-8",
             data: data,
@@ -1169,6 +1170,9 @@ function saveFence() {
             //crossOrigin: true,
             headers: {
                 'Access-Control-Allow-Origin': '*',
+                'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+                'Cache-Control': 'post-check=0, pre-check=0", false',
+                'Pragma': 'no-cache'
                 //'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
                 //'Access-Control-Allow-Headers': 'Content-Type'
             },

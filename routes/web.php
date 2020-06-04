@@ -3,51 +3,27 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-/*
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/adm', function () {
-    return view('aaa');
-});
-*/
-
-/*
-Route::middleware('auth')->group(function () {
-    Route::group(['namespace' => 'Profile'], function() {
-        // view
-        Route::view('/profile', 'profile.profile');
-        Route::view('/password', 'profile.password');
-        // api
-        Route::group(['prefix' => 'api/profile'], function() {
-            Route::get('/getAuthUser','UserController@getAuthUser');
-            Route::put('/updateAuthUser','UserController@updateAuthUser');
-            Route::put('/updateAuthUserPassword','UserController@updateAuthUserPassword');
-        });
-    });
-});
-*/
-
 Auth::routes();
+Route::get('/', function () { return view('welcome'); });
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::resource('fencedevice', 'FenceDeviceController', [
-    'only' => ['destroy', 'update', 'store']
-]);
 Route::resource('meet', 'MeetController', [
     'only' => ['destroy', 'index', 'store']
 ]);
-Route::resource('track', 'TrackController', [
-    'only' => ['destroy', 'index', 'store']
-]);
 
-Route::post('/alert/batch', 'AlertController@batch')->name('alert.batch');
-#Route::post('/track/add', 'MeetController@add')->name('fence.add');
-#Route::post('/fence/add', 'FenceController@add')->name('fence.add');
+Route::post('/adm/fence/add', 'FenceController@add')->name('fence.add');
+
+# alerta simples, em lotes
+Route::post('/adm/alert/batch/{tel}', 'AlertController@batch')->name('alert.batch');
+
+#puladas de cerca
+Route::post('/adm/alert/post/{tel}', 'AlertController@postAlerts')->name('alert.post');
+#Route::post('/adm/alert/{tel}/post', 'AlertController@postAlerts')->name('alert.post');
+
+Route::post('/adm/alert/track', 'MeetController@add')->name('fence.add');
+Route::post('/adm/alert/{tel}/track', 'AlertController@trackAlerts')->name('alert.track');
+
+Route::get('/adm/fence/{tel}/get', 'FenceController@getFences')->name('fence.get');
+
 
 Route::group(['prefix' => 'adm', 'middleware' => ['auth']], function () {
 
@@ -65,13 +41,13 @@ Route::group(['prefix' => 'adm', 'middleware' => ['auth']], function () {
         'only' => ['destroy', 'update', 'store', 'index', 'show']
     ]);
 
+    ###################################################
+    Route::resource('fencedevice', 'FenceDeviceController', [
+        'only' => ['destroy', 'update', 'store']
+    ]);
+
+    Route::resource('alert', 'AlertController', [
+        'only' => ['destroy', 'show', 'store', 'index']
+    ]);
+
 });
-
-Route::resource('alert', 'AlertController', [
-    'only' => ['destroy', 'show', 'store', 'index']
-]);
-
-
-Route::get('/fence/{tel}/get', 'FenceController@getFences')->name('fence.get');
-Route::post('/alert/{tel}/post', 'AlertController@postAlerts')->name('alert.post');
-Route::post('/alert/{tel}/track', 'AlertController@trackAlerts')->name('alert.track');

@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 
 trait TenantScoped{
     protected static function bootTenantScoped(){
-        static::creating(function (Model $model){
-            $model->user_id = (int) Auth::id();
-        });
+        #static::creating(function (Model $model){
+        #    $model->user_id = (int) Auth::id();
+        #});
         static::addGlobalScope(new TenantScope());
     }
 

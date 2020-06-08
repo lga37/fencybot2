@@ -110,10 +110,11 @@ class FenceController extends Controller
     public function getFences (string $tel)
     {
 
-        $devices = Device::where('tel','=',$tel)->select('id','name')
-        ->with('fences:name,fence as coords')->get();
+        $device = Device::where('tel','=',$tel)
+        ->select('id','user_id','name','t as wait_alert','d as border', 'r as pfence')
+        ->with('fences:fence_id,name,fence as coords')->first();
 
-        return response()->json(compact('devices'),200);
+        return response()->json(compact('device'),200);
         #return response()->json(['status' => 'ERRO'], 406);
 
     }

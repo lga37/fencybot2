@@ -34,6 +34,8 @@ class DeviceController extends Controller
             $device->tel =  $request->get('tel');
             $device->r =  $request->get('r');
             $device->d =  $request->get('d');
+            $device->t =  $request->get('t');
+
             #$device->user_id = (int) Auth::id();
             $device->save();
 
@@ -60,6 +62,7 @@ class DeviceController extends Controller
         $device = Device::find($id);
         $device->name =  $request->get('name');
         $device->tel =  $request->get('tel');
+        $device->t =  $request->get('t');
         $device->r =  $request->get('r');
         $device->d =  $request->get('d');
 

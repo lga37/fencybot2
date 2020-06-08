@@ -32,6 +32,7 @@
             <input type="text" name="name" class="form-control">
         </th>
         <th><input type="text" name="tel" class="form-control"></th>
+        <th><input type="text" name="t" value="15" class="form-control"></th>
         <th><input type="text" name="d" value="1" class="form-control"></th>
         <th><input type="text" name="r" value="10" class="form-control"></th>
         <th colspan="4" class="">
@@ -44,6 +45,7 @@
         <th>cerca assoc</th>
         <th>name</th>
         <th>tel</th>
+        <th>t</th>
         <th>d</th>
         <th>r</th>
         <th>upd</th>
@@ -77,6 +79,9 @@
         </td>
         <td class="">
             <input type="text" name="tel" value="{{ $device->tel }}" class="form-control">
+        </td>
+        <td class="">
+            <input type="text" name="t" value="{{ $device->t }}" class="form-control">
         </td>
         <td class="">
             <input type="text" name="d" value="{{ $device->d }}" class="form-control">

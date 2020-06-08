@@ -19,10 +19,14 @@ class CreateFenceDeviceTable extends Migration
             $table->integer('device_id')->unsigned()->nullable();
             $table->integer('fence_id')->unsigned()->nullable();
 
+
             $table->unique(['device_id', 'fence_id' ]);
 
             $table->foreign('device_id')->references('id')->on('devices')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('fence_id')->references('id')->on('fences')->onDelete('cascade')->onUpdate('cascade');
+
+            $table->integer('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')->references('id')->on('fences')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
         });

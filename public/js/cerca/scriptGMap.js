@@ -586,6 +586,16 @@ class GMapFence extends Polygon {
         return path;
     }
 
+    generateLatLngFence(){
+        let fence = [];
+
+        for (let i = 0; i < this.vertex.length; i++)
+            fence.push(this.getLatLng(i));
+
+        return fence;
+
+    }
+
     /**
     * Retorna o ponto "central" da cerca em UTM.
     *
@@ -1140,6 +1150,16 @@ function showFenceCoords() {
 }
 
 /*--------------------------------------------------------------------------------------*/
+function fence2LatLng(fence){
+    var latlng = [];
+    var len = fence.length;
+
+    for(var i=0; i<len; i++){
+        latlng.push({lat: fence[i].lat, lng: fence[i].lng });
+    }
+    return latlng;
+}
+
 
 /**
 * Simula a operação de "salvar" a cerca, ou seja, simula o SUBMIT das coordenadas da cerca
@@ -1158,15 +1178,20 @@ function saveFence() {
         //modal.show();
         var user_id = document.getElementById('user_id').value;
         var nome_cerca = document.getElementById('nome_cerca').value;
-        var data = JSON.stringify({name:nome_cerca,user_id:user_id,fence:fence.vertex});
+
+        //console.log(JSON.stringify(fence2LatLng(fence.vertex)));
+        var fenceLatLng = fence2LatLng(fence.vertex);
+
+        var data = JSON.stringify({name:nome_cerca,fence:fenceLatLng});
         console.log(data);
 
         $.ajax({
-            url: "http://localhost/cerca/public/adm/fence/add",
+            //url: "http://200.156.26.136/fencybot/public/adm/fence/add",
+            //url: "http://localhost/cerca/public/adm/fence/add",
             type: 'POST',
             contentType: "application/json; charset=utf-8",
             data: data,
-            //CrossDomain: true,
+            //crossDomain: true,
             //crossOrigin: true,
             headers: {
                 'Access-Control-Allow-Origin': '*',

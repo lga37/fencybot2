@@ -8,6 +8,7 @@ use App\Fence;
 use App\Device;
 use App\FenceDevice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use \App\Notifications\TelegramNotification;
 
 class AlertController extends Controller
@@ -15,18 +16,8 @@ class AlertController extends Controller
 
     public function index(Request $request)
     {
-        #dd($request);
-
-        $devices = Device::with('fences')->get();
-        #$devices = Device::all();
-        $fencedevices = FenceDevice::all();
-
-        #dd($devices);
-
-        $alerts = Alert::all();
-
-        $fences = Fence::paginate(6);
-        return view('alert.index', compact('fences', 'devices', 'alerts', 'fencedevices'));
+        $alerts = Alert::with(['fence','device'])->get();
+        return view('alert.index', compact('alerts'));
     }
 
 
@@ -35,19 +26,7 @@ class AlertController extends Controller
         //
     }
 
-    public function store(Request $request)
-    {
-        $this->isValid($request);
-
-        $alert = new Alert();
-        $alert->fencedevice_id =  $request->get('fencedevice_id');
-        $alert->lat = $request->get('lat');
-        $alert->lng = $request->get('lng');
-
-        $alert->save();
-
-
-
+    private function sendTelegram(){
         #Auth::user()->notify(new TelegramNotification());
         User::find(1)->notify(new TelegramNotification());
 
@@ -104,6 +83,19 @@ class AlertController extends Controller
         dd($response);
 
 */
+
+    }
+
+    public function store(Request $request)
+    {
+        $this->isValid($request);
+
+        $alert = new Alert();
+        $alert->fencedevice_id =  $request->get('fencedevice_id');
+        $alert->lat = $request->get('lat');
+        $alert->lng = $request->get('lng');
+
+        $alert->save();
 
         return response()->json(['status' => 'OK'], 201);
     }

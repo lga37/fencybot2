@@ -14,17 +14,10 @@ class DeviceController extends Controller
 {
     public function index(Request $request)
     {
-        #dd($request);
-
-        $devices = Device::with('fences')->get();
-        #$devices = Device::with('fences')->toSql();
-        #$devices = Device::all();
-        #dd($devices);
-        #$fencedevices = FenceDevice::toSql();
+        $devices = Device::all();
         $fencedevices = FenceDevice::all();
 
         #dd($fencedevices);
-
         $fences = Fence::all();
         return view('device.index', compact('fences', 'devices', 'fencedevices'));
     }
@@ -41,7 +34,7 @@ class DeviceController extends Controller
             $device->tel =  $request->get('tel');
             $device->r =  $request->get('r');
             $device->d =  $request->get('d');
-            $device->user_id = (int) Auth::id();
+            #$device->user_id = (int) Auth::id();
             $device->save();
 
             $fences_id = $request->get('fences_id');
@@ -70,15 +63,16 @@ class DeviceController extends Controller
         $device->r =  $request->get('r');
         $device->d =  $request->get('d');
 
-        #$fence_id = (int) $request->get('fence_id') ?? 0;
         $device->save();
 
-        #dd($request);
-
         $fences_id = $request->get('fences_id');
+        $fences_com_user = [];
+        $user_id = (int) Auth::id();
+        foreach($fences_id as $fence_id){
+            $fences_com_user[]=compact('fence_id','user_id');
+        }
 
-        #dd($fences_id);
-        $device->fences()->sync($fences_id);
+        $device->fences()->sync($fences_com_user);
 
 
         return back()->with('status', 'device updated!');
@@ -95,10 +89,6 @@ class DeviceController extends Controller
     {
         return view('device.show', compact('device'));
     }
-
-
-
-
 
 
     private function isValid(Request $request)

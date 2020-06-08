@@ -17,9 +17,14 @@ class Alert extends Model
         return $this->belongsTo('App\FenceDevice','fencedevice_id','id')->select('fence_id','device_id');
     }
 
-    public function fence ()
+    public function fence_old ()
     {
         return $this->fencedevice()->with('fence:id,name,fence');
+    }
+
+    public function fence ()
+    {
+        return $this->belongsTo('App\Fence');
     }
 
     public function device_old ()

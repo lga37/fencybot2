@@ -171,7 +171,7 @@
                             <a class="nav-link
                             {{ request()->routeIs('fence.*') ? 'active' : '' }}"
                             href="{{ route('fence.index') }}">
-                                <span data-feather="file"></span>
+                                <span data-feather="map-pin"></span>
                                 Fences
                             </a>
                         </li>
@@ -179,7 +179,7 @@
                             <a class="nav-link
                             {{ request()->routeIs('device.*') ? 'active' : '' }}"
                             href="{{ route('device.index') }}">
-                                <span data-feather="shopping-cart"></span>
+                                <span data-feather="target"></span>
                                 Devices
                             </a>
                         </li>
@@ -187,17 +187,18 @@
                             <a class="nav-link
                             {{ request()->routeIs('alert.*') ? 'active' : '' }}"
                             href="{{ route('alert.index') }}">
-                                <span data-feather="users"></span>
+                                <span data-feather="bell"></span>
                                 Alerts
                             </a>
                         </li>
                     </ul>
 
                     <h6
-                        class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        class="sidebar-heading d-flex justify-content-between
+                        align-items-center px-3 mt-4 mb-1 text-muted">
                         <span>Admin & Configs</span>
                         <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
-                            <span data-feather="plus-circle"></span>
+                            <span data-feather="settings"></span>
                         </a>
                     </h6>
                     <ul class="nav flex-column mb-2">
@@ -205,7 +206,7 @@
                             <a class="nav-link
                             {{ request()->routeIs('user.profile') ? 'active' : '' }}"
                             href="{{ route('user.profile') }}">
-                                <span data-feather="file-text"></span>
+                                <span data-feather="user"></span>
                                 Profile
                             </a>
                         </li>
@@ -213,7 +214,7 @@
                             <a class="nav-link
                             {{ request()->routeIs('user.telegram') ? 'active' : '' }}"
                             href="{{ route('user.telegram') }}">
-                                <span data-feather="file-text"></span>
+                                <span data-feather="phone"></span>
                                 Telegram
                             </a>
                         </li>
@@ -221,13 +222,19 @@
                             <a class="nav-link
                             {{ request()->routeIs('user.changepass') ? 'active' : '' }}"
                             href="{{ route('user.changepass') }}">
-                                <span data-feather="file-text"></span>
+                                <span data-feather="unlock"></span>
                                 Change Password
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <span data-feather="file-text"></span>
+                                <span data-feather="log-out"></span>
+                                Logout
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span data-feather="file"></span>
                                 Others...
                             </a>
                         </li>

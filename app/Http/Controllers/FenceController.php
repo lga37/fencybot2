@@ -17,17 +17,15 @@ class FenceController extends Controller
     {
         #dd($request);
 
-        $devices = Device::with('fences')->get();
-        #$devices = Device::all();
+        #$devices = Device::with('fences')->get();
+        $devices = Device::all();
+        $fences = Fence::all();
         $fencedevices = FenceDevice::all();
 
         #dd($devices);
+        #$user_id = (int) Auth::id();
+        $alerts = Alert::with(['fence','device'])->get();
 
-        $alerts =[];
-        #$alerts = Alert::with('fence___device')->get()->toArray();
-        $alerts = Alert::all();
-
-        $fences = Fence::all();
         return view('fence.index', compact('fences','devices','alerts','fencedevices'));
     }
 
@@ -42,28 +40,18 @@ class FenceController extends Controller
         $request->only(['name', 'fence', ]);
 
         $request->validate([
-            #'name' => 'required|min:5',
-            #'fence' => 'required|json',
+            'name' => 'required|min:2',
+            'fence' => 'required|json',
         ],[
-            #'name.required' => 'Nome e obrigatorio',
-            #'name.min' => 'Minimo de 5 carcateres',
+            'name.required' => 'Nome e obrigatorio',
+            'name' => 'A cerca deve ser um JSON valido',
+            'name.min' => 'Minimo de 2 carcateres',
         ]);
         return $request;
     }
 
     public function store(Request $request)
     {
-        #dd($request->all());
-        #$this->isValid($request);
-
-        $fence = new Fence();
-        $fence->name =  $request->get('name');
-        $fence->fence = $request->get('fence');
-        $fence->user_id = Auth::id() ?? 1;
-
-        $fence->save();
-
-        return response()->json(['status' => 'OK'], 201);
 
     }
 
@@ -72,16 +60,15 @@ class FenceController extends Controller
         $name = $request->json('name');
         ### atencao aqui, pois se usar fence p json e fence p model da aquela baita confusao
         $cerca = $request->json('fence');
-        $user_id = $request->json('user_id');
+        #$user_id = $request->json('user_id');
 
         #dd((int) $user_id);
-
-
 
         $fence = new Fence();
         $fence->name =  $name;
         $fence->fence =  json_encode($cerca,true);
-        $fence->user_id = (int) $user_id;
+        #vou testar o scoped
+        #$fence->user_id = (int) $user_id;
         $fence->save();
         return response()->json(['status' => 'OK'], 201);
 
@@ -104,24 +91,30 @@ class FenceController extends Controller
         $this->isValid($request);
 
         $fence->name =  $request->get('name');
-        #$fence->fence = $request->get('fence');
         $fence->save();
 
         #dd($request);
         $devices_id = $request->get('devices_id');
-        $fence->devices()->sync($devices_id);
+
+        $user_id = (int) Auth::id();
+        foreach($devices_id as $device_id){
+            $devices_com_user[]=compact('device_id','user_id');
+        }
+
+        $fence->devices()->sync($devices_com_user);
 
 
-        return redirect('/fence')->with('alert', 'fence updated!');
+        return redirect('fence.index')->with('alert', 'fence updated!');
     }
 
     public function getFences (string $tel)
     {
 
-        $devices = Device::where('tel','=',$tel)->select('id','name','user_id')
-        ->with('fences:name,fence')->with('user:id,name')->get();
+        $devices = Device::where('tel','=',$tel)->select('id','name')
+        ->with('fences:name,fence as coords')->get();
 
         return response()->json(compact('devices'),200);
+        #return response()->json(['status' => 'ERRO'], 406);
 
     }
 
@@ -137,7 +130,7 @@ class FenceController extends Controller
         $fence = Fence::find($fence_id);
         $fence->devices()->detach($device_id);
 
-        return redirect('/fence')->with('alert', 'fence updated!');
+        return redirect('fence.index')->with('alert', 'fence updated!');
     }
 
 

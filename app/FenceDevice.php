@@ -2,12 +2,15 @@
 
 namespace App;
 
+use App\Traits\TenantScoped;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class FenceDevice extends Model
 {
+    use TenantScoped;
     protected $table = 'fence_device';
+
 
     public function fence()
     {

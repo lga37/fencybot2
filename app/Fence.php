@@ -13,6 +13,8 @@ class Fence extends Model
 
     protected $hidden = ['pivot'];
 
+
+
     public function user()
     {
         return $this->belongsTo('App\User','user_id','id');

@@ -1176,7 +1176,7 @@ function saveFence() {
         //modal.header = "Dados para o servidor";
         //modal.html = "<textarea rows='10' cols='60'>" + JSON.stringify(fence.vertex) + "</textarea>";
         //modal.show();
-        var user_id = document.getElementById('user_id').value;
+        //var user_id = document.getElementById('user_id').value;
         var nome_cerca = document.getElementById('nome_cerca').value;
 
         //console.log(JSON.stringify(fence2LatLng(fence.vertex)));
@@ -1184,6 +1184,14 @@ function saveFence() {
 
         var data = JSON.stringify({name:nome_cerca,fence:fenceLatLng});
         console.log(data);
+
+
+        html2canvas(document.querySelector("#mapa")).then(canvas => {
+            document.body.appendChild(canvas)
+            //var img = canvas.toDataURL();
+            var img = canvas.toDataURL().replace(/.*,/, '')
+            console.log({img:img})
+        });
 
         $.ajax({
             //url: "http://200.156.26.136/fencybot/public/adm/fence/add",
@@ -1204,6 +1212,7 @@ function saveFence() {
             dataType: 'json',
             success: function (d) {
                 alert('OK - cerca inserida');
+                //location.reload();
             },
             error: function (e) {
                 alert('Erro: '+JSON.stringify(e));

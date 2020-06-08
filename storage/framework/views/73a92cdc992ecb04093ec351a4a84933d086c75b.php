@@ -155,14 +155,12 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
         <div class="row">
-            <input type="hidden" id="user_id" value="<?php echo e(Auth::user()->id); ?>">
 
             <div class="col-md-3">
                 <input class="form-control-lg  border border-success" id="nome_cerca" placeholder="Nome da Cerca">
             </div>
             <div class="col-md-1">
-<!--                 <button class="btn btn-block btn-lg btn-outline-info" id="mostrar">Coords cerca</button>
- -->            </div>
+            </div>
             <div class="col-md-3">
                 <button class="btn  btn-block btn-lg btn-outline-warning " id="limpar">Limpar cerca</button>
             </div>
@@ -244,8 +242,6 @@
 
             //console.log(cerca);
 
-
-
             var fence = new GMapFence();
             for (let i = 0; i < cerca.length; i++) {
                 fence.addVertex(cerca[i]);
@@ -291,9 +287,6 @@
             }
 
         });
-
-
-
 
     }
 

@@ -264,6 +264,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
+    <script src="{{ asset('js/cerca/html2canvas.min.js') }}"></script>
     <script src="{{ asset('js/cerca/dms.js') }}"></script>
     <script src="{{ asset('js/cerca/vector3d.js') }}"></script>
     <script src="{{ asset('js/cerca/latlon-ellipsoidal.js') }}"></script>

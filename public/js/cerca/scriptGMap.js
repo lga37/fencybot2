@@ -1187,7 +1187,7 @@ function saveFence() {
 
         $.ajax({
             //url: "http://200.156.26.136/fencybot/public/adm/fence/add",
-            //url: "http://localhost/cerca/public/adm/fence/add",
+            url: "http://localhost/cerca/public/adm/fence/add",
             type: 'POST',
             contentType: "application/json; charset=utf-8",
             data: data,

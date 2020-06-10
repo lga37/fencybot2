@@ -1,13 +1,11 @@
-@extends('layouts.adm')
+<?php $__env->startSection('content'); ?>
 
-
-@section('content')
-
-@if (session('status'))
+<?php if(session('status')): ?>
 <div class="alert alert-success" role="alert">
-    {{ session('status') }}
+    <?php echo e(session('status')); ?>
+
 </div>
-@endif
+<?php endif; ?>
 
 
 
@@ -17,15 +15,15 @@
     <tr>
         <th>add</th>
         <th>
-            <form method="POST" action="{{ route('device.store') }}">
-                @csrf
+            <form method="POST" action="<?php echo e(route('device.store')); ?>">
+                <?php echo csrf_field(); ?>
                 <select name="fences_id[]" class="form-control rounded-lg border border-secondary selectpicker"
                     multiple>
                     <option selected disabled>Selecione</option>
-                    @forelse ($fences as $fence)
-                    <option value="{{ $fence->id }}">{{ $fence->name }} </option>
-                    @empty
-                    @endforelse
+                    <?php $__empty_1 = true; $__currentLoopData = $fences; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fence): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <option value="<?php echo e($fence->id); ?>"><?php echo e($fence->name); ?> </option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                    <?php endif; ?>
                 </select>
         </th>
 
@@ -55,14 +53,14 @@
         <th>map</th>
     </tr>
 
-    @forelse ($devices as $device)
+    <?php $__empty_1 = true; $__currentLoopData = $devices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $device): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
     <tr class="">
-        <td class="">{{ $device->id }}</td>
+        <td class=""><?php echo e($device->id); ?></td>
         <td class="">
-            <form method="POST" action="{{ route('device.update',['device'=>$device->id]) }}">
-                @method('PUT')
-                @csrf
+            <form method="POST" action="<?php echo e(route('device.update',['device'=>$device->id])); ?>">
+                <?php echo method_field('PUT'); ?>
+                <?php echo csrf_field(); ?>
                 <select name="fences_id[]" class="form-control border border-info selectpicker" multiple>
                     <?php
                     foreach ($fences as $fence):
@@ -76,19 +74,19 @@
                 </select>
         </td>
         <td class="">
-            <input type="text" name="name" value="{{ $device->name }}" class="form-control">
+            <input type="text" name="name" value="<?php echo e($device->name); ?>" class="form-control">
         </td>
         <td class="">
-            <input type="text" name="tel" value="{{ $device->tel }}" class="form-control">
+            <input type="text" name="tel" value="<?php echo e($device->tel); ?>" class="form-control">
         </td>
         <td class="">
-            <input type="text" name="t" value="{{ $device->t }}" class="form-control">
+            <input type="text" name="t" value="<?php echo e($device->t); ?>" class="form-control">
         </td>
         <td class="">
-            <input type="text" name="d" value="{{ $device->d }}" class="form-control">
+            <input type="text" name="d" value="<?php echo e($device->d); ?>" class="form-control">
         </td>
         <td class="">
-            <input type="text" name="r" value="{{ $device->r }}" class="form-control">
+            <input type="text" name="r" value="<?php echo e($device->r); ?>" class="form-control">
         </td>
 
         <td class="">
@@ -97,49 +95,52 @@
         </td>
 
         <td class="">
-            <form method="POST" action="{{ route('device.destroy',['device'=>$device]) }}">
-                @method('DELETE')
-                @csrf
+            <form method="POST" action="<?php echo e(route('device.destroy',['device'=>$device])); ?>">
+                <?php echo method_field('DELETE'); ?>
+                <?php echo csrf_field(); ?>
                 <button class="btn btn-danger">del</button>
             </form>
         </td>
         <td>
-            <a target="_blank" href="{{ route('fence.get',['tel'=>$device->tel]) }}" class="btn btn-warning">get</a>
+            <a target="_blank" href="<?php echo e(route('fence.get',['tel'=>$device->tel])); ?>" class="btn btn-warning">get</a>
         </td>
         <td>
-            <a target="_blank" href="{{ route('device.show',['device'=>$device]) }}" class="btn btn-primary">map</a>
+            <a target="_blank" href="<?php echo e(route('device.show',['device'=>$device])); ?>" class="btn btn-primary">map</a>
         </td>
     </tr>
-    @empty
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
     <tr>
         <td colspan="9">Nenhum Registro</td>
     </tr>
-    @endforelse
+    <?php endif; ?>
 
 </table>
 
 
-@forelse ($devices as $device)
+<?php $__empty_1 = true; $__currentLoopData = $devices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $device): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
-@if ($loop->first)
+<?php if($loop->first): ?>
 
 <div class="container-fluid mt-4">
     <div class="row justify-content-center">
-        @endif
+        <?php endif; ?>
         <div class="col-auto mb-3">
             <div class="card" style="width: 20rem;">
-                <div class="card-header">{{ $device->created_at }}</div>
+                <div class="card-header"><?php echo e($device->created_at); ?></div>
                 <div class="card-body">
-                    <h5 class="card-title">{{ $device->name }}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{ $device->tel }}</h6>
+                    <h5 class="card-title"><?php echo e($device->name); ?></h5>
+                    <h6 class="card-subtitle mb-2 text-muted"><?php echo e($device->tel); ?></h6>
 
-                    {{ $device->t }}
-                    {{ $device->d }}
-                    {{ $device->r }}
+                    <?php echo e($device->t); ?>
 
-                    <form method="POST" action="{{ route('device.update',['device'=>$device->id]) }}">
-                        @method('PUT')
-                        @csrf
+                    <?php echo e($device->d); ?>
+
+                    <?php echo e($device->r); ?>
+
+
+                    <form method="POST" action="<?php echo e(route('device.update',['device'=>$device->id])); ?>">
+                        <?php echo method_field('PUT'); ?>
+                        <?php echo csrf_field(); ?>
                         <select name="fences_id[]" class="form-control border border-info selectpicker" multiple>
                             <?php
                             foreach ($fences as $fence):
@@ -157,19 +158,19 @@
                     <a href="#" class="card-link">Another link</a>
                 </div>
                 <div class="card-footer">
-                    <a class="text-red" href="{{ route('fence.index') }}">
+                    <a class="text-red" href="<?php echo e(route('fence.index')); ?>">
                         <span data-feather="map-pin"></span>
                         Fences
                     </a>
 
-                        <form method="POST" action="{{ route('device.destroy',['device'=>$device]) }}">
-                            @method('DELETE')
-                            @csrf
+                        <form method="POST" action="<?php echo e(route('device.destroy',['device'=>$device])); ?>">
+                            <?php echo method_field('DELETE'); ?>
+                            <?php echo csrf_field(); ?>
                             <button class="btn btn-sm btn-danger">del</button>
 
-                            <a target="_blank" href="{{ route('fence.get',['tel'=>$device->tel]) }}" class="btn btn-sm btn-warning">get</a>
+                            <a target="_blank" href="<?php echo e(route('fence.get',['tel'=>$device->tel])); ?>" class="btn btn-sm btn-warning">get</a>
 
-                            <a target="_blank" href="{{ route('device.show',['device'=>$device]) }}" class="btn btn-sm btn-primary">map</a>
+                            <a target="_blank" href="<?php echo e(route('device.show',['device'=>$device])); ?>" class="btn btn-sm btn-primary">map</a>
 
                         </form>
 
@@ -179,18 +180,18 @@
         </div>
 
 
-        @if ($loop->last)
+        <?php if($loop->last): ?>
     </div>
 </div>
-@endif
+<?php endif; ?>
 
 
 
-@empty
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
 sem regs
 
-@endforelse
+<?php endif; ?>
 
 
 
@@ -212,4 +213,6 @@ sem regs
 
 
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.adm', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/fencybot/resources/views/device/index.blade.php ENDPATH**/ ?>

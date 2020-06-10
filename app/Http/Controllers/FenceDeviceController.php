@@ -2,12 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Fence;
+use App\Device;
 use App\FenceDevice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class FenceDeviceController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        $devices = Device::all();
+        $fencedevices = FenceDevice::all();
+
+        $fences = Fence::all();
+        return view('drag.index', compact('fences', 'devices', 'fencedevices'));
+    }
+
+
 
     public function store(Request $request)
     {

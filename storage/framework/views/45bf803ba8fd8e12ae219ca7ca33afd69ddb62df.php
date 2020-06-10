@@ -36,10 +36,8 @@
         <td><?php echo e($alert->fence->name ?? ''); ?></td>
 
         <td class="px-4 py-4">
-            <button class="btn btn-primary"
-            data-lat="<?php echo e($alert->lat); ?>" data-lng="<?php echo e($alert->lng); ?>"
-            data-cerca="<?php echo e($alert->fence->fence ?? false); ?>"
-            data-toggle="modal" data-target="#modal">map</button>
+            <button class="btn btn-primary" data-lat="<?php echo e($alert->lat); ?>" data-lng="<?php echo e($alert->lng); ?>"
+                data-cerca="<?php echo e($alert->fence->fence ?? false); ?>" data-toggle="modal" data-target="#modal">map</button>
         </td>
         <td class="px-4 py-4">
             <form method="POST" action="<?php echo e(route('alert.destroy',['alert'=>$alert])); ?>">
@@ -96,7 +94,7 @@
             var lng = parseFloat(button.data('lng')) || -43.2075;
             var cerca = button.data('cerca') || false;
             var modal = $(this)
-            modal.find('.modal-title').text(' Detalhamento:'+ lat +' / '+ lng)
+            modal.find('.modal-title').text(' Detalhamento:' + lat + ' / ' + lng)
             //modal.find('.modal-body input').val(recipient)
 
             var map = new google.maps.Map(document.getElementById('map'), {
@@ -113,7 +111,7 @@
                 position: { lat: lat, lng: lng }
             });
             //alert(cerca);
-            if(cerca){
+            if (cerca) {
                 var fence = new GMapFence();
                 for (let i = 0; i < cerca.length; i++) {
                     fence.addVertex(cerca[i]);
@@ -145,7 +143,13 @@
 
     }
 
+
+
 </script>
+
+
+
+
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.adm', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/cerca/resources/views/alert/index.blade.php ENDPATH**/ ?>

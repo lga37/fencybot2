@@ -13,16 +13,16 @@ Route::resource('meet', 'MeetController', [
 Route::post('/adm/fence/add', 'FenceController@add')->name('fence.add');
 
 # alerta simples, em lotes
-Route::post('/adm/alert/batch/{tel}', 'AlertController@batch')->name('alert.batch');
+Route::post('/adm/alert/track/{tel}', 'AlertController@track')->name('alert.track');
 
 #puladas de cerca
 Route::post('/adm/alert/post/{tel}', 'AlertController@postAlerts')->name('alert.post');
-#Route::post('/adm/alert/{tel}/post', 'AlertController@postAlerts')->name('alert.post');
 
-Route::post('/adm/alert/track', 'MeetController@add')->name('fence.add');
-Route::post('/adm/alert/{tel}/track', 'AlertController@trackAlerts')->name('alert.track');
 
 Route::get('/adm/fence/{tel}/get', 'FenceController@getFences')->name('fence.get');
+
+
+Route::get('/adm/drag/index', 'FenceDeviceController@index')->name('drag.index');
 
 
 Route::group(['prefix' => 'adm', 'middleware' => ['auth']], function () {

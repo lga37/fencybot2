@@ -1186,12 +1186,12 @@ function saveFence() {
         console.log(data);
 
 
-        html2canvas(document.querySelector("#mapa")).then(canvas => {
-            document.body.appendChild(canvas)
+        //html2canvas(document.querySelector("#mapa")).then(canvas => {
+            //document.body.appendChild(canvas)
             //var img = canvas.toDataURL();
-            var img = canvas.toDataURL().replace(/.*,/, '')
-            console.log({img:img})
-        });
+            //var img = canvas.toDataURL().replace(/.*,/, '')
+            //console.log({img:img})
+        //});
 
         $.ajax({
             //url: "http://200.156.26.136/fencybot/public/adm/fence/add",
@@ -1212,7 +1212,7 @@ function saveFence() {
             dataType: 'json',
             success: function (d) {
                 alert('OK - cerca inserida');
-                //location.reload();
+                location.reload();
             },
             error: function (e) {
                 alert('Erro: '+JSON.stringify(e));

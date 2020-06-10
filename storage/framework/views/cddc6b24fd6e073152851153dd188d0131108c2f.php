@@ -1,12 +1,11 @@
-@extends('layouts.adm')
+<?php $__env->startSection('content'); ?>
 
-@section('content')
-
-@if (session('status'))
+<?php if(session('status')): ?>
 <div class="alert alert-success" role="alert">
-    {{ session('status') }}
+    <?php echo e(session('status')); ?>
+
 </div>
-@endif
+<?php endif; ?>
 
 <h1>Alertas </h1>
 
@@ -62,62 +61,62 @@
 
 
 <table class="table table-striped">
-    @forelse ($alerts as $alert)
+    <?php $__empty_1 = true; $__currentLoopData = $alerts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $alert): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
     <tr>
-        <td>{{ $alert->id }}</td>
+        <td><?php echo e($alert->id); ?></td>
         <td>
-            @switch($alert->type)
-            @case(1)
+            <?php switch($alert->type):
+            case (1): ?>
             <span class="badge badge-danger">tipo 1</span>
-            @break
+            <?php break; ?>
 
-            @case(2)
+            <?php case (2): ?>
             <span class="badge badge-success">tipo 2</span>
-            @break
-            @case(3)
+            <?php break; ?>
+            <?php case (3): ?>
             <span class="badge badge-warning">tipo 3</span>
-            @break
-            @case(4)
+            <?php break; ?>
+            <?php case (4): ?>
             <span class="badge badge-info">tipo 4</span>
-            @break
-            @case(5)
+            <?php break; ?>
+            <?php case (5): ?>
             <span class="badge badge-primary">tipo 5</span>
-            @break
+            <?php break; ?>
 
-            @default
+            <?php default: ?>
             <span class="badge badge-secondary">default</span>
-            @endswitch
+            <?php endswitch; ?>
 
 
         </td>
-        <td>{{ $alert->dt->format('l d/M H:i:s') }}</td>
+        <td><?php echo e($alert->dt->format('l d/M H:i:s')); ?></td>
 
         <td><a class="btn btn-sm btn-info"
-                onclick="javascript:geocodeLatLng('{{$alert->lat}}','{{$alert->lng}}')">local</a> </td>
+                onclick="javascript:geocodeLatLng('<?php echo e($alert->lat); ?>','<?php echo e($alert->lng); ?>')">local</a> </td>
 
-        <td>{{ $alert->dist }}</td>
+        <td><?php echo e($alert->dist); ?></td>
 
-        <td>{{ $alert->device->name ?? '' }}</td>
-        <td>{{ $alert->fence->name ?? '' }}</td>
+        <td><?php echo e($alert->device->name ?? ''); ?></td>
+        <td><?php echo e($alert->fence->name ?? ''); ?></td>
 
         <td class="">
-            <button class="btn btn-primary" data-lat="{{ $alert->lat }}" data-lng="{{ $alert->lng }}"
-                data-cerca="{{ $alert->fence->fence ?? false }}" data-toggle="modal" data-target="#modal">map</button>
+            <button class="btn btn-primary" data-lat="<?php echo e($alert->lat); ?>" data-lng="<?php echo e($alert->lng); ?>"
+                data-cerca="<?php echo e($alert->fence->fence ?? false); ?>" data-toggle="modal" data-target="#modal">map</button>
         </td>
         <td class="">
-            <form method="POST" action="{{ route('alert.destroy',['alert'=>$alert]) }}">
-                @method('DELETE')
-                @csrf
+            <form method="POST" action="<?php echo e(route('alert.destroy',['alert'=>$alert])); ?>">
+                <?php echo method_field('DELETE'); ?>
+                <?php echo csrf_field(); ?>
                 <button class="btn btn-danger">del</button>
             </form>
         </td>
     </tr>
 
 
-    @empty
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
 
-    @endforelse
+    <?php endif; ?>
 </table>
 
 <hr>
@@ -144,11 +143,11 @@
 
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 
-@section('js')
-<script src="https://maps.googleapis.com/maps/api/js?key={{ env('API_GOOGLE') }}&callback=init" async defer></script>
+<?php $__env->startSection('js'); ?>
+<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo e(env('API_GOOGLE')); ?>&callback=init" async defer></script>
 <script>
 
 
@@ -243,4 +242,6 @@
 
 
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.adm', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/fencybot/resources/views/alert/index.blade.php ENDPATH**/ ?>

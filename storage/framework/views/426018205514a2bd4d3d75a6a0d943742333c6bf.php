@@ -134,7 +134,7 @@
             box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
         }
     </style>
-    @yield('css')
+    <?php echo $__env->yieldContent('css'); ?>
 
 </head>
 
@@ -146,7 +146,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
-        <form method="POST" action="{{ route('logout') }}">
+        <form method="POST" action="<?php echo e(route('logout')); ?>">
             <button class="btn-outline-danger p-2 rounded-lg text-nowrap mr-2">Sign Out</button>
         </form>
 
@@ -161,40 +161,40 @@
                         <li class="nav-item">
 
                             <a class="nav-link
-                            {{ request()->routeIs('home') ? 'active' : '' }}"
-                            href="{{ route('home') }}">
+                            <?php echo e(request()->routeIs('home') ? 'active' : ''); ?>"
+                            href="<?php echo e(route('home')); ?>">
                                 <span data-feather="home"></span>
                                 Home
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link
-                            {{ request()->routeIs('fence.*') ? 'active' : '' }}"
-                            href="{{ route('fence.index') }}">
+                            <?php echo e(request()->routeIs('fence.*') ? 'active' : ''); ?>"
+                            href="<?php echo e(route('fence.index')); ?>">
                                 <span data-feather="map-pin"></span>
                                 Fences
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link
-                            {{ request()->routeIs('device.*') ? 'active' : '' }}"
-                            href="{{ route('device.index') }}">
+                            <?php echo e(request()->routeIs('device.*') ? 'active' : ''); ?>"
+                            href="<?php echo e(route('device.index')); ?>">
                                 <span data-feather="target"></span>
                                 Devices
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link
-                            {{ request()->routeIs('drag.*') ? 'active' : '' }}"
-                            href="{{ route('drag.index') }}">
+                            <?php echo e(request()->routeIs('drag.*') ? 'active' : ''); ?>"
+                            href="<?php echo e(route('drag.index')); ?>">
                                 <span data-feather="target"></span>
                                 Drag And Drop
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link
-                            {{ request()->routeIs('alert.*') ? 'active' : '' }}"
-                            href="{{ route('alert.index') }}">
+                            <?php echo e(request()->routeIs('alert.*') ? 'active' : ''); ?>"
+                            href="<?php echo e(route('alert.index')); ?>">
                                 <span data-feather="bell"></span>
                                 Alerts
                             </a>
@@ -212,24 +212,24 @@
                     <ul class="nav flex-column mb-2">
                         <li class="nav-item">
                             <a class="nav-link
-                            {{ request()->routeIs('user.profile') ? 'active' : '' }}"
-                            href="{{ route('user.profile') }}">
+                            <?php echo e(request()->routeIs('user.profile') ? 'active' : ''); ?>"
+                            href="<?php echo e(route('user.profile')); ?>">
                                 <span data-feather="user"></span>
                                 Profile
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link
-                            {{ request()->routeIs('user.telegram') ? 'active' : '' }}"
-                            href="{{ route('user.telegram') }}">
+                            <?php echo e(request()->routeIs('user.telegram') ? 'active' : ''); ?>"
+                            href="<?php echo e(route('user.telegram')); ?>">
                                 <span data-feather="phone"></span>
                                 Telegram
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link
-                            {{ request()->routeIs('user.changepass') ? 'active' : '' }}"
-                            href="{{ route('user.changepass') }}">
+                            <?php echo e(request()->routeIs('user.changepass') ? 'active' : ''); ?>"
+                            href="<?php echo e(route('user.changepass')); ?>">
                                 <span data-feather="unlock"></span>
                                 Change Password
                             </a>
@@ -251,7 +251,7 @@
             </nav>
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-                @yield('content')
+                <?php echo $__env->yieldContent('content'); ?>
             </main>
         </div>
     </div>
@@ -272,12 +272,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
-    <script src="{{ asset('js/cerca/html2canvas.min.js') }}"></script>
-    <script src="{{ asset('js/cerca/dms.js') }}"></script>
-    <script src="{{ asset('js/cerca/vector3d.js') }}"></script>
-    <script src="{{ asset('js/cerca/latlon-ellipsoidal.js') }}"></script>
-    <script src="{{ asset('js/cerca/utm.js') }}"></script>
-    <script src="{{ asset('js/cerca/scriptGMap.js') }}"></script>
+    <script src="<?php echo e(asset('js/cerca/html2canvas.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('js/cerca/dms.js')); ?>"></script>
+    <script src="<?php echo e(asset('js/cerca/vector3d.js')); ?>"></script>
+    <script src="<?php echo e(asset('js/cerca/latlon-ellipsoidal.js')); ?>"></script>
+    <script src="<?php echo e(asset('js/cerca/utm.js')); ?>"></script>
+    <script src="<?php echo e(asset('js/cerca/scriptGMap.js')); ?>"></script>
 
 
     <script>
@@ -293,6 +293,7 @@
 
         }());
     </script>
-    @yield('js')
+    <?php echo $__env->yieldContent('js'); ?>
 </body>
 </html>
+<?php /**PATH /var/www/fencybot/resources/views/layouts/adm.blade.php ENDPATH**/ ?>

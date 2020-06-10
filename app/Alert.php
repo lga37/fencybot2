@@ -8,6 +8,7 @@ class Alert extends Model
 {
     protected $casts = [
         'created_at' => 'datetime',
+        'dt' => 'datetime',
     ];
 
     protected $fillable = ['lat','lng','dt','device_id',];

@@ -1,6 +1,4 @@
-@extends('layouts.adm')
-
-@section('css')
+<?php $__env->startSection('css'); ?>
 <style>
     #mapa {
         width: 100%;
@@ -32,25 +30,27 @@
         cursor: context-menu;
     }
 </style>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 
-@if (session('status'))
+<?php if(session('status')): ?>
 <div class="alert alert-success" role="alert">
-    {{ session('status') }}
-</div>
-@endif
+    <?php echo e(session('status')); ?>
 
-@if ($errors->any())
+</div>
+<?php endif; ?>
+
+<?php if($errors->any()): ?>
 <div class="alert alert-danger">
     Houve erros no Formulario
 </div>
-@endif
+<?php endif; ?>
 
 
 <h2 class="shadow p-3 m-3 bg-white rounded-lg border border-info rounded">Cercas
-    {{ Auth::id() }}
+    <?php echo e(Auth::id()); ?>
+
 </h2>
 
 
@@ -65,43 +65,45 @@
         <th>del</th>
     </tr>
 
-    @forelse ($fences as $fence)
+    <?php $__empty_1 = true; $__currentLoopData = $fences; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fence): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
     <tr class="">
-        <td class="">{{ $fence->id }}</td>
+        <td class=""><?php echo e($fence->id); ?></td>
         <td class="">
-            <button class="btn btn-info" data-toggle="modal" data-cerca="{{ $fence->fence }}"
-                data-name="{{ $fence->name }}" data-target="#cerca_modal">
+            <button class="btn btn-info" data-toggle="modal" data-cerca="<?php echo e($fence->fence); ?>"
+                data-name="<?php echo e($fence->name); ?>" data-target="#cerca_modal">
                 map
             </button>
         </td>
 
 
-        @php
+        <?php
         $f = json_decode($fence['fence'],true);
         $tot = count($f) ?? 0;
 
 
-        @endphp
-        <td class="">{{ $tot }}</td>
+        ?>
+        <td class=""><?php echo e($tot); ?></td>
 
         <td>
-            <form method="POST" action="{{ route('fence.update',['fence'=>$fence]) }}">
-                @method('PUT')
-                @csrf
+            <form method="POST" action="<?php echo e(route('fence.update',['fence'=>$fence])); ?>">
+                <?php echo method_field('PUT'); ?>
+                <?php echo csrf_field(); ?>
 
                 <select name="devices_id[]" class="form-control border border-info selectpicker" multiple>
-                    @foreach ($devices as $device)
-                    <option {{ in_array($device->id,$fence->devices->pluck('id')->toArray() )? 'selected' : '' }}
-                        value="{{ $device->id }}">{{ $device->name }}
+                    <?php $__currentLoopData = $devices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $device): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option <?php echo e(in_array($device->id,$fence->devices->pluck('id')->toArray() )? 'selected' : ''); ?>
+
+                        value="<?php echo e($device->id); ?>"><?php echo e($device->name); ?>
+
                     </option>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
 
         </td>
 
 
         <td class="">
-            <input type="text" name="name" value="{{ $fence->name }}" class="form-control">
+            <input type="text" name="name" value="<?php echo e($fence->name); ?>" class="form-control">
         </td>
 
         <td class="">
@@ -112,18 +114,18 @@
 
 
         <td class="">
-            <form method="POST" action="{{ route('fence.destroy',['fence'=>$fence]) }}">
-                @method('DELETE')
-                @csrf
+            <form method="POST" action="<?php echo e(route('fence.destroy',['fence'=>$fence])); ?>">
+                <?php echo method_field('DELETE'); ?>
+                <?php echo csrf_field(); ?>
                 <button class="btn btn-danger">del</button>
             </form>
         </td>
     </tr>
-    @empty
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
     <tr>
         <td colspan="9">Nenhum Registro</td>
     </tr>
-    @endforelse
+    <?php endif; ?>
 
 </table>
 
@@ -167,25 +169,25 @@
 </div>
 
 <br><br>
-@forelse ($fences as $fence)
+<?php $__empty_1 = true; $__currentLoopData = $fences; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fence): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
-@if ($loop->first)
+<?php if($loop->first): ?>
 
 <div class="container-fluid mt-4">
     <div class="row justify-content-center">
-        @endif
+        <?php endif; ?>
         <div class="col-auto mb-3">
             <div class="card" style="width: 20rem;">
-                <div class="card-header">{{ $fence->created_at }}</div>
+                <div class="card-header"><?php echo e($fence->created_at); ?></div>
                 <div class="card-body">
-                    <h5 class="card-title">{{ $fence->name }}</h5>
+                    <h5 class="card-title"><?php echo e($fence->name); ?></h5>
                     <h6 class="card-subtitle mb-2 text-muted">
 
                     </h6>
 
-                    <form method="POST" action="{{ route('fence.update',['fence'=>$fence->id]) }}">
-                        @method('PUT')
-                        @csrf
+                    <form method="POST" action="<?php echo e(route('fence.update',['fence'=>$fence->id])); ?>">
+                        <?php echo method_field('PUT'); ?>
+                        <?php echo csrf_field(); ?>
                         <select name="devices_id[]" class="form-control border border-info selectpicker" multiple>
                             <?php
                             foreach ($devices as $device):
@@ -203,20 +205,20 @@
                     <a href="#" class="card-link">Another link</a>
                 </div>
                 <div class="card-footer">
-                    <a class="text-red" href="{{ route('fence.index') }}">
+                    <a class="text-red" href="<?php echo e(route('fence.index')); ?>">
                         <span data-feather="map-pin"></span>
                         Link
                     </a>
 
-                        <form method="POST" action="{{ route('fence.destroy',['fence'=>$fence]) }}">
-                            @method('DELETE')
-                            @csrf
+                        <form method="POST" action="<?php echo e(route('fence.destroy',['fence'=>$fence])); ?>">
+                            <?php echo method_field('DELETE'); ?>
+                            <?php echo csrf_field(); ?>
                             <button class="btn btn-sm btn-danger">del</button>
 
                             <a href="#" class="btn btn-sm btn-primary"
 
-                                data-cerca="{{ $fence->fence ?? false }}"
-                                data-name="{{ $fence->name }}"
+                                data-cerca="<?php echo e($fence->fence ?? false); ?>"
+                                data-name="<?php echo e($fence->name); ?>"
                                 data-toggle="modal"
                                 data-target="#modal_cerca">map</a>
 
@@ -229,18 +231,18 @@
         </div>
 
 
-        @if ($loop->last)
+        <?php if($loop->last): ?>
     </div>
 </div>
-@endif
+<?php endif; ?>
 
 
 
-@empty
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
 sem regs
 
-@endforelse
+<?php endif; ?>
 
 <br><br>
 
@@ -292,10 +294,10 @@ sem regs
 
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('js')
-<script src="https://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE')}}&libraries=places&callback=init" async
+<?php $__env->startSection('js'); ?>
+<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo e(env('API_GOOGLE')); ?>&libraries=places&callback=init" async
     defer></script>
 <script>
     cerca_modal();
@@ -443,4 +445,6 @@ sem regs
     }
 
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.adm', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/fencybot/resources/views/fence/index.blade.php ENDPATH**/ ?>

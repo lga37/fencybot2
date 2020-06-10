@@ -6,6 +6,7 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use TelegramNotifications\TelegramChannel;
+use Illuminate\Notifications\Messages\MailMessage;
 use TelegramNotifications\Messages\TelegramMessage;
 use TelegramNotifications\Messages\TelegramCollection;
 
@@ -33,23 +34,15 @@ class TelegramNotification extends Notification
     }
 */
 
-    public function toTelegram()
+    public function toTelegram($msg,$type,$lat,$lng)
     {
         return (new TelegramCollection())
-            ->message(['text' => 'Hello, world! <b>negrito</b>','parse_mode'=>'html'])
+            ->message(['text' => $msg,'parse_mode'=>'html'])
             ->location(['latitude' => 55.755768, 'longitude' => 37.617671])
             ->venue(
                 ['latitude' => 55.755768, 'longitude' => 37.617671,
                 'title'=>'title','address'=>'address','foursquare_id'=>'foursquare_id',]
                 )
-
-            #->photo(['photo'=> 'ggdgdgdfg','caption'=>'uma caption da imagem'])
-
-            #->audio(['audio'=> 'dfgdfgdfgdf','caption'=>'caption','title'=>'title',])
-            #->document()
-            #->video()
-            #->voice()
-            #->contact()
 
             ->sticker(['sticker' => 'CAADBQADJwEAAl7ylwK4Q0M5P7UxhQI']);
     }

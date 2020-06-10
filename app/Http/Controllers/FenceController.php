@@ -65,11 +65,10 @@ class FenceController extends Controller
         #dd((int) $user_id);
 
 
-
-
         $fence = new Fence();
         $fence->name =  $name;
-        $fence->fence =  json_encode($cerca,true);
+        //json_encode($array,JSON_UNESCAPED_SLASHES);
+        $fence->fence =  json_encode($cerca,JSON_UNESCAPED_SLASHES);
         #vou testar o scoped
         #$fence->user_id = (int) $user_id;
         $fence->save();

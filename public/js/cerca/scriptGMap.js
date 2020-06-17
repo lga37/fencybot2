@@ -1204,7 +1204,7 @@ function saveFence() {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
-                'Cache-Control': 'post-check=0, pre-check=0", false',
+                'Cache-Control': 'post-check=0, pre-check=0, false',
                 'Pragma': 'no-cache'
                 //'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
                 //'Access-Control-Allow-Headers': 'Content-Type'

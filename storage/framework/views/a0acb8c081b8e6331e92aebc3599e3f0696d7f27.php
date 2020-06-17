@@ -1,120 +1,95 @@
 <?php $__env->startSection('content'); ?>
 
-<?php if(session('status')): ?>
-<div class="alert alert-success" role="alert">
-    <?php echo e(session('status')); ?>
-
-</div>
-<?php endif; ?>
+<?php echo $__env->make('shared.msgs', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('shared.header', ['name' => 'Devices'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 
+<form method="POST" action="<?php echo e(route('device.store')); ?>">
+    <?php echo csrf_field(); ?>
+
+    <div class="input-group mt-1">
+        <div class="input-group-prepend">
+            <div class="input-group-text" data-toggle="tooltip" data-placement="top"
+                title="Tooltip on top">?</div>
+        </div>
+        <input class="form-control" placeholder="Device Name" name="name" >
+    </div>
+
+    <div class="input-group mt-1">
+        <div class="input-group-prepend">
+            <div class="input-group-text" data-toggle="tooltip" data-placement="top"
+                title="Tooltip on top">?</div>
+        </div>
+        <input class="form-control" placeholder="Device Tel Number" name="tel" >
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-1">
+            <div class="" data-toggle="tooltip" data-placement="top"
+            title="Time to receive the alert in seconds, from 0 to 60">? time</div>
+        </div>
+        <div class="col-md-9">
+            <input type="range" name="t" id="t" class="custom-range"
+                min="0" step="5" max="60" oninput="t_output.value = t.value">
+        </div>
+        <div class="col-md-1">
+            <output name="t_output" id="t_output"></output>
+        </div>
+    </div>
 
 
-<h1>Devices para usuario </h1>
-<table class="table table-striped">
-    <tr>
-        <th>add</th>
-        <th>
-            <form method="POST" action="<?php echo e(route('device.store')); ?>">
-                <?php echo csrf_field(); ?>
-                <select name="fences_id[]" class="form-control rounded-lg border border-secondary selectpicker"
-                    multiple>
-                    <option selected disabled>Selecione</option>
-                    <?php $__empty_1 = true; $__currentLoopData = $fences; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fence): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                    <option value="<?php echo e($fence->id); ?>"><?php echo e($fence->name); ?> </option>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                    <?php endif; ?>
-                </select>
-        </th>
+    <div class="row">
+        <div class="col-md-1">
+            <div class="" data-toggle="tooltip" data-placement="top"
+            title="Minimal distance to Associated Fence, from 10 to 50 meters ">? dist</div>
+        </div>
+        <div class="col-md-9">
+            <input type="range" name="d" id="d" class="custom-range"
+                min="10" step="5" max="50" oninput="d_output.value = d.value">
+        </div>
+        <div class="col-md-1">
+            <output name="d_output" id="d_output"></output>
+        </div>
+    </div>
 
-        <th class="">
-            <input type="text" name="name" class="form-control">
-        </th>
-        <th><input type="text" name="tel" class="form-control"></th>
-        <th><input type="text" name="t" value="15" class="form-control"></th>
-        <th><input type="text" name="d" value="1" class="form-control"></th>
-        <th><input type="text" name="r" value="10" class="form-control"></th>
-        <th colspan="4" class="">
-            <button class="btn btn-block btn-outline-success">add</button>
-            </form>
-        </th>
-    </tr>
-    <tr>
-        <th>id</th>
-        <th>cerca assoc</th>
-        <th>name</th>
-        <th>tel</th>
-        <th>t</th>
-        <th>d</th>
-        <th>r</th>
-        <th>upd</th>
-        <th>del</th>
-        <th>get</th>
-        <th>map</th>
-    </tr>
 
-    <?php $__empty_1 = true; $__currentLoopData = $devices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $device): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+    <div class="row">
+        <div class="col-md-1">
+            <div class="" data-toggle="tooltip" data-placement="top"
+            title="Radius of the Personal Area, from 1 to 5 meters,
+            used to fire a meet event with others registered Users">? radius</div>
+        </div>
+        <div class="col-md-9">
+            <input type="range" name="r" id="r" class="custom-range"
+                min="1" step=".5" max="5" oninput="r_output.value = r.value">
+        </div>
+        <div class="col-md-1">
+            <output name="r_output" id="r_output"></output>
+        </div>
+    </div>
 
-    <tr class="">
-        <td class=""><?php echo e($device->id); ?></td>
-        <td class="">
-            <form method="POST" action="<?php echo e(route('device.update',['device'=>$device->id])); ?>">
-                <?php echo method_field('PUT'); ?>
-                <?php echo csrf_field(); ?>
-                <select name="fences_id[]" class="form-control border border-info selectpicker" multiple>
-                    <?php
-                    foreach ($fences as $fence):
-                        $sel = '';
-                        if(isset($device->fences)){
-                            $sel = in_array($fence->id,$device->fences->pluck('id')->toArray())? 'selected':'';
-                        }
-                        echo sprintf("<option %s value='%d'>%s</option>",$sel,$fence->id,$fence->name);
-                    endforeach;
-                    ?>
-                </select>
-        </td>
-        <td class="">
-            <input type="text" name="name" value="<?php echo e($device->name); ?>" class="form-control">
-        </td>
-        <td class="">
-            <input type="text" name="tel" value="<?php echo e($device->tel); ?>" class="form-control">
-        </td>
-        <td class="">
-            <input type="text" name="t" value="<?php echo e($device->t); ?>" class="form-control">
-        </td>
-        <td class="">
-            <input type="text" name="d" value="<?php echo e($device->d); ?>" class="form-control">
-        </td>
-        <td class="">
-            <input type="text" name="r" value="<?php echo e($device->r); ?>" class="form-control">
-        </td>
+    <br>
 
-        <td class="">
-            <button class="btn btn-info">upd</button>
-            </form>
-        </td>
+    <div class="input-group mt-1">
+        <div class="input-group-prepend">
+            <div class="input-group-text" data-toggle="tooltip" data-placement="top"
+                title="Associated Fences for this Device">?</div>
+        </div>
+        <select name="fences_id[]" class="form-control border border-info selectpicker"
+        multiple>
+            <?php
+            foreach ($fences as $fence):
+                echo sprintf("<option value='%d'>%s</option>",$fence->id,$fence->name);
+            endforeach;
+            ?>
+        </select>
+        </div>
 
-        <td class="">
-            <form method="POST" action="<?php echo e(route('device.destroy',['device'=>$device])); ?>">
-                <?php echo method_field('DELETE'); ?>
-                <?php echo csrf_field(); ?>
-                <button class="btn btn-danger">del</button>
-            </form>
-        </td>
-        <td>
-            <a target="_blank" href="<?php echo e(route('fence.get',['tel'=>$device->tel])); ?>" class="btn btn-warning">get</a>
-        </td>
-        <td>
-            <a target="_blank" href="<?php echo e(route('device.show',['device'=>$device])); ?>" class="btn btn-primary">map</a>
-        </td>
-    </tr>
-    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-    <tr>
-        <td colspan="9">Nenhum Registro</td>
-    </tr>
-    <?php endif; ?>
-
-</table>
+    <button class="btn mt-2 btn-lg btn-success">create</button>
+</form>
+<br>
 
 
 <?php $__empty_1 = true; $__currentLoopData = $devices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $device): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
@@ -125,22 +100,75 @@
     <div class="row justify-content-center">
         <?php endif; ?>
         <div class="col-auto mb-3">
-            <div class="card" style="width: 20rem;">
-                <div class="card-header"><?php echo e($device->created_at); ?></div>
-                <div class="card-body">
-                    <h5 class="card-title"><?php echo e($device->name); ?></h5>
-                    <h6 class="card-subtitle mb-2 text-muted"><?php echo e($device->tel); ?></h6>
-
-                    <?php echo e($device->t); ?>
-
-                    <?php echo e($device->d); ?>
-
-                    <?php echo e($device->r); ?>
-
-
+            <div class="card p-0" style="width: 20rem;">
+                <div class="card-body p-2">
                     <form method="POST" action="<?php echo e(route('device.update',['device'=>$device->id])); ?>">
                         <?php echo method_field('PUT'); ?>
                         <?php echo csrf_field(); ?>
+
+                        <div class="input-group mt-1">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text" data-toggle="tooltip" data-placement="top"
+                                    title="Tooltip on top">?</div>
+                            </div>
+                            <input class="form-control" name="name" value="<?php echo e($device->name); ?>">
+                        </div>
+
+                        <div class="input-group mt-1">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text" data-toggle="tooltip" data-placement="top"
+                                    title="Tooltip on top">?</div>
+                            </div>
+                            <input class="form-control" name="tel" value="<?php echo e($device->tel); ?>">
+                        </div>
+
+
+
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="" data-toggle="tooltip" data-placement="top" title="Tooltip on top">?</div>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="range" name="t" id="t" class="custom-range" value=" <?php echo e($device->t); ?>"
+                                    min="1" step="1" max="10" oninput="t_output.value = t.value">
+                            </div>
+                            <div class="col-md-1">
+                                <output name="t_output" id="t_output"><?php echo e($device->t); ?></output>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="" data-toggle="tooltip" data-placement="top" title="Tooltip on top">?</div>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="range" name="d" id="d" class="custom-range" value=" <?php echo e($device->d); ?>"
+                                    min="1" step="1" max="10" oninput="d_output.value = d.value">
+                            </div>
+                            <div class="col-md-1">
+                                <output name="d_output" id="d_output"><?php echo e($device->d); ?></output>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="" data-toggle="tooltip" data-placement="top" title="Tooltip on top">?</div>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="range" name="r" id="r" class="custom-range" value=" <?php echo e($device->r); ?>"
+                                    min="1" step="1" max="10" oninput="r_output.value = r.value">
+                            </div>
+                            <div class="col-md-1">
+                                <output name="r_output" id="r_output"><?php echo e($device->r); ?></output>
+                            </div>
+                        </div>
+
+                        <br>
+
                         <select name="fences_id[]" class="form-control border border-info selectpicker" multiple>
                             <?php
                             foreach ($fences as $fence):
@@ -152,27 +180,26 @@
                             endforeach;
                             ?>
                         </select>
+                        <button class="btn mt-2 btn-sm btn-success">save</button>
                     </form>
 
-                    <a href="#" class="card-link">Card link</a>
-                    <a href="#" class="card-link">Another link</a>
                 </div>
                 <div class="card-footer">
-                    <a class="text-red" href="<?php echo e(route('fence.index')); ?>">
-                        <span data-feather="map-pin"></span>
-                        Fences
-                    </a>
 
-                        <form method="POST" action="<?php echo e(route('device.destroy',['device'=>$device])); ?>">
-                            <?php echo method_field('DELETE'); ?>
-                            <?php echo csrf_field(); ?>
-                            <button class="btn btn-sm btn-danger">del</button>
+                    <form method="POST" action="<?php echo e(route('device.destroy',['device'=>$device])); ?>">
+                        <?php echo method_field('DELETE'); ?>
+                        <?php echo csrf_field(); ?>
 
-                            <a target="_blank" href="<?php echo e(route('fence.get',['tel'=>$device->tel])); ?>" class="btn btn-sm btn-warning">get</a>
+                        <?php if(count($device->fences)>0): ?>
+                        <a href="#" class="mr-2 btn btn-sm btn-primary" data-cercas="<?php echo e($device->fences ?? false); ?>"
+                            data-name="<?php echo e($device->name); ?>" data-toggle="modal" data-target="#device_modal">
+                            map
+                        </a>
+                        <?php endif; ?>
 
-                            <a target="_blank" href="<?php echo e(route('device.show',['device'=>$device])); ?>" class="btn btn-sm btn-primary">map</a>
+                        <button class="btn btn-sm btn-danger">del</button>
 
-                        </form>
+                    </form>
 
 
                 </div>
@@ -184,35 +211,110 @@
     </div>
 </div>
 <?php endif; ?>
-
-
-
 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-
-sem regs
-
+<p><b>No records</b></p>
 <?php endif; ?>
 
 
-
-<div class="card border-success mb-3">
-    <div class="card-header bg-transparent border-success">Header</div>
-    <div class="card-body text-success">
-        <h5 class="card-title">Success card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-            content.</p>
+<div class="modal fade" id="device_modal" tabindex="-1" role="dialog" aria-labelledby="device_modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="label_cerca">New message</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="map_cerca" class="mb-2" style="width:99%;height:600px; "></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
-    <div class="card-footer bg-transparent border-success">Footer</div>
 </div>
 
 
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('js'); ?>
+<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo e(env('API_GOOGLE')); ?>" async
+    defer></script>
+<script>
+
+    $('#device_modal').on('show.bs.modal', function (event) {
+
+        var bounds = new google.maps.LatLngBounds();
+        var i;
+
+        // The Bermuda Triangle
+        var polygonCoords = [
+            new google.maps.LatLng(25.774252, -80.190262),
+            new google.maps.LatLng(18.466465, -66.118292),
+            new google.maps.LatLng(32.321384, -64.757370),
+            new google.maps.LatLng(25.774252, -80.190262)
+        ];
+
+        for (i = 0; i < polygonCoords.length; i++) {
+            bounds.extend(polygonCoords[i]);
+        }
+
+        // The Center of the Bermuda Triangle - (25.3939245, -72.473816)
+        console.log(bounds.getCenter());
+
+        //event.preventDefault();
+        //alert(11)
+        var button = $(event.relatedTarget)
+        //var lat = parseFloat(button.data('lat'));
+        //var lng = parseFloat(button.data('lng'));
+        var cercas = button.data('cercas');
+        var label_cerca = button.data('name');
+        $("#label_cerca").text(label_cerca);
+
+
+        console.log(cercas);
+
+        var fence = new GMapFence();
+        for (let i = 0; i < cercas[0].length; i++) {
+            //var utm = GeoConverson.LatLng2UTM(cerca[i].lat, cerca[i].lng);
+            //console.log(utm);
+            //fence.addVertex(new GeoPoint(parseFloat(cerca[i].lat), parseFloat(cerca[i].lng)));
+            //fence.addVertex(cerca[i]);
+        }
+
+        //lat = -22.90278;
+        //lng = -43.2075;
+        var centralPoint = fence.centralPointLatLng();
+        console.log(centralPoint);
+        var map = new google.maps.Map(document.getElementById('map_cerca'), {
+            center: bounds.getCenter(),
+            //center: { lat: lat, lng: lng },
+            zoom: 15,
+            mapTypeControl: false,
+            scaleControl: false,
+            streetViewControl: false,
+            rotateControl: false
+        });
 
 
 
+        var pl = new google.maps.Polygon({
+            path: polygonCoords,
+            strokeColor: "#0000FF",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#0000FF",
+            fillOpacity: 0.1
+        });
+
+        pl.setMap(map);
 
 
+    });
 
 
+</script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.adm', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/fencybot/resources/views/device/index.blade.php ENDPATH**/ ?>

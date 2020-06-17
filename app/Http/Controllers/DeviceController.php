@@ -41,13 +41,14 @@ class DeviceController extends Controller
 
             $fences_id = $request->get('fences_id');
             $device->fences()->sync($fences_id);
-            return back()->withErrors( 'erros created successfully ... ');
+            return back()->withSuccess( ' created successfully ... ');
             #return back()->with('status', 'device created successfully.');
 
         } catch(Exception $e){
             #Session::flash('message', );
-
-            return back()->with('status', ['text'=>$e->getMessage(),'type'=>'danger'] );
+            #return redirect()->to('/here')->withErrors(['message1'=>'this is first message']);
+            return back()->withErrors(['message1'=>'this is first message']);
+            #return back()->with('status', ['text'=>$e->getMessage(),'type'=>'danger'] );
             #echo $e->getMessage();
         }
 
@@ -69,13 +70,17 @@ class DeviceController extends Controller
         $device->save();
 
         $fences_id = $request->get('fences_id');
-        $fences_com_user = [];
-        $user_id = (int) Auth::id();
-        foreach($fences_id as $fence_id){
-            $fences_com_user[]=compact('fence_id','user_id');
-        }
+        if($fences_id){
+            $fences_com_user = [];
+            $user_id = (int) Auth::id();
 
-        $device->fences()->sync($fences_com_user);
+            foreach($fences_id as $fence_id){
+                $fences_com_user[]=compact('fence_id','user_id');
+            }
+
+            $device->fences()->sync($fences_com_user);
+
+        }
 
 
         return back()->with('status', 'device updated!');

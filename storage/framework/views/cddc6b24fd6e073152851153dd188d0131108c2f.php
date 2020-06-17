@@ -1,61 +1,63 @@
 <?php $__env->startSection('content'); ?>
 
-<?php if(session('status')): ?>
-<div class="alert alert-success" role="alert">
-    <?php echo e(session('status')); ?>
-
-</div>
-<?php endif; ?>
-
-<h1>Alertas </h1>
+<?php echo $__env->make('shared.msgs', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('shared.header', ['name' => 'Alerts'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 
-<div class="input-group mb-3">
-    <select class="custom-select" name="type" id="type">
-        <option selected>Type</option>
-        <option value="1">tocou</option>
-        <option value="2">aproximou</option>
-        <option value="3">pulou</option>
-    </select>
+<form method="POST" action="<?php echo e(route('alert.filter')); ?>">
+    <div class="input-group mb-3">
 
-    <select class="custom-select" name="cerca" id="cerca">
-        <option selected>Cerca</option>
-        <option value="1">cerca 1</option>
-        <option value="2">cerca 2</option>
-        <option value="3">cerca 3</option>
-    </select>
+        <select class="custom-select" name="type">
+            <option selected disabled>Type</option>
+            <option value="1">close</option>
+            <option value="2">very close</option>
 
-    <select class="custom-select" name="device" id="device">
-        <option selected>Device</option>
-        <option value="1">device 1</option>
-        <option value="2">device 2</option>
-        <option value="3">device 3</option>
-    </select>
+        </select>
+        <select class="custom-select" name="fence_id">
+            <option selected disabled>Fence</option>
+            <?php $__empty_1 = true; $__currentLoopData = $fences; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fence): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+            <option value="<?php echo e($fence->id); ?>"><?php echo e($fence->name); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
-    <div class="input-group-prepend">
-        <label class="input-group-text" for="dt1">dt1</label>
-    </div>
-    <input class="form-control" type="datetime-local" id="dt1" name="dt1">
+            <?php endif; ?>
+        </select>
 
-    <div class="input-group-prepend">
-        <label class="input-group-text" for="dt1">dt2</label>
-    </div>
-    <input class="form-control" type="datetime-local" id="dt1" name="dt1">
+        <select class="custom-select" name="device_id">
+            <option selected disabled>Device</option>
+            <?php $__empty_1 = true; $__currentLoopData = $devices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $device): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+            <option value="<?php echo e($device->id); ?>"><?php echo e($device->name); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+
+            <?php endif; ?>
+        </select>
 
 
-    <div class="input-group-append">
-        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">Acao</button>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-            <div role="separator" class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Separated link</a>
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="dt1">dt1</label>
         </div>
-    </div>
+        <input class="form-control" type="date"
+        value="<?php echo e(\Carbon\Carbon::parse(now()->subDays(7))->format('Y-m-d')); ?>" id="dt1" name="dt1">
 
-</div>
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="dt1">dt2</label>
+        </div>
+        <input class="form-control" type="date"
+        value="<?php echo e(\Carbon\Carbon::parse(now())->format('Y-m-d')); ?>" id="dt2" name="dt2">
+
+
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">Order</button>
+            <div class="dropdown-menu">
+                <input type="submit" value="Asc" name="order" class="dropdown-item">
+                <input type="submit" value="Desc" name="order" class="dropdown-item">
+                <div role="separator" class="dropdown-divider"></div>
+                <input type="submit" value="Separated" name="y" class="dropdown-item">
+            </div>
+        </div>
+
+    </div>
+</form>
 
 <br>
 
@@ -67,21 +69,13 @@
         <td>
             <?php switch($alert->type):
             case (1): ?>
-            <span class="badge badge-danger">tipo 1</span>
+            <span class="badge badge-danger">close</span>
             <?php break; ?>
 
             <?php case (2): ?>
-            <span class="badge badge-success">tipo 2</span>
+            <span class="badge badge-success">very close</span>
             <?php break; ?>
-            <?php case (3): ?>
-            <span class="badge badge-warning">tipo 3</span>
-            <?php break; ?>
-            <?php case (4): ?>
-            <span class="badge badge-info">tipo 4</span>
-            <?php break; ?>
-            <?php case (5): ?>
-            <span class="badge badge-primary">tipo 5</span>
-            <?php break; ?>
+
 
             <?php default: ?>
             <span class="badge badge-secondary">default</span>
@@ -114,6 +108,7 @@
 
 
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+    <p><b>No records</b></p>
 
 
     <?php endif; ?>

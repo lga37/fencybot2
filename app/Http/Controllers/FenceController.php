@@ -90,23 +90,26 @@ class FenceController extends Controller
 
     public function update(Request $request, Fence $fence)
     {
-        $this->isValid($request);
+        #$this->isValid($request);
 
         $fence->name =  $request->get('name');
         $fence->save();
 
-        #dd($request);
         $devices_id = $request->get('devices_id');
+        #dd($devices_id);
 
         $user_id = (int) Auth::id();
-        foreach($devices_id as $device_id){
-            $devices_com_user[]=compact('device_id','user_id');
+        if($devices_id){
+            foreach($devices_id as $device_id){
+                $devices_com_user[]=compact('device_id','user_id');
+            }
+
+            $fence->devices()->sync($devices_com_user);
         }
 
-        $fence->devices()->sync($devices_com_user);
 
-
-        return redirect('fence.index')->with('alert', 'fence updated!');
+        #return redirect('fence.index')->withSuccess('fence updated!');
+        return redirect()->route('fence.index')->withSuccess('fence updated!');
     }
 
     public function getFences (string $tel)

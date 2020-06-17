@@ -1,14 +1,19 @@
 <?php
 
+use App\Events\EventAlert;
+use App\Mail\AlertEmitted;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Broadcast;
+
+
+Broadcast::routes();
 
 Auth::routes();
+
+
 Route::get('/', function () { return view('welcome'); });
 
-Route::resource('meet', 'MeetController', [
-    'only' => ['destroy', 'index', 'store']
-]);
 
 Route::post('/adm/fence/add', 'FenceController@add')->name('fence.add');
 
@@ -22,7 +27,7 @@ Route::post('/adm/alert/post/{tel}', 'AlertController@postAlerts')->name('alert.
 Route::get('/adm/fence/{tel}/get', 'FenceController@getFences')->name('fence.get');
 
 
-Route::get('/adm/drag/index', 'FenceDeviceController@index')->name('drag.index');
+
 
 
 Route::group(['prefix' => 'adm', 'middleware' => ['auth']], function () {
@@ -45,6 +50,11 @@ Route::group(['prefix' => 'adm', 'middleware' => ['auth']], function () {
     Route::resource('fencedevice', 'FenceDeviceController', [
         'only' => ['destroy', 'update', 'store']
     ]);
+
+    Route::get('/alert/hist', 'AlertController@hist')->name('alert.hist');
+    Route::post('/alert/filter', 'AlertController@filter')->name('alert.filter');
+    Route::post('/alert/filterTracks', 'AlertController@filterTracks')->name('alert.filterTracks');
+
 
     Route::resource('alert', 'AlertController', [
         'only' => ['destroy', 'show', 'store', 'index']

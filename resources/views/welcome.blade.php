@@ -36,26 +36,25 @@
                                 <path d="M0,0 L6,4 L14,0 L20,4 L20,20 L14,16 L6,20 L0,16 L0,0 Z M7,6 L13,3 L13,14 L7,17 L7,6 Z"
                                 id="Combined-Shape"></path>
                             </svg>
-                            <span class="text-gray-200 text-2xl"> FencyBoty </span>
+                            <span class="text-gray-200 text-2xl">FencyBot </span>
                         </div>
                     </div>
                 </div>
                 <div class="px-6 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-none">
                     <p class="text-sm font-semibold text-gray-300 uppercase tracking-wider">
-                        Crie cercas digitais e alertas
+                        CREATE DIGITAL FENCES AND ALERTS
                     </p>
                     <h1 class="mt-3 text-3xl leading-9 font-semibold font-display text-white
                         sm:mt-6 sm:text-4xl sm:leading-10 xl:text-5xl xl:leading-none">
-                        Monitore pessoas proximas
+                        Monitor people nearby
                         <br class="hidden sm:inline">
                         <span class="text-teal-400">
-                            Tenha controle cartografico em tempo real
+                            Have real-time mapping control
                         </span>
                     </h1>
                     <p
                         class="mt-2 text-lg leading-7 text-gray-300 sm:mt-3 sm:text-xl sm:max-w-xl xl:mt-4 xl:text-2xl xl:max-w-2xl">
-                        Assim que uma pessoa usando um celular com nosso app, voce sera avisado em tempo real
-                        se a pessoa ultrapassar cercas digitais. Voce podera rastrear contaminados pela Covid19
+                        As soon as a person using a mobile phone with our app, you will be notified in real time if the person goes beyond digital fences. You can track contaminated by Covid19
                     </p>
                     <div class="mt-6 sm:flex sm:mt-8 xl:mt-12">
                         <a href="{{ route('login')}}"
@@ -73,6 +72,13 @@
                             focus:bg-gray-700 transition ease-in-out duration-150 xl:text-lg xl:py-4">
                            Register
                         </a>
+                        <a href="{{ route('register') }}"
+                            class="w-full mt-4 sm:ml-4 sm:mt-0 sm:w-auto inline-flex items-center justify-center
+                            px-6 py-3 border border-transparent text-base leading-6 font-semibold
+                            rounded-md text-white bg-gray-800 shadow-sm hover:bg-gray-700 focus:outline-none
+                            focus:bg-gray-700 transition ease-in-out duration-150 xl:text-lg xl:py-4">
+                            <span class="text-teal-400">Android AppStore</span>
+                        </a>
                     </div>
                 </div>
                 <div class="mt-8 sm:mt-12 relative h-64 overflow-hidden bg-gray-300 lg:hidden">
@@ -85,15 +91,7 @@
                     <p class="text-sm font-semibold text-gray-300 uppercase tracking-wider">Designed and developed by
                     </p>
                     <div class="mt-4 sm:flex">
-                        <a href="https://twitter.com/adamwathan" class="flex items-center no-underline">
-                            <div class="flex-shrink-0">
-                                <img class="h-12 w-12 rounded-full border-2 border-white" src="img/adam.jpg" alt="">
-                            </div>
-                            <div class="ml-3">
-                                <p class="font-semibold text-white leading-tight">Almeida, L. Gustavo</p>
-                                <p class="text-sm text-gray-500 leading-tight">Doutorando Unirio</p>
-                            </div>
-                        </a>
+
                         <a href="https://twitter.com/steveschoger"
                             class="mt-6 sm:mt-0 sm:ml-12 flex items-center no-underline">
                             <div class="flex-shrink-0">
@@ -101,7 +99,7 @@
                             </div>
                             <div class="ml-3">
                                 <p class="font-semibold text-white leading-tight">Cristina B.</p>
-                                <p class="text-sm text-gray-500 leading-tight">Prof Unirio</p>
+                                <p class="text-sm text-gray-500 leading-tight">Coord. Unirio</p>
                             </div>
                         </a>
                         <a href="https://twitter.com/steveschoger"
@@ -110,10 +108,24 @@
                                 <img class="h-12 w-12 rounded-full border-2 border-white" src="/img/steve.jpg" alt="">
                             </div>
                             <div class="ml-3">
-                                <p class="font-semibold text-white leading-tight">Jobson ..</p>
-                                <p class="text-sm text-gray-500 leading-tight">Prof Unirio</p>
+                                <p class="font-semibold text-white leading-tight">Jobson </p>
+                                <p class="text-sm text-gray-500 leading-tight">Prof. Unirio</p>
                             </div>
                         </a>
+
+                        <a href="https://www.linkedin.com/in/lga37/" target="_blank" class="mt-6 sm:mt-0 sm:ml-12 flex items-center no-underline">
+                            <div class="flex-shrink-0">
+                                <img class="h-12 w-12 rounded-full border-2 border-white" src="{{ asset('images/eu.png')}}" alt="">
+
+                            </div>
+                            <div class="ml-3">
+                                <p class="font-semibold text-white leading-tight">
+                                    Gustavo Almeida
+                                </p>
+                                <p class="text-sm text-gray-500 leading-tight">PhD Unirio</p>
+                            </div>
+                        </a>
+
                     </div>
                 </div>
             </div>

@@ -2,13 +2,11 @@
 
 @section('content')
 
-@if (session('status'))
-<div class="alert alert-success" role="alert">
-    {{ session('status') }}
-</div>
-@endif
 
-<h2 class="shadow p-3 m-3 bg-white rounded-lg border border-info rounded">Change Password </h2>
+@include('shared.msgs')
+@include('shared.header', ['name' => 'Change Password'])
+
+
 
 <form method="POST" action="{{ route('user.savepass') }}">
     @csrf
@@ -40,7 +38,7 @@
     <div class="form-group row mb-0">
         <div class="col-md-10 offset-md-2">
             <button class="btn btn-lg btn-outline-primary">
-                {{ __('Register') }}
+                Save
             </button>
         </div>
     </div>

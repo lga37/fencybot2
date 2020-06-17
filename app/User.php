@@ -10,29 +10,14 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'name', 'email', 'password','tel','chat_id',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password', 'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
@@ -43,12 +28,22 @@ class User extends Authenticatable
     }
 
 
-    public function routeNotificationForTelegram()
+    public function routeNotificationForTelegramaaaaaaaaaaaaa()
     {
+        #dd(__FUNCTION__);
         return '-1001490952251';
+
         #return '1221455806';
         #return '262757621';
         #return '@Uniriofencebot';
+    }
+
+    public function routeNotificationForMail($notification)
+    {
+
+
+        // Return name and email address...
+        return [$this->email => $this->name];
     }
 
 }

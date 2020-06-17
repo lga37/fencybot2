@@ -2,61 +2,64 @@
 
 @section('content')
 
-@if (session('status'))
-<div class="alert alert-success" role="alert">
-    {{ session('status') }}
-</div>
-@endif
-
-<h1>Alertas </h1>
+@include('shared.msgs')
+@include('shared.header', ['name' => 'Alerts'])
 
 
-<div class="input-group mb-3">
-    <select class="custom-select" name="type" id="type">
-        <option selected>Type</option>
-        <option value="1">tocou</option>
-        <option value="2">aproximou</option>
-        <option value="3">pulou</option>
-    </select>
+<form method="POST" action="{{ route('alert.filter') }}">
+    <div class="input-group mb-3">
 
-    <select class="custom-select" name="cerca" id="cerca">
-        <option selected>Cerca</option>
-        <option value="1">cerca 1</option>
-        <option value="2">cerca 2</option>
-        <option value="3">cerca 3</option>
-    </select>
+        <select class="custom-select" name="type">
+            <option selected disabled>Type</option>
+            <option value="1">close</option>
+            <option value="2">very close</option>
 
-    <select class="custom-select" name="device" id="device">
-        <option selected>Device</option>
-        <option value="1">device 1</option>
-        <option value="2">device 2</option>
-        <option value="3">device 3</option>
-    </select>
+        </select>
+        <select class="custom-select" name="fence_id">
+            <option selected disabled>Fence</option>
+            @forelse ($fences as $fence)
+            <option value="{{ $fence->id }}">{{ $fence->name }}</option>
+            @empty
 
-    <div class="input-group-prepend">
-        <label class="input-group-text" for="dt1">dt1</label>
-    </div>
-    <input class="form-control" type="datetime-local" id="dt1" name="dt1">
+            @endforelse
+        </select>
 
-    <div class="input-group-prepend">
-        <label class="input-group-text" for="dt1">dt2</label>
-    </div>
-    <input class="form-control" type="datetime-local" id="dt1" name="dt1">
+        <select class="custom-select" name="device_id">
+            <option selected disabled>Device</option>
+            @forelse ($devices as $device)
+            <option value="{{ $device->id }}">{{ $device->name }}</option>
+            @empty
+
+            @endforelse
+        </select>
 
 
-    <div class="input-group-append">
-        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">Acao</button>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-            <div role="separator" class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Separated link</a>
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="dt1">dt1</label>
         </div>
-    </div>
+        <input class="form-control" type="date"
+        value="{{ \Carbon\Carbon::parse(now()->subDays(7))->format('Y-m-d') }}" id="dt1" name="dt1">
 
-</div>
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="dt1">dt2</label>
+        </div>
+        <input class="form-control" type="date"
+        value="{{ \Carbon\Carbon::parse(now())->format('Y-m-d') }}" id="dt2" name="dt2">
+
+
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">Order</button>
+            <div class="dropdown-menu">
+                <input type="submit" value="Asc" name="order" class="dropdown-item">
+                <input type="submit" value="Desc" name="order" class="dropdown-item">
+                <div role="separator" class="dropdown-divider"></div>
+                <input type="submit" value="Separated" name="y" class="dropdown-item">
+            </div>
+        </div>
+
+    </div>
+</form>
 
 <br>
 
@@ -68,21 +71,13 @@
         <td>
             @switch($alert->type)
             @case(1)
-            <span class="badge badge-danger">tipo 1</span>
+            <span class="badge badge-danger">close</span>
             @break
 
             @case(2)
-            <span class="badge badge-success">tipo 2</span>
+            <span class="badge badge-success">very close</span>
             @break
-            @case(3)
-            <span class="badge badge-warning">tipo 3</span>
-            @break
-            @case(4)
-            <span class="badge badge-info">tipo 4</span>
-            @break
-            @case(5)
-            <span class="badge badge-primary">tipo 5</span>
-            @break
+
 
             @default
             <span class="badge badge-secondary">default</span>
@@ -115,6 +110,7 @@
 
 
     @empty
+    <p><b>No records</b></p>
 
 
     @endforelse

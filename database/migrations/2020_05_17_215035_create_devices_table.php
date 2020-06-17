@@ -16,10 +16,10 @@ class CreateDevicesTable extends Migration
         Schema::create('devices', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->char('tel',13);
-            $table->integer('r')->unsigned();
-            $table->integer('d')->unsigned();
-            #$table->integer('t')->unsigned()->nullable();
+            $table->string('tel');
+            $table->integer('r')->unsigned()->nullable()->default(10);
+            $table->integer('d')->unsigned()->nullable()->default(5);
+            $table->integer('t')->unsigned()->nullable()->default(30);
 
             $table->integer('user_id')->unsigned();
             $table->timestamps();

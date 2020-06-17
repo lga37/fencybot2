@@ -1,13 +1,9 @@
 <?php $__env->startSection('content'); ?>
 
-<?php if(session('status')): ?>
-<div class="alert alert-success" role="alert">
-    <?php echo e(session('status')); ?>
+<?php echo $__env->make('shared.msgs', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('shared.header', ['name' => 'Notifications'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-</div>
-<?php endif; ?>
 
-<h2 class="shadow p-3 m-3 bg-white rounded-lg border border-info rounded">Telegram </h2>
 
 
 <?php $__env->stopSection(); ?>

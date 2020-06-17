@@ -3,9 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Alert extends Model
 {
+    use Notifiable;
+
+
     protected $casts = [
         'created_at' => 'datetime',
         'dt' => 'datetime',
@@ -18,19 +22,9 @@ class Alert extends Model
         return $this->belongsTo('App\FenceDevice','fencedevice_id','id')->select('fence_id','device_id');
     }
 
-    public function fence_old ()
-    {
-        return $this->fencedevice()->with('fence:id,name,fence');
-    }
-
     public function fence ()
     {
         return $this->belongsTo('App\Fence');
-    }
-
-    public function device_old ()
-    {
-        return $this->fencedevice()->with('device:id,name');
     }
 
     public function device ()

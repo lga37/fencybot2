@@ -1,39 +1,69 @@
-//window._ = require('lodash');
-
-
+window._ = require('lodash');
 try {
     //window.Popper = require('popper.js').default;
     //window.$ = window.jQuery = require('jquery');
 
-    //require('bootstrap');
 
+} catch (e) { }
 
-
-
-} catch (e) {}
-
-/**
- * We'll load the axios HTTP library which allows us to easily issue requests
- * to our Laravel back-end. This library automatically handles sending the
- * CSRF token as a header based on the value of the "XSRF" token cookie.
- */
 
 //window.axios = require('axios');
 //window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
 
-// import Echo from 'laravel-echo';
+import Echo from 'laravel-echo';
 
-// window.Pusher = require('pusher-js');
+window.Pusher = require('pusher-js');
 
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     forceTLS: true
-// });
+//alert(key)
+
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    authEndpoint : 'http://localhost/fencybot/public/broadcasting/auth',
+    //key: process.env.MIX_PUSHER_APP_KEY,
+    //cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+
+    key: window.Laravel.pusher.key,
+    cluster: window.Laravel.pusher.cluster,
+
+    //key: '7f1eb8fdd463d10f603a',
+    //cluster: 'us2',
+
+    forceTLS: true
+});
+
+window.Echo.channel('canal').listen('EventAlert', (e) => {
+    alert('newmessage, canal');
+    console.log(e);
+});
+
+window.Echo.channel('canal').listen('EventAlert', (e) => {
+    alert(' com windownewmessage, canal');
+    console.log(e);
+});
+
+window.Echo.private('canal').listen('newMessage', (e) => {
+    //alert(' ggggggg com windownewmessage, canal');
+    console.log(e);
+});
+
+window.Echo.private('canal').listen('newMessage', (e) => {
+    //alert(' apelido com windownewmessage, canal');
+    console.log(e);
+});
+
+
+
+if(Laravel.user){
+    console.log(`App.User.${Laravel.user}`)
+    console.log(` === ${Laravel.pusher.key}`)
+
+    window.Echo.channel('canal').listen('newMessage',(e)=>{
+        alert(333)
+        console.log('chegou'+ e);
+    });
+    window.Echo.channel(`App.User.${Laravel.user}`).notification(ddd=>{
+        console.log(ddd)
+    });
+
+}

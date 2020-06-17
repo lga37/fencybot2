@@ -107,6 +107,9 @@ class FenceController extends Controller
             }
 
             $fence->devices()->sync($devices_com_user);
+        } else {
+            $fence->devices()->sync([]);
+
         }
 
 
@@ -126,20 +129,6 @@ class FenceController extends Controller
 
     }
 
-
-    public function del_device888888888888(int $fence_id, int $device_id)
-    {
-        #$this->isValid($request);
-
-        #$fence_id =  (int) $request->get('fence_id');
-        #$device_id =  (int) $request->get('device_id');
-        $user_id = Auth::id(); #ver se pertence ao usuario
-
-        $fence = Fence::find($fence_id);
-        $fence->devices()->detach($device_id);
-
-        return redirect('fence.index')->with('alert', 'fence updated!');
-    }
 
 
     public function destroy(Fence $fence)

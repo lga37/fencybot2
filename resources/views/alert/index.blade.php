@@ -64,7 +64,7 @@
 <br>
 
 
-<table class="table table-striped">
+<table class="table table-striped table-sm">
     @forelse ($alerts as $alert)
     <tr>
         <td>{{ $alert->id }}</td>

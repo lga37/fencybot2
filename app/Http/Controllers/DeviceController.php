@@ -69,16 +69,20 @@ class DeviceController extends Controller
 
         $device->save();
 
-        $fences_id = $request->get('fences_id');
+        $fences_id = (array) $request->get('fences_id'); #fazer essa tipagem, se nao tiver exclui
+
+        #dd($fences_id);
         if($fences_id){
+
             $fences_com_user = [];
             $user_id = (int) Auth::id();
 
             foreach($fences_id as $fence_id){
                 $fences_com_user[]=compact('fence_id','user_id');
             }
-
             $device->fences()->sync($fences_com_user);
+        } else {
+            $device->fences()->sync([]);
 
         }
 
@@ -107,7 +111,7 @@ class DeviceController extends Controller
         $request->validate([
             'name' => 'required|min:2',
         ]);
-        
+
         return $request;
     }
 }

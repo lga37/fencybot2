@@ -7,94 +7,100 @@
 @include('shared.header', ['name' => 'Devices'])
 
 
-<form method="POST" action="{{ route('device.store') }}">
-    @csrf
+<div class="card border-success mb-3">
+    <div class="card-header">Add New Device</div>
+    <div class="card-body text-success">
 
-    <div class="input-group mt-1">
-        <div class="input-group-prepend">
-            <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                title="Name of this device"><span data-feather="target"></span></div>
-        </div>
-        <input class="form-control" placeholder="Device Name" name="name" >
+
+        <form method="POST" action="{{ route('device.store') }}">
+            @csrf
+
+            <div class="input-group mt-1">
+                <div class="input-group-prepend">
+                    <div class="input-group-text" data-toggle="tooltip" data-placement="top"
+                        title="Name of this device"><span data-feather="target"></span></div>
+                </div>
+                <input class="form-control" placeholder="Device Name" name="name">
+            </div>
+
+            <div class="input-group mt-1">
+                <div class="input-group-prepend">
+                    <div class="input-group-text" data-toggle="tooltip" data-placement="top"
+                        title="Phone number of this device"><span data-feather="phone"></span></div>
+                </div>
+                <input class="form-control" placeholder="Device Tel Number" name="tel">
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-md-1">
+                    <div class="" data-toggle="tooltip" data-placement="top"
+                        title="Time to receive the alert in seconds, from 0 to 60">? time</div>
+                </div>
+                <div class="col-md-9">
+                    <input type="range" name="t" id="t" class="custom-range" min="0" step="5" max="60"
+                        oninput="t_output.value = t.value">
+                </div>
+                <div class="col-md-1">
+                    <output name="t_output" id="t_output"></output>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-1">
+                    <div class="" data-toggle="tooltip" data-placement="top"
+                        title="Minimal distance to Associated Fence, from 10 to 50 meters ">? dist</div>
+                </div>
+                <div class="col-md-9">
+                    <input type="range" name="d" id="d" class="custom-range" min="10" step="5" max="50"
+                        oninput="d_output.value = d.value">
+                </div>
+                <div class="col-md-1">
+                    <output name="d_output" id="d_output"></output>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-1">
+                    <div class="" data-toggle="tooltip" data-placement="top" title="Radius of the Personal Area, from 1 to 5 meters,
+                    used to fire a meet event with others registered Users">? radius</div>
+                </div>
+                <div class="col-md-9">
+                    <input type="range" name="r" id="r" class="custom-range" min="1" step=".5" max="5"
+                        oninput="r_output.value = r.value">
+                </div>
+                <div class="col-md-1">
+                    <output name="r_output" id="r_output"></output>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="input-group mt-1">
+                <div class="input-group-prepend">
+                    <div class="input-group-text" data-toggle="tooltip" data-placement="top"
+                        title="Associated Fences for this Device">?</div>
+                </div>
+                <select title="Fences Associated to this Device" name="fences_id[]"
+                    class="form-control border border-info selectpicker" multiple>
+                    <?php
+                    foreach ($fences as $fence):
+                        echo sprintf("<option value='%d'>%s</option>",$fence->id,$fence->name);
+                    endforeach;
+                    ?>
+                </select>
+            </div>
+
+            <button class="btn mt-2 btn-lg btn-success">create</button>
+        </form>
+
+
     </div>
+</div>
 
-    <div class="input-group mt-1">
-        <div class="input-group-prepend">
-            <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                title="Phone number of this device"><span data-feather="phone"></span></div>
-        </div>
-        <input class="form-control" placeholder="Device Tel Number" name="tel" >
-    </div>
-
-    <br>
-
-    <div class="row">
-        <div class="col-md-1">
-            <div class="" data-toggle="tooltip" data-placement="top"
-            title="Time to receive the alert in seconds, from 0 to 60">? time</div>
-        </div>
-        <div class="col-md-9">
-            <input type="range" name="t" id="t" class="custom-range"
-                min="0" step="5" max="60" oninput="t_output.value = t.value">
-        </div>
-        <div class="col-md-1">
-            <output name="t_output" id="t_output"></output>
-        </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col-md-1">
-            <div class="" data-toggle="tooltip" data-placement="top"
-            title="Minimal distance to Associated Fence, from 10 to 50 meters ">? dist</div>
-        </div>
-        <div class="col-md-9">
-            <input type="range" name="d" id="d" class="custom-range"
-                min="10" step="5" max="50" oninput="d_output.value = d.value">
-        </div>
-        <div class="col-md-1">
-            <output name="d_output" id="d_output"></output>
-        </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col-md-1">
-            <div class="" data-toggle="tooltip" data-placement="top"
-            title="Radius of the Personal Area, from 1 to 5 meters,
-            used to fire a meet event with others registered Users">? radius</div>
-        </div>
-        <div class="col-md-9">
-            <input type="range" name="r" id="r" class="custom-range"
-                min="1" step=".5" max="5" oninput="r_output.value = r.value">
-        </div>
-        <div class="col-md-1">
-            <output name="r_output" id="r_output"></output>
-        </div>
-    </div>
-
-    <br>
-
-    <div class="input-group mt-1">
-        <div class="input-group-prepend">
-            <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                title="Associated Fences for this Device">?</div>
-        </div>
-        <select
-        title="Fences Associated to this Device"
-
-        name="fences_id[]" class="form-control border border-info selectpicker"
-        multiple>
-            <?php
-            foreach ($fences as $fence):
-                echo sprintf("<option value='%d'>%s</option>",$fence->id,$fence->name);
-            endforeach;
-            ?>
-        </select>
-        </div>
-
-    <button class="btn mt-2 btn-lg btn-success">create</button>
-</form>
 <br>
 
 
@@ -115,7 +121,7 @@
                         <div class="input-group mt-1">
                             <div class="input-group-prepend">
                                 <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                                title="Name of this device"><span data-feather="target"></span></div>
+                                    title="Name of this device"><span data-feather="target"></span></div>
                             </div>
                             <input class="form-control" name="name" value="{{ $device->name }}">
                         </div>
@@ -123,7 +129,7 @@
                         <div class="input-group mt-1">
                             <div class="input-group-prepend">
                                 <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                                title="Phone number of this device"><span data-feather="phone"></span></div>
+                                    title="Phone number of this device"><span data-feather="phone"></span></div>
                             </div>
                             <input class="form-control" name="tel" value="{{ $device->tel }}">
                         </div>
@@ -135,11 +141,11 @@
                         <div class="row">
                             <div class="col-md-1">
                                 <div class="" data-toggle="tooltip" data-placement="top"
-                                title="Time to receive the alert in seconds, from 0 to 60">?</div>
+                                    title="Time to receive the alert in seconds, from 0 to 60">?</div>
                             </div>
                             <div class="col-md-9">
                                 <input type="range" name="t" id="t" class="custom-range" value=" {{ $device->t }}"
-                                min="0" step="5" max="60" oninput="t_output.value = t.value">
+                                    min="0" step="5" max="60" oninput="t_output.value = t.value">
                             </div>
                             <div class="col-md-1">
                                 <output name="t_output" id="t_output">{{ $device->t }}</output>
@@ -150,11 +156,11 @@
                         <div class="row">
                             <div class="col-md-1">
                                 <div class="" data-toggle="tooltip" data-placement="top"
-                                title="Minimal distance to Associated Fence, from 10 to 50 meters ">?</div>
+                                    title="Minimal distance to Associated Fence, from 10 to 50 meters ">?</div>
                             </div>
                             <div class="col-md-9">
                                 <input type="range" name="d" id="d" class="custom-range" value=" {{ $device->d }}"
-                                min="10" step="5" max="50" oninput="d_output.value = d.value">
+                                    min="10" step="5" max="50" oninput="d_output.value = d.value">
                             </div>
                             <div class="col-md-1">
                                 <output name="d_output" id="d_output">{{ $device->d }}</output>
@@ -164,13 +170,12 @@
 
                         <div class="row">
                             <div class="col-md-1">
-                                <div class="" data-toggle="tooltip" data-placement="top"
-                                title="Radius of the Personal Area, from 1 to 5 meters,
+                                <div class="" data-toggle="tooltip" data-placement="top" title="Radius of the Personal Area, from 1 to 5 meters,
             used to fire a meet event with others registered Users">?</div>
                             </div>
                             <div class="col-md-9">
                                 <input type="range" name="r" id="r" class="custom-range" value=" {{ $device->r }}"
-                                min="1" step=".5" max="5" oninput="r_output.value = r.value">
+                                    min="1" step=".5" max="5" oninput="r_output.value = r.value">
                             </div>
                             <div class="col-md-1">
                                 <output name="r_output" id="r_output">{{ $device->r }}</output>
@@ -179,10 +184,8 @@
 
                         <br>
 
-                        <select
-                        title="Fences Associated to this Device"
-                        name="fences_id[]"
-                        class="form-control border border-info selectpicker" multiple>
+                        <select title="Fences Associated to this Device" name="fences_id[]"
+                            class="form-control border border-info selectpicker" multiple>
                             <?php
                             foreach ($fences as $fence):
                                 $sel = '';
@@ -252,8 +255,7 @@
 @endsection
 
 @section('js')
-<script src="https://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE')}}" async
-    defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE')}}" async defer></script>
 <script>
 
     $('#device_modal').on('show.bs.modal', function (event) {

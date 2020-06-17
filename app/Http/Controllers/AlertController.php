@@ -150,7 +150,12 @@ class AlertController extends Controller
                     $alert->save();
                     $user_id = (int) $item->user_id;
 
-                    $this->sendTelegram($user_id, $alert->type, $v['lat'], $v['lng']);
+                    $user = User::find($user_id);
+                    #$alert->notify($alert);
+                    $user->notify((new AlertEmitted($alert)));
+                    event(new EventAlert($alert));
+
+                    #$this->sendTelegram($user_id, $alert->type, $v['lat'], $v['lng']);
                 }
             });
         } else {
@@ -183,6 +188,7 @@ class AlertController extends Controller
                     $user = User::find($user_id);
                     #$alert->notify($alert);
                     $user->notify((new AlertEmitted($alert)));
+                    event(new EventAlert($alert));
                     #$alert->notify(new TelegramNotification());
                     #$this->sendTelegram($user_id,0,$v['lat'],$v['lng']);
 
@@ -201,12 +207,12 @@ class AlertController extends Controller
         $user = $alert->device->user;
         #dd($user);
         #$alert->notify($alert);
-        $user->notify((new AlertEmitted($alert)));
+        #$user->notify((new AlertEmitted($alert)));
 
-        event(new EventAlert($alert));
+        #event(new EventAlert($alert));
 
 
-        broadcast(new EventAlert($alert));
+        #broadcast(new EventAlert($alert));
         $alert->delete();
 
         return back()->withSuccess('Record Deleted with Success');

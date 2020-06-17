@@ -13,7 +13,7 @@
     <div class="input-group mt-1">
         <div class="input-group-prepend">
             <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                title="Tooltip on top">?</div>
+                title="Name of this device"><span data-feather="target"></span></div>
         </div>
         <input class="form-control" placeholder="Device Name" name="name" >
     </div>
@@ -21,7 +21,7 @@
     <div class="input-group mt-1">
         <div class="input-group-prepend">
             <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                title="Tooltip on top">?</div>
+                title="Phone number of this device"><span data-feather="phone"></span></div>
         </div>
         <input class="form-control" placeholder="Device Tel Number" name="tel" >
     </div>
@@ -80,7 +80,10 @@
             <div class="input-group-text" data-toggle="tooltip" data-placement="top"
                 title="Associated Fences for this Device">?</div>
         </div>
-        <select name="fences_id[]" class="form-control border border-info selectpicker"
+        <select
+        title="Fences Associated to this Device"
+
+        name="fences_id[]" class="form-control border border-info selectpicker"
         multiple>
             <?php
             foreach ($fences as $fence):
@@ -112,7 +115,7 @@
                         <div class="input-group mt-1">
                             <div class="input-group-prepend">
                                 <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                                    title="Tooltip on top">?</div>
+                                title="Name of this device"><span data-feather="target"></span></div>
                             </div>
                             <input class="form-control" name="name" value="{{ $device->name }}">
                         </div>
@@ -120,7 +123,7 @@
                         <div class="input-group mt-1">
                             <div class="input-group-prepend">
                                 <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                                    title="Tooltip on top">?</div>
+                                title="Phone number of this device"><span data-feather="phone"></span></div>
                             </div>
                             <input class="form-control" name="tel" value="{{ $device->tel }}">
                         </div>
@@ -131,11 +134,12 @@
 
                         <div class="row">
                             <div class="col-md-1">
-                                <div class="" data-toggle="tooltip" data-placement="top" title="Tooltip on top">?</div>
+                                <div class="" data-toggle="tooltip" data-placement="top"
+                                title="Time to receive the alert in seconds, from 0 to 60">?</div>
                             </div>
                             <div class="col-md-9">
                                 <input type="range" name="t" id="t" class="custom-range" value=" {{ $device->t }}"
-                                    min="1" step="1" max="10" oninput="t_output.value = t.value">
+                                min="0" step="5" max="60" oninput="t_output.value = t.value">
                             </div>
                             <div class="col-md-1">
                                 <output name="t_output" id="t_output">{{ $device->t }}</output>
@@ -145,11 +149,12 @@
 
                         <div class="row">
                             <div class="col-md-1">
-                                <div class="" data-toggle="tooltip" data-placement="top" title="Tooltip on top">?</div>
+                                <div class="" data-toggle="tooltip" data-placement="top"
+                                title="Minimal distance to Associated Fence, from 10 to 50 meters ">?</div>
                             </div>
                             <div class="col-md-9">
                                 <input type="range" name="d" id="d" class="custom-range" value=" {{ $device->d }}"
-                                    min="1" step="1" max="10" oninput="d_output.value = d.value">
+                                min="10" step="5" max="50" oninput="d_output.value = d.value">
                             </div>
                             <div class="col-md-1">
                                 <output name="d_output" id="d_output">{{ $device->d }}</output>
@@ -159,11 +164,13 @@
 
                         <div class="row">
                             <div class="col-md-1">
-                                <div class="" data-toggle="tooltip" data-placement="top" title="Tooltip on top">?</div>
+                                <div class="" data-toggle="tooltip" data-placement="top"
+                                title="Radius of the Personal Area, from 1 to 5 meters,
+            used to fire a meet event with others registered Users">?</div>
                             </div>
                             <div class="col-md-9">
                                 <input type="range" name="r" id="r" class="custom-range" value=" {{ $device->r }}"
-                                    min="1" step="1" max="10" oninput="r_output.value = r.value">
+                                min="1" step=".5" max="5" oninput="r_output.value = r.value">
                             </div>
                             <div class="col-md-1">
                                 <output name="r_output" id="r_output">{{ $device->r }}</output>
@@ -172,7 +179,10 @@
 
                         <br>
 
-                        <select name="fences_id[]" class="form-control border border-info selectpicker" multiple>
+                        <select
+                        title="Fences Associated to this Device"
+                        name="fences_id[]"
+                        class="form-control border border-info selectpicker" multiple>
                             <?php
                             foreach ($fences as $fence):
                                 $sel = '';

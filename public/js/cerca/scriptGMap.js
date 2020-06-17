@@ -1168,23 +1168,22 @@ function fence2LatLng(fence){
 function saveFence() {
 
     if (fence.numberOfVertices() == 0) {
-        modal.header = "Erro!";
-        modal.html = "Cerca não definida.";
+        modal.header = "Error!";
+        modal.html = "Fence not defined";
         modal.show();
 
     } else if (fence.isValid()) {
         //modal.header = "Dados para o servidor";
         //modal.html = "<textarea rows='10' cols='60'>" + JSON.stringify(fence.vertex) + "</textarea>";
         //modal.show();
-        //var user_id = document.getElementById('user_id').value;
+        var user_id = document.getElementById('user_id').value;
         var nome_cerca = document.getElementById('nome_cerca').value;
 
         //console.log(JSON.stringify(fence2LatLng(fence.vertex)));
         var fenceLatLng = fence2LatLng(fence.vertex);
 
-        var data = JSON.stringify({name:nome_cerca,fence:fenceLatLng});
+        var data = JSON.stringify({user_id:user_id,name:nome_cerca,fence:fenceLatLng});
         console.log(data);
-
 
         //html2canvas(document.querySelector("#mapa")).then(canvas => {
             //document.body.appendChild(canvas)
@@ -1195,7 +1194,7 @@ function saveFence() {
 
         $.ajax({
             //url: "http://200.156.26.136/fencybot/public/adm/fence/add",
-            url: "http://localhost/cerca/public/adm/fence/add",
+            url: "http://localhost/fencybot/public/adm/fence/add",
             type: 'POST',
             contentType: "application/json; charset=utf-8",
             data: data,
@@ -1211,11 +1210,11 @@ function saveFence() {
             },
             dataType: 'json',
             success: function (d) {
-                alert('OK - cerca inserida');
+                alert('Fence registered with Success!');
                 location.reload();
             },
             error: function (e) {
-                alert('Erro: '+JSON.stringify(e));
+                alert('Error: '+JSON.stringify(e));
             }
         });
         document.getElementById('nome_cerca').value="";

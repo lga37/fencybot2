@@ -41,13 +41,13 @@ class DeviceController extends Controller
 
             $fences_id = $request->get('fences_id');
             $device->fences()->sync($fences_id);
-            return back()->withSuccess( ' created successfully ... ');
+            return back()->withSuccess('Record Inserted with Success');
             #return back()->with('status', 'device created successfully.');
 
         } catch(Exception $e){
             #Session::flash('message', );
             #return redirect()->to('/here')->withErrors(['message1'=>'this is first message']);
-            return back()->withErrors(['message1'=>'this is first message']);
+            return back()->withError('Error on Database processing');
             #return back()->with('status', ['text'=>$e->getMessage(),'type'=>'danger'] );
             #echo $e->getMessage();
         }
@@ -83,14 +83,14 @@ class DeviceController extends Controller
         }
 
 
-        return back()->with('status', 'device updated!');
+        return back()->withSuccess('Record Updated with Success');
     }
 
 
     public function destroy(Device $device)
     {
         $device->delete();
-        return back()->with('status', 'Item Deletado com Sucesso');
+        return back()->withSuccess('Record Deleted with Success');
     }
 
     public function show(Device $device)
@@ -106,10 +106,8 @@ class DeviceController extends Controller
 
         $request->validate([
             'name' => 'required|min:2',
-        ], [
-            'name.required' => 'Nome e obrigatorio',
-            'name.min' => 'Minimo de 5 carcateres',
         ]);
+        
         return $request;
     }
 }

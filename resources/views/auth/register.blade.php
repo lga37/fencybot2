@@ -29,7 +29,10 @@
                             <label for="tel" class="col-md-4 col-form-label text-md-right">{{ __('Tel') }}</label>
 
                             <div class="col-md-6">
-                                <input id="tel" type="text" class="form-control @error('tel') is-invalid @enderror" name="tel" value="{{ old('tel') }}" required autocomplete="tel" autofocus>
+                                <input id="tel" type="tel"
+                                class="form-control @error('tel') is-invalid @enderror"
+                                name="tel" value="{{ old('tel') }}"
+                                required autocomplete="tel" autofocus>
 
                                 @error('tel')
                                     <span class="invalid-feedback" role="alert">
@@ -79,7 +82,8 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-lg btn-primary">
+                                <button type="submit"
+                                class="btn btn-outline-primary btn-lg">
                                     {{ __('Register') }}
                                 </button>
                             </div>
@@ -91,3 +95,23 @@
     </div>
 </div>
 @endsection
+
+
+<script>
+    //var input = document.querySelector("#tel");
+    //var input = $("#tel");
+    $("#tel").intlTelInput( {
+
+        preferredCountries: ["us", "br"],
+            separateDialCode: true,
+            initialCountry: "br",
+            separateDialCode: true,
+
+        })
+        .on('countrychange', function (e, countryData) {
+            $("#code").val((
+                $("#tel")
+            .intlTelInput("getSelectedCountryData").dialCode));
+
+    });
+</script>

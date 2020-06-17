@@ -35,7 +35,7 @@ Route::group(['prefix' => 'adm', 'middleware' => ['auth']], function () {
     Route::get('/adm', 'HomeController@index')->name('home');
     Route::get('/user/profile', 'UserController@profile')->name('user.profile');
     Route::post('/user/update', 'UserController@update')->name('user.update');
-    Route::get('/user/telegram', 'UserController@telegram')->name('user.telegram');
+    Route::get('/user/notify', 'UserController@notify')->name('user.notify');
 
     Route::post('/user/emailchange', 'UserController@emailchange')->name('user.emailchange');
 

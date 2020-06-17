@@ -30,7 +30,7 @@ class AlertEmitted extends Mailable
 
         return $this->markdown('email.alert')
         ->with([
-            'lat' => $this->alert->lat,
+            'fence' => $this->alert->fence,
             'alert' => $this->alert,
 
             ]);

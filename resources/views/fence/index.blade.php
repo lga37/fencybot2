@@ -46,16 +46,25 @@
 @if ($loop->first)
 <div class="container-fluid mt-4">
     <div class="row justify-content-center">
-@endif
+        @endif
         <div class="col-auto mb-3">
             <div class="card p-1" style="width: 20rem;">
                 <form method="POST" action="{{ route('fence.update',['fence'=>$fence->id]) }}">
-                <input class="form-control" name="name" value="{{ $fence->name }}">
-                <div class="card-body">
-                    @method('PUT')
-                    @csrf
-                    <select name="devices_id[]" class="form-control border border-info selectpicker" multiple>
-                        <?php
+
+                    <div class="input-group mt-1">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text" data-toggle="tooltip" data-placement="top"
+                                title="Name of this fence"><span data-feather="map-pin"></span></div>
+                        </div>
+                        <input class="form-control" name="name" value="{{ $fence->name }}">
+                    </div>
+
+                    <div class="card-body">
+                        @method('PUT')
+                        @csrf
+                        <select title="Associated Devices" name="devices_id[]"
+                            class="form-control border border-info selectpicker" multiple>
+                            <?php
                         foreach ($devices as $device):
                             $sel = '';
                             if(isset($device->fences)){
@@ -64,35 +73,32 @@
                             echo sprintf("<option %s value='%d'>%s</option>",$sel,$device->id,$device->name);
                         endforeach;
                         ?>
-                    </select>
-                    <button class="btn mt-2 btn-sm btn-success">save</button>
+                        </select>
+                        <button class="btn mt-2 btn-sm btn-success">save</button>
 
                 </form>
 
-                </div>
-                <div class="card-footer">
+            </div>
+            <div class="card-footer">
 
-                    <button type="button" href="#" class="mr-2 btn btn-sm btn-primary"
-                        data-cerca="{{ $fence->fence ?? false }}"
-                        data-name="{{ $fence->name }}"
-                        data-toggle="modal"
-                        data-target="#cerca_modal">
-                        map
-                    </button>
-                    <form method="POST" action="{{ route('fence.destroy',['fence'=>$fence]) }}">
-                        @method('DELETE')
-                        @csrf
+                <form method="POST" action="{{ route('fence.destroy',['fence'=>$fence]) }}">
+                    @method('DELETE')
+                    @csrf
 
-                        <button class="btn btn-sm btn-danger">del</button>
-                    </form>
+                    <button class="btn btn-sm btn-danger mr-2">del</button>
+                    <a href="#" class="mr-2 btn btn-sm btn-primary" data-cerca="{{ $fence->fence ?? false }}"
+                        data-name="{{ $fence->name }}" data-toggle="modal" data-target="#cerca_modal">
+                        view
+                    </a>
+                </form>
 
-                </div>
             </div>
         </div>
-
-
-@if ($loop->last)
     </div>
+
+
+    @if ($loop->last)
+</div>
 </div>
 @endif
 
@@ -108,8 +114,7 @@
         Adding New Fences
     </div>
     <div class="form-group">
-        <input class="form-control" id="pac-input" class="pac-target-input"
-        placeholder="Enter a Location"
+        <input class="form-control" id="pac-input" class="pac-target-input" placeholder="Enter a Location"
             autocomplete="off">
     </div>
 
@@ -119,6 +124,7 @@
 <br>
 <div class="row">
     <div class="col-sm-12 col-md-12">
+        <input type="hidden" id="user_id" value="{{ Auth()->id() }}">
         <div class="row">
             <div class="col-md-3">
                 <input class="form-control-lg  border border-success" id="nome_cerca" placeholder="Fence Name">
@@ -143,8 +149,7 @@
     </ul>
 </div>
 
-<div class="modal fade" id="cerca_modal" tabindex="-1" role="dialog"
-    aria-labelledby="cerca_modal" aria-hidden="true">
+<div class="modal fade" id="cerca_modal" tabindex="-1" role="dialog" aria-labelledby="cerca_modal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -168,7 +173,8 @@
 @endsection
 
 @section('js')
-<script src="https://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE')}}&libraries=places&callback=init" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE')}}&libraries=places&callback=init" async
+    defer></script>
 <script>
 
     $('#cerca_modal').on('show.bs.modal', function (event) {

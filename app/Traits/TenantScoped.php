@@ -19,8 +19,8 @@ trait TenantScoped{
             if($model->user_id == (int) Auth::id()){
 
             } else {
-                dd('hhh');
-                return redirect('login')->with('status', 'erro - nao pertence');
+                #dd('hhh');
+                return redirect('login')->with('status', 'error in TenantScope');
 
             }
 

@@ -42,10 +42,6 @@ class FenceController extends Controller
         $request->validate([
             'name' => 'required|min:2',
             'fence' => 'required|json',
-        ],[
-            'name.required' => 'Nome e obrigatorio',
-            'name' => 'A cerca deve ser um JSON valido',
-            'name.min' => 'Minimo de 2 carcateres',
         ]);
         return $request;
     }
@@ -60,17 +56,23 @@ class FenceController extends Controller
         $name = $request->json('name');
         ### atencao aqui, pois se usar fence p json e fence p model da aquela baita confusao
         $cerca = $request->json('fence');
-        #$user_id = $request->json('user_id');
+        $user_id = (int) $request->json('user_id');
+        if(!$user_id > 0){
+            return response()->json(['error' => 'Incorrect User'], 406);
+
+        }
 
         #dd((int) $user_id);
+        #dd($cerca);
+        $cerca_prepare = json_encode($cerca,JSON_UNESCAPED_SLASHES);
+        #dd($cerca_prepare);
 
-
-        $fence = new Fence();
+        $fence = new Fence();  #############)->withoutGlobalScopes();
         $fence->name =  $name;
         //json_encode($array,JSON_UNESCAPED_SLASHES);
-        $fence->fence =  json_encode($cerca,JSON_UNESCAPED_SLASHES);
+        $fence->fence = $cerca_prepare;
         #vou testar o scoped
-        #$fence->user_id = (int) $user_id;
+        $fence->user_id = $user_id;
         $fence->save();
         return response()->json(['status' => 'OK'], 201);
 
@@ -109,7 +111,7 @@ class FenceController extends Controller
 
 
         #return redirect('fence.index')->withSuccess('fence updated!');
-        return redirect()->route('fence.index')->withSuccess('fence updated!');
+        return redirect()->route('fence.index')->withSuccess('Fence updated!');
     }
 
     public function getFences (string $tel)
@@ -125,7 +127,7 @@ class FenceController extends Controller
     }
 
 
-    public function del_device(int $fence_id, int $device_id)
+    public function del_device888888888888(int $fence_id, int $device_id)
     {
         #$this->isValid($request);
 
@@ -143,6 +145,6 @@ class FenceController extends Controller
     public function destroy(Fence $fence)
     {
         $fence->delete();
-        return back()->with('status', 'Item Deletado com Sucesso');
+        return back()->withSuccess('Record Deleted with Success');;
     }
 }

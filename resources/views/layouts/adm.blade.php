@@ -151,7 +151,7 @@
                 'cluster'=> config('broadcasting.connections.pusher.options.cluster'),
             ],
             'user'=> auth() -> check() ? auth() -> user() -> id : '',
-        ])!!}
+        ]) !!}
     </script>
 
 
@@ -238,8 +238,8 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link
-                            {{ request()->routeIs('user.telegram') ? 'active' : '' }}"
-                                href="{{ route('user.telegram') }}">
+                            {{ request()->routeIs('user.notify') ? 'active' : '' }}"
+                                href="{{ route('user.notify') }}">
                                 <span data-feather="bell-off"></span>
                                 Notifications
                             </a>

@@ -30,7 +30,7 @@ class FenceDeviceController extends Controller
 
         $fencedevice->save();
 
-        return back()->with('status', 'fdevice created successfully.');
+        return back()->withSuccess('Record Inserted with Success');
 
     }
 
@@ -44,7 +44,7 @@ class FenceDeviceController extends Controller
         $fence_id = (int) $request->get('fence_id');
         $fencedevice->save();
 
-        return back()->with('status', 'fdevice updated!');
+        return back()->withSuccess('Record Updated with Success');;
 
     }
 
@@ -52,7 +52,7 @@ class FenceDeviceController extends Controller
     public function destroy(FenceDevice $fencedevice)
     {
         $fencedevice->delete();
-        return back()->with('status', 'Item Deletado com Sucesso');
+        return back()->withSuccess('Record Deleted with Success');
     }
 
 
@@ -62,9 +62,6 @@ class FenceDeviceController extends Controller
 
         $request->validate([
             'name' => 'required|min:2',
-        ],[
-            'name.required' => 'Nome e obrigatorio',
-            'name.min' => 'Minimo de 5 carcateres',
         ]);
         return $request;
     }

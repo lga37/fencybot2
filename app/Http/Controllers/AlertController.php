@@ -113,7 +113,7 @@ class AlertController extends Controller
     }
 
 
-    public function show(int $id)
+    public function show44444444444( $id)
     {
         $alert = Alert::find($id);
         return view('alert.show', compact('alert'));
@@ -209,7 +209,7 @@ class AlertController extends Controller
         broadcast(new EventAlert($alert));
         $alert->delete();
 
-        return back()->with('status', 'Item Deletado com Sucesso');
+        return back()->withSuccess('Record Deleted with Success');
     }
 
 

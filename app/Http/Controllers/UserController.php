@@ -5,12 +5,18 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    public function notify()
+    {
+        return view('user.notify');
     }
 
     public function profile()
@@ -29,26 +35,24 @@ class UserController extends Controller
         $user = Auth::user();
         $this->validate(request(), [
             'name' => 'required',
-            'tel' => 'required|digits:13',
-            'chat_id' => 'required',
+            'tel' => 'required',
         ]);
 
         $user->name = request('name');
         $user->tel = request('tel');
-        $user->chat_id = request('chat_id');
         $user->save();
-        return back()->with('status', 'user updated successfully.');
+        return back()->withSuccess('User Updated with Success');
     }
     public function emailchange(Request $request)
     {
         $user = Auth::user();
         $this->validate(request(), [
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email',
         ]);
 
         $user->email = request('email');
         $user->save();
-        return back()->with('status', 'user updated successfully.');
+        return back()->withSuccess('User Updated with Success');
     }
 
 
@@ -63,7 +67,7 @@ class UserController extends Controller
 
         $user->password = bcrypt(request('password'));
         $user->save();
-        return back()->with('status', 'user pass updated successfully.');
+        return back()->withSuccess('User Updated with Success');
     }
 
     public function getAuthUser()
@@ -106,11 +110,4 @@ class UserController extends Controller
 
         return $user;
     }
-
-    public function telegram (Request $request)
-    {
-        return view('user.telegram');
-
-    }
-
 }

@@ -1,5 +1,11 @@
 <?php $__env->startSection('css'); ?>
 <style>
+
+    .vitrine:hover {
+        border: 1px solid blue;
+    }
+
+
     #mapa {
         width: 100%;
         height: 500px;
@@ -37,16 +43,49 @@
 <?php echo $__env->make('shared.msgs', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php echo $__env->make('shared.header', ['name' => 'Fences'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
+<form>
+    <div class="form-group">
+        Adding New Fences
+    </div>
+    <div class="form-group">
+        <input class="form-control" id="pac-input" class="pac-target-input" placeholder="Enter a Location"
+            autocomplete="off">
+    </div>
 
+    <div id="mapa" class="border border-danger"></div>
+</form>
 
 <br>
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <input type="hidden" id="user_id" value="<?php echo e(Auth()->id()); ?>">
+        <div class="row">
+            <div class="col-md-3">
+                <input class="form-control-lg  border border-success" id="nome_cerca" placeholder="Fence Name">
+            </div>
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-3">
+                <button class="btn  btn-block btn-lg btn-outline-warning " id="limpar">Clean Fence</button>
+            </div>
+            <div class="col-md-3">
+                <button class="btn  btn-block btn-lg btn-outline-success" id="salvar">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<?php echo $__env->make('shared.header', ['name' => 'Edit your Fences'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
+
 <?php $__empty_1 = true; $__currentLoopData = $fences; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fence): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 <?php if($loop->first): ?>
 <div class="container-fluid mt-4">
     <div class="row justify-content-center">
         <?php endif; ?>
         <div class="col-auto mb-3">
-            <div class="card p-1" style="width: 20rem;">
+            <div class="card p-1 vitrine" style="width: 20rem;">
                 <form method="POST" action="<?php echo e(route('fence.update',['fence'=>$fence->id])); ?>">
 
                     <div class="input-group mt-1">
@@ -107,37 +146,6 @@
 <br>
 
 
-<form>
-    <div class="form-group">
-        Adding New Fences
-    </div>
-    <div class="form-group">
-        <input class="form-control" id="pac-input" class="pac-target-input" placeholder="Enter a Location"
-            autocomplete="off">
-    </div>
-
-    <div id="mapa" class="border border-danger"></div>
-</form>
-
-<br>
-<div class="row">
-    <div class="col-sm-12 col-md-12">
-        <input type="hidden" id="user_id" value="<?php echo e(Auth()->id()); ?>">
-        <div class="row">
-            <div class="col-md-3">
-                <input class="form-control-lg  border border-success" id="nome_cerca" placeholder="Fence Name">
-            </div>
-            <div class="col-md-1">
-            </div>
-            <div class="col-md-3">
-                <button class="btn  btn-block btn-lg btn-outline-warning " id="limpar">Clean Fence</button>
-            </div>
-            <div class="col-md-3">
-                <button class="btn  btn-block btn-lg btn-outline-success" id="salvar">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div id="context_menu">
     <ul id="linklist">
@@ -176,52 +184,34 @@
 <script>
 
     $('#cerca_modal').on('show.bs.modal', function (event) {
-        //event.preventDefault();
-        //alert(11)
         var button = $(event.relatedTarget)
-        //var lat = parseFloat(button.data('lat'));
-        //var lng = parseFloat(button.data('lng'));
         var cerca = button.data('cerca');
         var label_cerca = button.data('name');
         $("#label_cerca").text(label_cerca);
-        //alert(label_cerca);
-        //var modal = $(this)
-        //modal.find('.modal-title').text('New message to ' + recipient)
 
-        console.log(cerca);
+        //console.log(cerca);
 
         var fence = new GMapFence();
         for (let i = 0; i < cerca.length; i++) {
-            //var utm = GeoConverson.LatLng2UTM(cerca[i].lat, cerca[i].lng);
-            //console.log(utm);
-            //fence.addVertex(new GeoPoint(parseFloat(cerca[i].lat), parseFloat(cerca[i].lng)));
-            //fence.addVertex(cerca[i]);
+            fence.addVertex(new GeoPoint(parseFloat(cerca[i].lat), parseFloat(cerca[i].lng)));
         }
 
-        //lat = -22.90278;
-        //lng = -43.2075;
         var centralPoint = fence.centralPointLatLng();
-        console.log(centralPoint);
+        //console.log(centralPoint);
+        var center = fence.isValid()? {'lat':centralPoint._lat,'lng':centralPoint._lon} : cerca[0];
+        //console.log(center);
+
         var map = new google.maps.Map(document.getElementById('map_cerca'), {
-            //center: centralPoint,
-            //center: { lat: lat, lng: lng },
-            zoom: 15,
+            center: center,
+            zoom: 17,
             mapTypeControl: false,
             scaleControl: false,
             streetViewControl: false,
             rotateControl: false
         });
 
-
-
-        /*                 var bounds = new google.maps.LatLngBounds(
-                            marker1.getPosition(), marker2.getPosition()
-                            fence.getBounds()
-                        );
-                        map.fitBounds(bounds); */
-
         var pl = new google.maps.Polygon({
-            path: fence.generatePath(),
+            path: cerca,
             strokeColor: "#0000FF",
             strokeOpacity: 0.8,
             strokeWeight: 2,
@@ -262,8 +252,6 @@
             { id: '#center_mark', callback: centerMark },
             { id: '#close_menu', callback: closeContextMenu }]);
 
-        //modal = new ModalWindow("#janela_modal", "#titulo_modal", "#texto_modal");
-        //$("#mostrar").on("click", showFenceCoords);
         $("#salvar").on("click", saveFence);
         $("#limpar").on("click", cleanFence);
 

@@ -65,19 +65,28 @@
 
 
 <table class="table table-striped table-sm">
+    <tr>
+        <th>id</th>
+        <th>fence</th>
+        <th>device</th>
+        <th>time</th>
+        <th>map</th>
+        <th>del</th>
+    </tr>
     @forelse ($alerts as $alert)
+
+
     <tr>
         <td>{{ $alert->id }}</td>
 
-        <td>{{ $alert->dt->format('l d/M H:i:s') }}</td>
 
-        <td><a class="btn btn-sm btn-info"
-                onclick="javascript:geocodeLatLng('{{$alert->lat}}','{{$alert->lng}}')">local</a> </td>
-
-        <td>{{ $alert->dist }}</td>
-
-        <td>{{ $alert->device->name ?? '' }}</td>
-        <td>{{ $alert->fence->name ?? '' }}</td>
+<!--         <td><a class="btn btn-sm btn-info"
+            onclick="javascript:geocodeLatLng('{{$alert->lat}}','{{$alert->lng}}')">local</a>
+        </td>
+ -->
+            <td>{{ $alert->fence->name ?? '' }}</td>
+            <td>{{ $alert->device->name ?? '' }}</td>
+            <td>{{ $alert->dt->format('l d/M H:i:s') }}</td>
 
         <td class="">
             <button class="btn btn-primary" data-lat="{{ $alert->lat }}" data-lng="{{ $alert->lng }}"

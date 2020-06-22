@@ -62,7 +62,17 @@
 <br>
 
 
-<table class="table table-striped">
+<table class="table table-striped table-sm">
+    <tr>
+        <th>id</th>
+        <th>type</th>
+        <th>fence</th>
+        <th>device</th>
+        <th>time</th>
+        <th>d</th>
+        <th>map</th>
+        <th>del</th>
+    </tr>
     <?php $__empty_1 = true; $__currentLoopData = $alerts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $alert): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
     <tr>
         <td><?php echo e($alert->id); ?></td>
@@ -83,15 +93,16 @@
 
 
         </td>
+        <td><?php echo e($alert->fence->name ?? ''); ?></td>
+        <td><?php echo e($alert->device->name ?? ''); ?></td>
         <td><?php echo e($alert->dt->format('l d/M H:i:s')); ?></td>
 
-        <td><a class="btn btn-sm btn-info"
-                onclick="javascript:geocodeLatLng('<?php echo e($alert->lat); ?>','<?php echo e($alert->lng); ?>')">local</a> </td>
-
+<!--         <td><a class="btn btn-sm btn-info"
+                onclick="javascript:geocodeLatLng('<?php echo e($alert->lat); ?>','<?php echo e($alert->lng); ?>')">local</a>
+        </td>
+ -->
         <td><?php echo e($alert->dist); ?></td>
 
-        <td><?php echo e($alert->device->name ?? ''); ?></td>
-        <td><?php echo e($alert->fence->name ?? ''); ?></td>
 
         <td class="">
             <button class="btn btn-primary" data-lat="<?php echo e($alert->lat); ?>" data-lng="<?php echo e($alert->lng); ?>"

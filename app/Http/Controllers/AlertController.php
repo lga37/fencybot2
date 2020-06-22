@@ -112,12 +112,15 @@ class AlertController extends Controller
 
     }
 
-
-    public function show44444444444( $id)
+    public function invasions(Request $request)
     {
-        $alert = Alert::find($id);
-        return view('alert.show', compact('alert'));
+        $devices = Device::all();
+
+        $alerts = Alert::with(['fence', 'device'])->get();
+        return view('alert.invasions', compact('devices', 'alerts'));
+
     }
+
 
 
     private function getDevicesByTel($tel)
@@ -133,7 +136,12 @@ class AlertController extends Controller
         $devices = $this->getDevicesByTel($tel);
         $lotes = $request->json();
         #dd($lotes);
+        #dd($request->getContent());
+
+
         if ($devices->count() > 0) {
+
+
             $devices->each(function ($item, $key) use ($lotes) {
                 foreach ($lotes as $v) {
                     $alert = new Alert();
@@ -159,7 +167,7 @@ class AlertController extends Controller
                 }
             });
         } else {
-            return response()->json(['status' => 'ERRO'], 406);
+            return response()->json(['status' => 'ERROR'], 406);
         }
         return response()->json(['status' => 'OK'], 201);
     }
@@ -171,7 +179,7 @@ class AlertController extends Controller
         $lotes = $request->json();
         #dd($lotes);
         if ($lotes->count() == 0) {
-            return response()->json(['status' => 'ERRO - empty JSON'], 406);
+            return response()->json(['status' => 'ERROR - empty JSON'], 406);
         }
         if ($devices->count() > 0) {
             $devices->each(function ($item, $key) use ($lotes) {
@@ -201,10 +209,54 @@ class AlertController extends Controller
     }
 
 
+
+
+    public function invasion(Request $request, string $tel)
+    {
+        #dd('hhh');
+
+        $devices = $this->getDevicesByTel($tel);
+        $lotes = $request->json();
+        #dd($lotes);
+        if ($lotes->count() == 0) {
+            return response()->json(['status' => 'ERROR - empty JSON'], 406);
+        }
+        if ($devices->count() > 0) {
+            $devices->each(function ($item, $key) use ($lotes) {
+                foreach ($lotes as $v) {
+                    $alert = new Alert();
+                    $alert->device_id = (int) $item->id;
+
+                    $alert->type = 3;
+                    $alert->phone = $v['phone'] ?? null;
+                    $alert->lat = $v['lat'];
+                    $alert->lng = $v['lng'];
+                    $alert->dt = $v['dt'] ?? null;
+                    $alert->save();
+
+                    $user_id = (int) $item->user_id;
+                    $user = User::find($user_id);
+                    $user->notify((new AlertEmitted($alert)));
+                    event(new EventAlert($alert));
+
+                }
+            });
+        } else {
+            return response()->json(['status' => 'ERRO'], 406);
+        }
+        return response()->json(['status' => 'OK'], 201);
+    }
+
+
+
+
+
+
+
     public function destroy(Alert $alert)
     {
 
-        $user = $alert->device->user;
+        #$user = $alert->device->user;
         #dd($user);
         #$alert->notify($alert);
         #$user->notify((new AlertEmitted($alert)));

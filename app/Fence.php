@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Fence extends Model
 {
-    //use TenantScoped; #ta dando pau em add pois o js nao pega o user_id (=0)
+    use TenantScoped; #ta dando pau em add pois o js nao pega o user_id (=0)
 
     protected $fillable = ['name', 'fence', 'user_id'];
 

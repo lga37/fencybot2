@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Str;
 use App\Traits\TenantScoped;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,7 +10,26 @@ class Device extends Model
 {
     use TenantScoped;
 
-    protected $fillable = [ 'name','tel','r','d','t','user_id' ];
+    protected $fillable = [ 'name','tel','r','d','t','partners' ];
+
+    protected $casts = [
+        'partners' => 'array',
+    ];
+
+    public function getPartnersAttribute($v)
+    {
+        #return $v;
+        return Str::contains($v, ',')? explode(',',$v) : [$v];
+    }
+
+    public function setPartnersAttribute($v)
+    {
+        $formatted = trim($v,',');
+        #dd($formatted);
+
+        return $formatted;
+    }
+
 
     public function user()
     {

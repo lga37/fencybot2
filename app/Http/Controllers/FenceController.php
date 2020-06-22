@@ -121,11 +121,13 @@ class FenceController extends Controller
     {
 
         $device = Device::where('tel','=',$tel)
-        ->select('id','user_id','name','t as wait_alert','d as border', 'r as pfence')
+        ->select('id','user_id','name','t as wait_alert','d as border', 'r as pfence','partners')
         ->with('fences:fence_id,name,fence as coords')->first()->toJson();
 
         return response()->json(compact('device'),200);
         #return response()->json(['status' => 'ERRO'], 406);
+
+        #json_encode($yourdata, JSON_UNESCAPED_SLASHES);
 
     }
 

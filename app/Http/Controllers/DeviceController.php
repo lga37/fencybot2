@@ -28,6 +28,8 @@ class DeviceController extends Controller
     {
         $this->isValid($request);
 
+        #dd($request);
+
         try{
             $device = new Device();
             $device->name =  $request->get('name');
@@ -35,6 +37,7 @@ class DeviceController extends Controller
             $device->r =  $request->get('r');
             $device->d =  $request->get('d');
             $device->t =  $request->get('t');
+            $device->partners =  $request->get('partners');
 
             #$device->user_id = (int) Auth::id();
             $device->save();
@@ -45,9 +48,10 @@ class DeviceController extends Controller
             #return back()->with('status', 'device created successfully.');
 
         } catch(Exception $e){
+            //dd($e);
             #Session::flash('message', );
             #return redirect()->to('/here')->withErrors(['message1'=>'this is first message']);
-            return back()->withError('Error on Database processing');
+            return back()->withError('Error on Database processing: '.$e->getMessage());
             #return back()->with('status', ['text'=>$e->getMessage(),'type'=>'danger'] );
             #echo $e->getMessage();
         }
@@ -57,6 +61,8 @@ class DeviceController extends Controller
 
     public function update(Request $request, int $id)
     {
+        #dd($request->get('partners'));
+
         $this->isValid($request);
 
 
@@ -66,6 +72,8 @@ class DeviceController extends Controller
         $device->t =  $request->get('t');
         $device->r =  $request->get('r');
         $device->d =  $request->get('d');
+        $device->partners =  $request->get('partners');
+
 
         $device->save();
 

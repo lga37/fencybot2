@@ -23,6 +23,9 @@ Route::post('/adm/alert/track/{tel}', 'AlertController@track')->name('alert.trac
 #puladas de cerca
 Route::post('/adm/alert/post/{tel}', 'AlertController@postAlerts')->name('alert.post');
 
+#invasoes
+Route::post('/adm/alert/invasion/{tel}', 'AlertController@invasion')->name('alert.invasion');
+
 
 Route::get('/adm/fence/{tel}/get', 'FenceController@getFences')->name('fence.get');
 
@@ -53,11 +56,12 @@ Route::group(['prefix' => 'adm', 'middleware' => ['auth']], function () {
 
     Route::get('/alert/hist', 'AlertController@hist')->name('alert.hist');
     Route::post('/alert/filter', 'AlertController@filter')->name('alert.filter');
+    Route::get('/alert/invasions', 'AlertController@invasions')->name('alert.invasions');
     Route::post('/alert/filterTracks', 'AlertController@filterTracks')->name('alert.filterTracks');
 
 
     Route::resource('alert', 'AlertController', [
-        'only' => ['destroy', 'show', 'store', 'index']
+        'only' => ['destroy', 'store', 'index']
     ]);
 
 });

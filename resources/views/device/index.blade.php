@@ -1,5 +1,13 @@
 @extends('layouts.adm')
 
+@section('css')
+<style>
+    .vitrine:hover {
+        border: 1px solid blue;
+    }
+</style>
+@endsection
+
 
 @section('content')
 
@@ -38,13 +46,19 @@
                     <div class="" data-toggle="tooltip" data-placement="top"
                         title="Time to receive the alert in seconds, from 0 to 60">? time</div>
                 </div>
+
                 <div class="col-md-9">
-                    <input type="range" name="t" id="t" class="custom-range" min="0" step="5" max="60"
-                        oninput="t_output.value = t.value">
+
+                    <input type="range" class="custom-range" name="t" min="0" step="5" max="60" value="20"
+                        oninput="this.form.t_input.value=this.value">
                 </div>
                 <div class="col-md-1">
-                    <output name="t_output" id="t_output"></output>
+                    <input class="border-0 input-sm" type="number" name="t_input" min="0" step="5" max="60" value="20"
+                        oninput="this.form.t.value=this.value">
+
                 </div>
+
+
             </div>
 
 
@@ -53,13 +67,18 @@
                     <div class="" data-toggle="tooltip" data-placement="top"
                         title="Minimal distance to Associated Fence, from 10 to 50 meters ">? dist</div>
                 </div>
+
                 <div class="col-md-9">
-                    <input type="range" name="d" id="d" class="custom-range" min="10" step="5" max="50"
-                        oninput="d_output.value = d.value">
+
+                    <input type="range" class="custom-range" name="d" min="10" step="5" max="50" value="20"
+                        oninput="this.form.d_input.value=this.value">
                 </div>
                 <div class="col-md-1">
-                    <output name="d_output" id="d_output"></output>
+                    <input class="border-0 input-sm" type="number" name="d_input" min="10" step="5" max="50" value="20"
+                        oninput="this.form.d.value=this.value">
+
                 </div>
+
             </div>
 
 
@@ -69,17 +88,31 @@
                     used to fire a meet event with others registered Users">? radius</div>
                 </div>
                 <div class="col-md-9">
-                    <input type="range" name="r" id="r" class="custom-range" min="1" step=".5" max="5"
-                        oninput="r_output.value = r.value">
+
+                    <input type="range" class="custom-range" name="r" min="1" step=".5" max="5" value="2"
+                        oninput="this.form.r_input.value=this.value">
                 </div>
                 <div class="col-md-1">
-                    <output name="r_output" id="r_output"></output>
+                    <input class="border-0 input-sm" type="number" name="r_input" min="1" step=".5" max="5" value="2"
+                        oninput="this.form.r.value=this.value">
+
                 </div>
             </div>
 
-            <br>
 
-            <div class="input-group mt-1">
+            <div class="input-group my-3">
+                <div class="input-group-prepend">
+                    <div class="input-group-text" data-toggle="tooltip" data-placement="top"
+                        title="Partners, assign numbers that will not be computed, if occurs a meeting inside your personal circle">
+                        <span data-feather="user"></span></div>
+                </div>
+                <input class="form-control" placeholder="Partners Tels on the format XXYYYYYYYYY, XXYYYYYYYYY, ..."
+                    name="partners">
+            </div>
+
+
+
+            <div class="input-group my-2">
                 <div class="input-group-prepend">
                     <div class="input-group-text" data-toggle="tooltip" data-placement="top"
                         title="Associated Fences for this Device">?</div>
@@ -103,6 +136,8 @@
 
 <br>
 
+@include('shared.header', ['name' => 'Edit your Devices'])
+
 
 @forelse ($devices as $device)
 
@@ -112,7 +147,7 @@
     <div class="row justify-content-center">
         @endif
         <div class="col-auto mb-3">
-            <div class="card p-0" style="width: 20rem;">
+            <div class="card p-0 vitrine" style="width: 20rem;">
                 <div class="card-body p-2">
                     <form method="POST" action="{{ route('device.update',['device'=>$device->id]) }}">
                         @method('PUT')
@@ -182,7 +217,20 @@
                             </div>
                         </div>
 
-                        <br>
+
+
+                        <div class="input-group my-3">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text" data-toggle="tooltip" data-placement="top"
+                                    title="Partners, assign numbers that will not be computed, if occurs a meeting inside your personal circle">
+                                    <span data-feather="user"></span>
+                                </div>
+                            </div>
+                            <input class="form-control"
+                                value="{{ $device->partners ? implode(',',$device->partners) : '' }}"
+                                placeholder="XXYYYYYYYYY, XXYYYYYYYYY, ..." name="partners">
+                        </div>
+
 
                         <select title="Fences Associated to this Device" name="fences_id[]"
                             class="form-control border border-info selectpicker" multiple>
@@ -260,52 +308,19 @@
 
     $('#device_modal').on('show.bs.modal', function (event) {
 
-        var bounds = new google.maps.LatLngBounds();
-        var i;
-
-        // The Bermuda Triangle
-        var polygonCoords = [
-            new google.maps.LatLng(25.774252, -80.190262),
-            new google.maps.LatLng(18.466465, -66.118292),
-            new google.maps.LatLng(32.321384, -64.757370),
-            new google.maps.LatLng(25.774252, -80.190262)
-        ];
-
-        for (i = 0; i < polygonCoords.length; i++) {
-            bounds.extend(polygonCoords[i]);
-        }
-
-        // The Center of the Bermuda Triangle - (25.3939245, -72.473816)
-        console.log(bounds.getCenter());
-
-        //event.preventDefault();
-        //alert(11)
         var button = $(event.relatedTarget)
-        //var lat = parseFloat(button.data('lat'));
-        //var lng = parseFloat(button.data('lng'));
         var cercas = button.data('cercas');
-        var label_cerca = button.data('name');
-        $("#label_cerca").text(label_cerca);
+        var label_device = button.data('name');
+        $("#label_cerca").text(label_device);
 
+        //console.log(cercas);
 
-        console.log(cercas);
+        var center_cerca = JSON.parse(cercas[0].fence);
+        var center = { 'lat': parseFloat(center_cerca[0].lat), 'lng': parseFloat(center_cerca[0].lng) };
 
-        var fence = new GMapFence();
-        for (let i = 0; i < cercas[0].length; i++) {
-            //var utm = GeoConverson.LatLng2UTM(cerca[i].lat, cerca[i].lng);
-            //console.log(utm);
-            //fence.addVertex(new GeoPoint(parseFloat(cerca[i].lat), parseFloat(cerca[i].lng)));
-            //fence.addVertex(cerca[i]);
-        }
-
-        //lat = -22.90278;
-        //lng = -43.2075;
-        var centralPoint = fence.centralPointLatLng();
-        console.log(centralPoint);
         var map = new google.maps.Map(document.getElementById('map_cerca'), {
-            center: bounds.getCenter(),
-            //center: { lat: lat, lng: lng },
-            zoom: 15,
+            center: center,
+            zoom: 16,
             mapTypeControl: false,
             scaleControl: false,
             streetViewControl: false,
@@ -313,17 +328,26 @@
         });
 
 
+        Array.prototype.sample = function () {
+            return this[Math.floor(Math.random() * this.length)];
+        }
 
-        var pl = new google.maps.Polygon({
-            path: polygonCoords,
-            strokeColor: "#0000FF",
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: "#0000FF",
-            fillOpacity: 0.1
-        });
+        var cores = ['red', 'orange', 'purple', 'green', 'blue', 'yellow', 'navy', 'teal'];
 
-        pl.setMap(map);
+        for (let i = 0; i < cercas.length; i++) {
+            var path = JSON.parse(cercas[i].fence);
+            var cor = cores.sample();
+            var pl = new google.maps.Polygon({
+                path: path,
+                strokeColor: cor,
+                fillColor: cor,
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillOpacity: 0.1
+            });
+
+            pl.setMap(map);
+        }
 
 
     });

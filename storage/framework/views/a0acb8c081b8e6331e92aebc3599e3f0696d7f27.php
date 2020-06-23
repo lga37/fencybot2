@@ -224,8 +224,16 @@
                                     <span data-feather="user"></span>
                                 </div>
                             </div>
+                            <?php $partners = ''; ?>
+                            <?php $__currentLoopData = $device->partners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php $partners .= $v.','; ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php $partners = trim($partners,','); ?>
+                            <?php $partners = trim($partners,'"'); ?>
+
+
                             <input class="form-control"
-                                value="<?php echo e($device->partners ? implode(',',$device->partners) : ''); ?>"
+                                value="<?php echo e($partners); ?>"
                                 placeholder="XXYYYYYYYYY, XXYYYYYYYYY, ..." name="partners">
                         </div>
 

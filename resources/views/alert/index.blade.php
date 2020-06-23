@@ -66,20 +66,28 @@
 
 <table class="table table-striped table-sm">
     <tr>
+        <th><input type="checkbox" class="" value="1" name="checkAll"></th>
         <th>id</th>
         <th>type</th>
         <th>fence</th>
         <th>device</th>
         <th>time</th>
-        <th>invaded by</th>
+        <th>dist</th>
         <th>map</th>
         <th>del</th>
     </tr>
     @forelse ($alerts as $alert)
     <tr>
+
+        <td><input type="checkbox" value="{{$alert->id}}" name="ids[]"></td>
+
         <td>{{ $alert->id }}</td>
         <td>
             @switch($alert->type)
+            @case(0)
+            <span class="badge badge-secondary">default</span>
+            @break
+
             @case(1)
             <span class="badge badge-danger">close</span>
             @break
@@ -88,6 +96,13 @@
             <span class="badge badge-success">very close</span>
             @break
 
+            @case(3)
+            <span class="badge badge-info">invasion</span>
+            @break
+
+            @case(4)
+            <span class="badge badge-warning">off</span>
+            @break
 
             @default
             <span class="badge badge-secondary">default</span>
@@ -103,7 +118,7 @@
                 onclick="javascript:geocodeLatLng('{{$alert->lat}}','{{$alert->lng}}')">local</a>
         </td>
  -->
-        <td>{{ $alert->phone ?? '-' }}</td>
+        <td>{{ $alert->d ?? '-' }}</td>
 
 
         <td class="">
@@ -119,6 +134,14 @@
         </td>
     </tr>
 
+    @if ($loop->last)
+    <tr><td colspan="2">
+        <form method="POST" action="{{ route('alert.massDestroy') }}">
+            @csrf
+            <button class="btn btn-sm btn-outline-danger">del all</button>
+        </form>
+    </td><td colspan="9">--</td></tr>
+    @endif
 
     @empty
     <p><b>No records</b></p>
@@ -197,7 +220,7 @@
             var lng = parseFloat(button.data('lng')) || -43.2075;
             var cerca = button.data('cerca') || false;
             var modal = $(this)
-            modal.find('.modal-title').text(' Detalhamento:' + lat + ' / ' + lng)
+            modal.find('.modal-title').text(' Details:' + lat + ' / ' + lng)
 
             var map = new google.maps.Map(document.getElementById('map'), {
                 center: { lat: lat, lng: lng },
@@ -220,11 +243,6 @@
                 }
 
                 if (fence.isValid()) {
-                    /*                 var bounds = new google.maps.LatLngBounds(
-                                        marker1.getPosition(), marker2.getPosition()
-                                        fence.getBounds()
-                                    );
-                                    map.fitBounds(bounds); */
                     var pl = new google.maps.Polygon({
                         path: fence.generatePath(),
                         strokeColor: "#0000FF",

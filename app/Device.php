@@ -18,16 +18,10 @@ class Device extends Model
 
     public function getPartnersAttribute($v)
     {
-        #return $v;
+        if(is_null($v) || empty($v)){
+            return [];
+        }
         return Str::contains($v, ',')? explode(',',$v) : [$v];
-    }
-
-    public function setPartnersAttribute($v)
-    {
-        $formatted = trim($v,',');
-        #dd($formatted);
-
-        return $formatted;
     }
 
 

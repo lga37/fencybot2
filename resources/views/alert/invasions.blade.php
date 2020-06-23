@@ -33,6 +33,7 @@
 
 <form method="POST" action="{{ route('alert.filterTracks') }}">
     <div class="input-group mb-3">
+        <input type="hidden" name="type" value="3">
 
         <select class="custom-select" name="device_id">
             <option selected disabled>Device</option>
@@ -149,7 +150,7 @@
         var lng = parseFloat(button.data('lng')) || -43.2075;
         //var cerca = button.data('cerca') || false;
         var modal = $(this)
-        modal.find('.modal-title').text(' Detalhamento:' + lat + ' / ' + lng)
+        modal.find('.modal-title').text(' Details :' + lat + ' / ' + lng)
 
         var map = new google.maps.Map(document.getElementById('map'), {
             center: { lat: lat, lng: lng },

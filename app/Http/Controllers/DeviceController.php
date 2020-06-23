@@ -72,8 +72,9 @@ class DeviceController extends Controller
         $device->t =  $request->get('t');
         $device->r =  $request->get('r');
         $device->d =  $request->get('d');
-        $device->partners =  $request->get('partners');
+        $device->partners =  trim($request->get('partners'),',');
 
+        #dd($device);
 
         $device->save();
 

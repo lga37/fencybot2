@@ -59,6 +59,8 @@ Route::group(['prefix' => 'adm', 'middleware' => ['auth']], function () {
     Route::get('/alert/invasions', 'AlertController@invasions')->name('alert.invasions');
     Route::post('/alert/filterTracks', 'AlertController@filterTracks')->name('alert.filterTracks');
 
+    Route::post('/alert/massDestroy', 'AlertController@massDestroy')->name('alert.massDestroy');
+
 
     Route::resource('alert', 'AlertController', [
         'only' => ['destroy', 'store', 'index']

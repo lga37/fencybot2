@@ -226,8 +226,16 @@
                                     <span data-feather="user"></span>
                                 </div>
                             </div>
+                            @php $partners = ''; @endphp
+                            @foreach ($device->partners as $v)
+                                @php $partners .= $v.','; @endphp
+                            @endforeach
+                            @php $partners = trim($partners,','); @endphp
+                            @php $partners = trim($partners,'"'); @endphp
+
+
                             <input class="form-control"
-                                value="{{ $device->partners ? implode(',',$device->partners) : '' }}"
+                                value="{{ $partners }}"
                                 placeholder="XXYYYYYYYYY, XXYYYYYYYYY, ..." name="partners">
                         </div>
 

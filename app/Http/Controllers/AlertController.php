@@ -16,9 +16,55 @@ use \App\Notifications\TelegramNotification;
 class AlertController extends Controller
 {
 
+    public function index(Request $request)
+    {
+
+        $devices = Device::all();
+        $fences = Fence::all();
+
+        $alerts = Alert::join('devices', function ($join) {
+            $join->on('alerts.device_id', '=', 'devices.id')->where('devices.user_id', '=', (int) Auth::id());
+        })->with(['fence', 'device'])->distinct()->get();
+
+
+        return view('alert.index', compact('fences', 'devices', 'alerts'));
+    }
+
+    public function hist(Request $request)
+    {
+        $devices = Device::all();
+
+        //$alerts = Alert::where('type',0)->orderBy('device_id')->with(['device'])->get();
+        //$alerts = Alert::orderBy('device_id')->with(['device'])->get();
+
+        $alerts = Alert::join('devices', function ($join) {
+            $join->on('alerts.device_id', '=', 'devices.id')->where('devices.user_id', '=', (int) Auth::id());
+        })->where('type', 0)->orderBy('device_id')->with(['fence', 'device'])->get();
+
+        return view('alert.hist', compact('devices', 'alerts'));
+    }
+
+    public function invasions(Request $request)
+    {
+        $devices = Device::all();
+
+        $alerts = Alert::join('devices', function ($join) {
+            $join->on('alerts.device_id', '=', 'devices.id')->where('devices.user_id', '=', (int) Auth::id());
+        })
+            ->whereIn('type', [2, 3])
+            ->with(['device'])->get();
+
+
+        return view('alert.invasions', compact('devices', 'alerts'));
+    }
+
+
     public function filter(Request $request)
     {
         $devices = Device::all();
+        #$devices_ids = $devices->pluck('id');
+        #dd($devices_ids);
+
         $fences = Fence::all();
 
         $fence_id = $request->post('fence_id');
@@ -28,26 +74,31 @@ class AlertController extends Controller
         $dt2 = $request->post('dt2');
         $order = $request->post('order');
 
-        $alerts = Alert::when($type, function ($query, $type) {
-            return $query->where('type', $type);
+        $alerts = Alert::join('devices', function ($join) {
+            $join->on('alerts.device_id', '=', 'devices.id')->where('devices.user_id', '=', (int) Auth::id());
         })
-        ->when($fence_id, function ($query, $fence_id) {
-            return $query->where('fence_id', $fence_id);
-        })
-        ->when($device_id, function ($query, $device_id) {
-            return $query->where('device_id', $device_id);
-        })
-        ->when($dt1, function ($query, $dt1) {
-            return $query->where('dt', '>=', $dt1);
-        })
-        ->when($dt2, function ($query, $dt2) {
-            return $query->where('dt', '<=', $dt2);
-        })
+            ->whereIn('type', [0, 1, 2, 3])
 
-        ->orderBy('dt',$order)
+            ->when($type, function ($query, $type) {
+                return $query->where('type', $type);
+            })
+            ->when($fence_id, function ($query, $fence_id) {
+                return $query->where('fence_id', $fence_id);
+            })
+            ->when($device_id, function ($query, $device_id) {
+                return $query->where('device_id', $device_id);
+            })
+            ->when($dt1, function ($query, $dt1) {
+                return $query->where('dt', '>=', $dt1);
+            })
+            ->when($dt2, function ($query, $dt2) {
+                return $query->where('dt', '<=', $dt2);
+            })
+
+            ->orderBy('dt', $order)
 
 
-        ->with(['fence', 'device'])->get();
+            ->with(['fence', 'device'])->get();
 
         #DB::table('users')->where('votes', '>', 100)->dd();
         # DB::table('users')->where('votes', '>', 100)->dump();
@@ -60,10 +111,7 @@ class AlertController extends Controller
     {
         $devices = Device::all();
 
-
-
         $device_id = $request->post('device_id');
-
         $dt1 = $request->post('dt1');
         $dt2 = $request->post('dt2');
 
@@ -72,55 +120,22 @@ class AlertController extends Controller
             return $query->where('device_id', $device_id);
         })
 
-        ->when($dt1, function ($query, $dt1) {
-            return $query->where('dt', '>=', $dt1);
-        })
-        ->when($dt2, function ($query, $dt2) {
-            return $query->where('dt', '<=', $dt2);
-        })
+            ->when($dt1, function ($query, $dt1) {
+                return $query->where('dt', '>=', $dt1);
+            })
+            ->when($dt2, function ($query, $dt2) {
+                return $query->where('dt', '<=', $dt2);
+            })
 
-        ->orderBy('dt','asc')
+            ->orderBy('dt', 'asc')
 
-
-        ->with(['fence', 'device'])->get();
+            ->with(['fence', 'device'])->get();
 
         #DB::table('users')->where('votes', '>', 100)->dd();
         # DB::table('users')->where('votes', '>', 100)->dump();
 
         return view('alert.hist', compact('devices', 'alerts'));
     }
-
-
-
-    public function index(Request $request)
-    {
-
-        $devices = Device::all();
-        $fences = Fence::all();
-
-        $alerts = Alert::with(['fence', 'device'])->get();
-
-        return view('alert.index', compact('fences', 'devices', 'alerts'));
-    }
-
-    public function hist(Request $request)
-    {
-        $devices = Device::all();
-
-        $alerts = Alert::with(['fence', 'device'])->get();
-        return view('alert.hist', compact('devices', 'alerts'));
-
-    }
-
-    public function invasions(Request $request)
-    {
-        $devices = Device::all();
-
-        $alerts = Alert::with(['fence', 'device'])->get();
-        return view('alert.invasions', compact('devices', 'alerts'));
-
-    }
-
 
 
     private function getDevicesByTel($tel)
@@ -159,11 +174,8 @@ class AlertController extends Controller
                     $user_id = (int) $item->user_id;
 
                     $user = User::find($user_id);
-                    #$alert->notify($alert);
-                    $user->notify((new AlertEmitted($alert)));
-                    event(new EventAlert($alert));
-
-                    #$this->sendTelegram($user_id, $alert->type, $v['lat'], $v['lng']);
+                    //$user->notify((new AlertEmitted($alert)));
+                    //event(new EventAlert($alert));
                 }
             });
         } else {
@@ -194,11 +206,8 @@ class AlertController extends Controller
 
                     $user_id = (int) $item->user_id;
                     $user = User::find($user_id);
-                    #$alert->notify($alert);
-                    $user->notify((new AlertEmitted($alert)));
-                    event(new EventAlert($alert));
-                    #$alert->notify(new TelegramNotification());
-                    #$this->sendTelegram($user_id,0,$v['lat'],$v['lng']);
+                    //$user->notify((new AlertEmitted($alert)));
+                    //event(new EventAlert($alert));
 
                 }
             });
@@ -236,8 +245,8 @@ class AlertController extends Controller
 
                     $user_id = (int) $item->user_id;
                     $user = User::find($user_id);
-                    $user->notify((new AlertEmitted($alert)));
-                    event(new EventAlert($alert));
+                    //$user->notify((new AlertEmitted($alert)));
+                    //event(new EventAlert($alert));
 
                 }
             });
@@ -256,15 +265,6 @@ class AlertController extends Controller
     public function destroy(Alert $alert)
     {
 
-        #$user = $alert->device->user;
-        #dd($user);
-        #$alert->notify($alert);
-        #$user->notify((new AlertEmitted($alert)));
-
-        #event(new EventAlert($alert));
-
-
-        #broadcast(new EventAlert($alert));
         $alert->delete();
 
         return back()->withSuccess('Record Deleted with Success');
@@ -285,5 +285,24 @@ class AlertController extends Controller
             #'name.min' => 'Minimo de 5 carcateres',
         ]);
         return $request;
+    }
+
+
+    public function massDestroy(Request $request)
+    {
+
+        dd($request);
+        
+        $request->validate([
+            'ids'   => 'bail|required|array',
+            'ids.*' => 'exists:alerts,id',
+        ]);
+
+        Alert::whereIn('id', request('ids'))->delete();
+
+        return back()->withSuccess('Record Deleted with Success');
+
+        #return response(null, Response::HTTP_NO_CONTENT);
+
     }
 }

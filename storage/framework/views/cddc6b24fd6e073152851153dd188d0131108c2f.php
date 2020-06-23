@@ -64,21 +64,29 @@
 
 <table class="table table-striped table-sm">
     <tr>
+        <th><input type="checkbox" class="" value="1" name="checkAll"></th>
         <th>id</th>
         <th>type</th>
         <th>fence</th>
         <th>device</th>
         <th>time</th>
-        <th>d</th>
+        <th>dist</th>
         <th>map</th>
         <th>del</th>
     </tr>
     <?php $__empty_1 = true; $__currentLoopData = $alerts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $alert): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
     <tr>
+
+        <td><input type="checkbox" value="<?php echo e($alert->id); ?>" name="ids[]"></td>
+
         <td><?php echo e($alert->id); ?></td>
         <td>
             <?php switch($alert->type):
-            case (1): ?>
+            case (0): ?>
+            <span class="badge badge-secondary">default</span>
+            <?php break; ?>
+
+            <?php case (1): ?>
             <span class="badge badge-danger">close</span>
             <?php break; ?>
 
@@ -86,6 +94,13 @@
             <span class="badge badge-success">very close</span>
             <?php break; ?>
 
+            <?php case (3): ?>
+            <span class="badge badge-info">invasion</span>
+            <?php break; ?>
+
+            <?php case (4): ?>
+            <span class="badge badge-warning">off</span>
+            <?php break; ?>
 
             <?php default: ?>
             <span class="badge badge-secondary">default</span>
@@ -101,7 +116,7 @@
                 onclick="javascript:geocodeLatLng('<?php echo e($alert->lat); ?>','<?php echo e($alert->lng); ?>')">local</a>
         </td>
  -->
-        <td><?php echo e($alert->dist); ?></td>
+        <td><?php echo e($alert->d ?? '-'); ?></td>
 
 
         <td class="">
@@ -117,6 +132,14 @@
         </td>
     </tr>
 
+    <?php if($loop->last): ?>
+    <tr><td colspan="2">
+        <form method="POST" action="<?php echo e(route('alert.massDestroy')); ?>">
+            <?php echo csrf_field(); ?>
+            <button class="btn btn-sm btn-outline-danger">del all</button>
+        </form>
+    </td><td colspan="9">--</td></tr>
+    <?php endif; ?>
 
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
     <p><b>No records</b></p>
@@ -218,11 +241,6 @@
                 }
 
                 if (fence.isValid()) {
-                    /*                 var bounds = new google.maps.LatLngBounds(
-                                        marker1.getPosition(), marker2.getPosition()
-                                        fence.getBounds()
-                                    );
-                                    map.fitBounds(bounds); */
                     var pl = new google.maps.Polygon({
                         path: fence.generatePath(),
                         strokeColor: "#0000FF",

@@ -19,8 +19,6 @@
         line-height: 30px;
         padding-left: 10px;
     }
-
-
 </style>
 @endsection
 
@@ -108,9 +106,7 @@
         @php $davez = $alert->device_id; @endphp
 
     @empty
-    <p><b>No records</b></p>
-
-
+        <p><b>No records</b></p>
     @endforelse
 </table>
 
@@ -123,10 +119,7 @@
         <button onclick="changeOpacity()">Change opacity</button>
     </div>
     <div id="map" class="border border-danger" style="width: 100%;height: 500px;"></div>
-
 </div>
-
-
 
 
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
@@ -149,34 +142,46 @@
 </div>
 
 
-
 @endsection
 
 
 @section('js')
 
-<script src="https://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE')}}&libraries=visualization&callback=init"
+<script src="https://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE')}}
+                            &libraries=visualization
+                            &callback=init2"
     async defer></script>
 
 <script>
-    //init();
-
     var map, heatmap;
 
+    function init2() {
+    }
+
+
+    
+
     function init() {
-        //alert({{ $alerts[0]->lat }});
+        return;
 
-        map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 13,
-            //center: { lat: 37.775, lng: -122.434 },
-            center: { lat: parseFloat("{{ $alerts[0]->lat }}"), lng: parseFloat("{{ $alerts[0]->lat }}") },
-            mapTypeId: 'terrain'
-        });
+        alert(11)
+        alert({{ $alerts[0]->lat }});
+        if("{{ $alerts[0]->lat }}" != 'undefined'){
+            alert(22)
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 13,
+                //center: { lat: 37.775, lng: -122.434 },
+                center: { lat: parseFloat("{{ $alerts[0]->lat }}"), lng: parseFloat("{{ $alerts[0]->lat }}") },
+                mapTypeId: 'terrain'
+            });
 
-        heatmap = new google.maps.visualization.HeatmapLayer({
-            data: getPoints(),
-            map: map
-        });
+            heatmap = new google.maps.visualization.HeatmapLayer({
+                data: getPoints(),
+                map: map
+            });
+
+        }
+
     }
 
     function toggleHeatmap() {
@@ -211,13 +216,13 @@
         heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
     }
 
-    // Heatmap data: 500 Points
     function getPoints() {
 
         var points = [
-            @foreach ($alerts as $alert)
+            @forelse ($alerts as $alert)
                 new google.maps.LatLng("{{ $alert->lat }}", "{{ $alert->lng }}"),
-            @endforeach
+            @empty
+            @endforelse
         ];
 
         console.log(points);
@@ -227,22 +232,15 @@
     }
 
 
-
-
     function geocodeLatLng(lat, lng) {
         var geocoder = new google.maps.Geocoder;
         var latlng = { lat: parseFloat(lat), lng: parseFloat(lng) };
-        //console.log(latlng);
-
         geocoder.geocode({ 'location': latlng }, function (results, status) {
             console.log(results);
             console.log(status);
             if (status == 'OK') {
                 if (results[0]) {
-                    console.log(typeof (results[0].formatted_address));
-                    console.log(results[0].formatted_address);
                     alert(results[0].formatted_address);
-                    //return results[0].formatted_address;
                 } else {
                     return 'No results found';
                 }
@@ -273,7 +271,7 @@
 
         var path = [];
         var marker, contentString, infowindow;
-        @foreach ($alerts as $k=>$alert)
+        @forelse ($alerts as $k=>$alert)
             lat = parseFloat("{{ $alert->lat }}");
             lng = parseFloat("{{ $alert->lng }}");
             marker = new google.maps.Marker({
@@ -294,7 +292,8 @@
 
             path.push({ lat: parseFloat("{{ $alert->lat }}"), lng: parseFloat("{{ $alert->lng }}")});
 
-        @endforeach
+        @empty
+        @endforelse
 
 
         var pl = new google.maps.Polyline({
@@ -315,9 +314,10 @@
 
 
 
+
+
+
+
 </script>
-
-
-
 
 @endsection

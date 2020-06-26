@@ -134,7 +134,7 @@ class AlertController extends Controller
         #DB::table('users')->where('votes', '>', 100)->dd();
         # DB::table('users')->where('votes', '>', 100)->dump();
 
-        return view('alert.hist', compact('devices', 'alerts'));
+        return view('alert.hist', compact('devices', 'alerts','device_id'));
     }
 
 
@@ -142,6 +142,7 @@ class AlertController extends Controller
     {
         $devices_id = Device::where('tel', $tel)->select('id', 'name', 'user_id')->get();
 
+        #dd($devices_id);
         return $devices_id;
     }
 
@@ -149,6 +150,7 @@ class AlertController extends Controller
     {
 
         $devices = $this->getDevicesByTel($tel);
+
         $lotes = $request->json();
         #dd($lotes);
         #dd($request->getContent());
@@ -156,9 +158,16 @@ class AlertController extends Controller
 
         if ($devices->count() > 0) {
 
+            #dd($devices->first()->id);
 
             $devices->each(function ($item, $key) use ($lotes) {
                 foreach ($lotes as $v) {
+                    $exists = FenceDevice::where('fence_id','=',$v['fence_id'])
+                    ->where('device_id','=',$item->id)
+                    ->where('user_id','=',$item->user_id)->exists();
+                    #dd($exists);
+                    if(!$exists) continue;
+
                     $alert = new Alert();
                     $alert->device_id = (int) $item->id;
 
@@ -292,7 +301,7 @@ class AlertController extends Controller
     {
 
         dd($request);
-        
+
         $request->validate([
             'ids'   => 'bail|required|array',
             'ids.*' => 'exists:alerts,id',

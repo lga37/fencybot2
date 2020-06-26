@@ -205,28 +205,37 @@
                                 Devices
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item
+                         d-flex justify-content-between align-items-center pr-4">
                             <a class="nav-link
                             {{ request()->routeIs('alert.index') ? 'active' : '' }}" href="{{ route('alert.index') }}">
                                 <span data-feather="bell"></span>
                                 Alerts
                             </a>
+                            <span class="badge badge-pill badge-primary">1</span>
                         </li>
-                        <li class="nav-item">
+
+
+
+                        <li class="nav-item
+                         d-flex justify-content-between align-items-center pr-4">
                             <a class="nav-link
                                 {{ request()->routeIs('alert.hist') ? 'active' : '' }}"
                                 href="{{ route('alert.hist') }}">
                                 <span data-feather="check"></span>
                                 Trackings
                             </a>
+                            <span class="badge badge-pill badge-warning">3</span>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item
+                         d-flex justify-content-between align-items-center pr-4">
                             <a class="nav-link
                                 {{ request()->routeIs('alert.invasions') ? 'active' : '' }}"
                                 href="{{ route('alert.invasions') }}">
                                 <span data-feather="check"></span>
                                 Invasions
                             </a>
+                            <span class="invisible badge badge-pill badge-success">0</span>
                         </li>
                     </ul>
 

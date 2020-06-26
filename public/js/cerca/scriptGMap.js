@@ -1173,40 +1173,33 @@ function saveFence() {
         modal.show();
 
     } else if (fence.isValid()) {
-        //modal.header = "Dados para o servidor";
-        //modal.html = "<textarea rows='10' cols='60'>" + JSON.stringify(fence.vertex) + "</textarea>";
-        //modal.show();
+
         var user_id = document.getElementById('user_id').value;
         var nome_cerca = document.getElementById('nome_cerca').value;
 
-        //console.log(JSON.stringify(fence2LatLng(fence.vertex)));
         var fenceLatLng = fence2LatLng(fence.vertex);
 
         var data = JSON.stringify({user_id:user_id,name:nome_cerca,fence:fenceLatLng});
         console.log(data);
 
-        //html2canvas(document.querySelector("#mapa")).then(canvas => {
-            //document.body.appendChild(canvas)
-            //var img = canvas.toDataURL();
-            //var img = canvas.toDataURL().replace(/.*,/, '')
-            //console.log({img:img})
-        //});
+        var url;
+        if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+            url = "http://localhost/fencybot/public/adm/fence/add";
+        else
+            url = "http://200.156.26.136/fencybot/public/adm/fence/add";
 
         $.ajax({
-            //url: "http://200.156.26.136/fencybot/public/adm/fence/add",
-            url: "http://localhost/fencybot/public/adm/fence/add",
+
+            url: url,
             type: 'POST',
             contentType: "application/json; charset=utf-8",
             data: data,
-            //crossDomain: true,
-            //crossOrigin: true,
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
                 'Cache-Control': 'post-check=0, pre-check=0, false',
                 'Pragma': 'no-cache'
-                //'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-                //'Access-Control-Allow-Headers': 'Content-Type'
+
             },
             dataType: 'json',
             success: function (d) {

@@ -218,7 +218,7 @@
             var lng = parseFloat(button.data('lng')) || -43.2075;
             var cerca = button.data('cerca') || false;
             var modal = $(this)
-            modal.find('.modal-title').text(' Detalhamento:' + lat + ' / ' + lng)
+            modal.find('.modal-title').text(' Details:' + lat + ' / ' + lng)
 
             var map = new google.maps.Map(document.getElementById('map'), {
                 center: { lat: lat, lng: lng },

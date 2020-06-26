@@ -157,16 +157,22 @@ class AlertController extends Controller
 
 
         if ($devices->count() > 0) {
-
-            #dd($devices->first()->id);
-
             $devices->each(function ($item, $key) use ($lotes) {
                 foreach ($lotes as $v) {
+                    if(!$v['fence_id']>0){
+                        dd('fence_id is missing');
+                        return response()->json(['status' => 'fence_id is missing'], 406);
+                    }
                     $exists = FenceDevice::where('fence_id','=',$v['fence_id'])
                     ->where('device_id','=',$item->id)
                     ->where('user_id','=',$item->user_id)->exists();
                     #dd($exists);
-                    if(!$exists) continue;
+                    #if(!$exists) continue;
+                    if(!$exists){
+                        dd('device_id/user_id mismatch');
+                        return response()->json(['status' => 'device_id/user_id mismatch'], 406);
+                    }
+
 
                     $alert = new Alert();
                     $alert->device_id = (int) $item->id;
@@ -190,6 +196,8 @@ class AlertController extends Controller
         } else {
             return response()->json(['status' => 'ERROR'], 406);
         }
+
+
         return response()->json(['status' => 'OK'], 201);
     }
 

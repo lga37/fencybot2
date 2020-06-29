@@ -77,6 +77,7 @@
         <th>del</th>
     </tr>
 
+
     @forelse ($alerts as $alert)
     <tr>
         <td><input type="checkbox" value="{{$alert->id}}" name="ids[]"></td>
@@ -84,13 +85,13 @@
         <td>
             @switch($alert->type)
             @case(0)
-            <span class="badge badge-secondary">default</span>
+            <span class="badge badge-secondary">default/inside</span>
             @break
             @case(1)
             <span class="badge badge-danger">close</span>
             @break
             @case(2)
-            <span class="badge badge-success">very close</span>
+            <span class="badge badge-success">out of fence</span>
             @break
             @case(3)
             <span class="badge badge-info">invasion</span>
@@ -98,12 +99,15 @@
             @case(4)
             <span class="badge badge-warning">off</span>
             @break
+            @case(5)
+            <span class="badge badge-primary">back</span>
+            @break
             @default
             <span class="badge badge-secondary">default</span>
             @endswitch
         </td>
-        <td>{{ $alert->fence->name ?? '' }}</td>
-        <td>{{ $alert->device->name ?? '' }}</td>
+        <td>{{ $alert->fence->name ?? '-' }}</td>
+        <td>{{ $alert->device->name ?? '-' }}</td>
         <td>{{ $alert->dt->format('l d/M H:i:s') }}</td>
         <!--         <td><a class="btn btn-sm btn-info"
                 onclick="javascript:geocodeLatLng('{{$alert->lat}}','{{$alert->lng}}')">local</a>
@@ -116,7 +120,8 @@
             </a>
         </td>
         <td class="">
-            <form method="POST" name="{{ $alert->id }}" action="{{ route('alert.destroy',['alert'=>$alert]) }}">
+            <form method="POST" name="{{ $alert->id }}"
+                action="{{ route('alert.destroy',['alert'=>$alert]) }}">
                 @method('DELETE')
                 @csrf
                 <button class="btn btn-danger">del</button>
@@ -190,7 +195,7 @@
         });
     });
 
-    
+
 
     function geocodeLatLng(lat, lng) {
         var geocoder = new google.maps.Geocoder;

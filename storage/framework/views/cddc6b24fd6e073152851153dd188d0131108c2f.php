@@ -75,6 +75,7 @@
         <th>del</th>
     </tr>
 
+
     <?php $__empty_1 = true; $__currentLoopData = $alerts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $alert): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
     <tr>
         <td><input type="checkbox" value="<?php echo e($alert->id); ?>" name="ids[]"></td>
@@ -82,13 +83,13 @@
         <td>
             <?php switch($alert->type):
             case (0): ?>
-            <span class="badge badge-secondary">default</span>
+            <span class="badge badge-secondary">default/inside</span>
             <?php break; ?>
             <?php case (1): ?>
             <span class="badge badge-danger">close</span>
             <?php break; ?>
             <?php case (2): ?>
-            <span class="badge badge-success">very close</span>
+            <span class="badge badge-success">out of fence</span>
             <?php break; ?>
             <?php case (3): ?>
             <span class="badge badge-info">invasion</span>
@@ -96,12 +97,15 @@
             <?php case (4): ?>
             <span class="badge badge-warning">off</span>
             <?php break; ?>
+            <?php case (5): ?>
+            <span class="badge badge-primary">back</span>
+            <?php break; ?>
             <?php default: ?>
             <span class="badge badge-secondary">default</span>
             <?php endswitch; ?>
         </td>
-        <td><?php echo e($alert->fence->name ?? ''); ?></td>
-        <td><?php echo e($alert->device->name ?? ''); ?></td>
+        <td><?php echo e($alert->fence->name ?? '-'); ?></td>
+        <td><?php echo e($alert->device->name ?? '-'); ?></td>
         <td><?php echo e($alert->dt->format('l d/M H:i:s')); ?></td>
         <!--         <td><a class="btn btn-sm btn-info"
                 onclick="javascript:geocodeLatLng('<?php echo e($alert->lat); ?>','<?php echo e($alert->lng); ?>')">local</a>
@@ -114,7 +118,8 @@
             </a>
         </td>
         <td class="">
-            <form method="POST" name="<?php echo e($alert->id); ?>" action="<?php echo e(route('alert.destroy',['alert'=>$alert])); ?>">
+            <form method="POST" name="<?php echo e($alert->id); ?>"
+                action="<?php echo e(route('alert.destroy',['alert'=>$alert])); ?>">
                 <?php echo method_field('DELETE'); ?>
                 <?php echo csrf_field(); ?>
                 <button class="btn btn-danger">del</button>
@@ -188,7 +193,7 @@
         });
     });
 
-    
+
 
     function geocodeLatLng(lat, lng) {
         var geocoder = new google.maps.Geocoder;

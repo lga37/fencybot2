@@ -70,9 +70,9 @@ class DeviceController extends Controller
         $device = Device::find($id);
         $device->name =  $request->get('name');
         $device->tel =  $request->get('tel');
-        $device->t =  $request->get('t');
-        $device->r =  $request->get('r');
-        $device->d =  $request->get('d');
+        #$device->t =  $request->get('t');
+        #$device->r =  $request->get('r');
+        #$device->d =  $request->get('d');
         #$device->partners =  trim($request->get('partners'),',');
 
         #dd($device);
@@ -109,16 +109,22 @@ class DeviceController extends Controller
 
     public function configure (Request $request)
     {
+        #dump($request->post('r')?1:0);
         #dd($request->post());
         $id = (int) $request->post('device_id');
         $device = Device::findOrFail($id);
         $device->t =  $request->post('t');
-        $device->r =  $request->post('r');
+        $device->r =  $request->post('r')?2:1;
         $device->d =  $request->post('d');
         $device->save();
 
         $fences_id = (array) $request->post('associated_fences'); #fazer essa tipagem, se nao tiver exclui
         #dd($fences_id);
+        #$request->validate([
+        #    'fences_id'   => 'bail|array',
+        #    'fences_id.*' => 'exists:fences,id',
+        #]);
+
         if($fences_id){
             $fences_com_user = [];
             $user_id = (int) Auth::id();

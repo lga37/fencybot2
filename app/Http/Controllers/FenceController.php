@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Alert;
 use App\Fence;
 use App\Device;
+use App\Partner;
 use App\FenceDevice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -117,22 +118,50 @@ class FenceController extends Controller
         return redirect()->route('fence.index')->withSuccess('Fence updated!');
     }
 
+    private function getDevicesByTel($tel)
+    {
+        $devices_id = Device::where('tel', $tel)->select('id')->get()->toArray();
+
+        #dd($devices_id);
+        return $devices_id;
+    }
+
     public function getFences (string $tel)
     {
+        $devices = $this->getDevicesByTel($tel);
+
+        #dump($devices);
+        if(!$devices){
+            return response()->json(['status' => 'ERROR'], 406);
+        }
+
+        $device_id = (int) $devices[0]['id'];
+        #dump($device_id);
+        $partners = Device::join('partners', function ($join) use ($device_id){
+            $join->on('partners.partner_id', '=', 'devices.id')
+            #->where('devices.user_id', '=', (int) Auth::id())
+            ->where('partners.device_id', '=', $device_id);
+
+        })->select('tel')->get()->toArray();
+
+        #dump($partners);
+
+        $tels = $partners? array_column($partners,'tel') : [];
+        #dump($tels);
 
         $device = Device::where('tel','=',$tel)
-        ->select('id','user_id','name','t as wait_alert','d as border', 'r as pfence','partners')
-        ->with('fences:fence_id,name,fence as coords')->first();
 
+        ->select('id','user_id','name','t as wait_alert','d as border', 'r as pfence')
+        ->with('fences:fence_id,name,fence as coords')
+        ->first();
+
+        $device->partners = $tels;
         #dd($device);
         if(!$device){
             return response()->json(['status' => 'ERROR'], 406);
         }
         $device->toArray();
         return response()->json(compact('device'),200);
-        #return response()->json(['status' => 'ERRO'], 406);
-
-        #json_encode($yourdata, JSON_UNESCAPED_SLASHES);
 
     }
 

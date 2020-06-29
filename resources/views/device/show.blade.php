@@ -144,13 +144,25 @@
                     </div>
                     <br>
 
+                    Dimension of personal Fence (Default is close)
+
+                    <div class="custom-control custom-switch">
+
+
+                        <input type="checkbox" value="1" name="r"
+                        class="custom-control-input" id="customSwitch1">
+                        <label class="custom-control-label"
+                        for="customSwitch1">Very Close</label>
+                    </div>
+                    <br>
+
                     <div class="row">
                         <div class="col-md-1 pre_range">
                             <div class="" data-toggle="tooltip" data-placement="top" title="Radius of the Personal Area, from 1 to 5 meters,
                             used to fire a meet event with others registered Users">?</div>
                         </div>
                         <div class="col-md-9 range">
-                            <input type="range" class="custom-range" id="radius" name="r" min="1" step=".5" max="5"
+                            <input type="range" class="custom-range" id="radius" name="rrr" min="1" step=".5" max="5"
                                 value="{{$device->r }}" oninput="this.form.r_input.value=this.value">
                         </div>
                         <div class="col-md-1 pos_range">

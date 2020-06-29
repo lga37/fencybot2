@@ -17,9 +17,9 @@ class CreateDevicesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('tel');
-            $table->integer('r')->unsigned()->nullable()->default(10);
-            $table->integer('d')->unsigned()->nullable()->default(5);
-            $table->integer('t')->unsigned()->nullable()->default(30);
+            $table->integer('r')->unsigned()->default(10);
+            $table->integer('d')->unsigned()->default(25);
+            $table->integer('t')->unsigned()->default(30);
 
             $table->integer('user_id')->unsigned();
             $table->timestamps();

@@ -19,13 +19,24 @@ class AlertController extends Controller
     public function index(Request $request)
     {
 
+/*         0 - dentro da cerca
+        1 - usuário próximo à borda da cerca.
+        2 - usuário fora da cerca.
+        3 - invasão da cerca pessoal.
+        4 - GPS desligado.
+        5 - usuário volta para a cerca.
+        Tipos 1, 2, 4 e 5 vem dist
+ */
         $devices = Device::all();
         $fences = Fence::all();
 
         $alerts = Alert::join('devices', function ($join) {
-            $join->on('alerts.device_id', '=', 'devices.id')->where('devices.user_id', '=', (int) Auth::id());
-        })->with(['fence', 'device'])->distinct()->get();
+            $join->on('alerts.device_id', '=', 'devices.id')
+            ->whereIn('alerts.type',[1,2,4,5])
+            ->where('devices.user_id', '=', (int) Auth::id());
+        })->with(['fence', 'device'])->select('alerts.*')->get();
 
+        #dd($alerts);
 
         return view('alert.index', compact('fences', 'devices', 'alerts'));
     }
@@ -39,7 +50,8 @@ class AlertController extends Controller
 
         $alerts = Alert::join('devices', function ($join) {
             $join->on('alerts.device_id', '=', 'devices.id')->where('devices.user_id', '=', (int) Auth::id());
-        })->where('type', 0)->orderBy('device_id')->with(['fence', 'device'])->get();
+        })->where('type', 0)->orderBy('device_id')->with(['fence', 'device'])
+        ->select('alerts.*')->get();
 
         return view('alert.hist', compact('devices', 'alerts'));
     }
@@ -49,10 +61,11 @@ class AlertController extends Controller
         $devices = Device::all();
 
         $alerts = Alert::join('devices', function ($join) {
-            $join->on('alerts.device_id', '=', 'devices.id')->where('devices.user_id', '=', (int) Auth::id());
+            $join->on('alerts.device_id', '=', 'devices.id')
+            ->where('devices.user_id', '=', (int) Auth::id());
         })
-            ->whereIn('type', [2, 3])
-            ->with(['device'])->get();
+            ->where('type', 3)
+            ->with(['device'])->select('alerts.*')->get();
 
 
         return view('alert.invasions', compact('devices', 'alerts'));
@@ -75,7 +88,8 @@ class AlertController extends Controller
         $order = $request->post('order');
 
         $alerts = Alert::join('devices', function ($join) {
-            $join->on('alerts.device_id', '=', 'devices.id')->where('devices.user_id', '=', (int) Auth::id());
+            $join->on('alerts.device_id', '=', 'devices.id')
+            ->where('devices.user_id', '=', (int) Auth::id());
         })
             ->whereIn('type', [0, 1, 2, 3])
 
@@ -216,6 +230,7 @@ class AlertController extends Controller
                     $alert = new Alert();
                     $alert->device_id = (int) $item->id;
 
+                    $alert->fence_id = $v['fence_id'] ?? null;
                     $alert->lat = $v['lat'];
                     $alert->lng = $v['lng'];
                     $alert->dt = $v['dt'] ?? null;

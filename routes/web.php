@@ -66,7 +66,7 @@ Route::group(['prefix' => 'adm', 'middleware' => ['auth']], function () {
 
 
     Route::resource('alert', 'AlertController', [
-        'only' => ['destroy', 'store', 'index']
+        'only' => ['destroy', 'store', 'index', ]
     ]);
 
 });

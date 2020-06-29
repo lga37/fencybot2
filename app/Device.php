@@ -12,18 +12,6 @@ class Device extends Model
 
     protected $fillable = ['name', 'tel', 'r', 'd', 't',];
 
-    protected $casts = [
-        'partners' => 'array',
-    ];
-
-    public function getPartnersAttribute($v)
-    {
-        if (is_null($v) || empty($v)) {
-            return [];
-        }
-        return Str::contains($v, ',') ? explode(',', $v) : [$v];
-    }
-
 
     public function user()
     {

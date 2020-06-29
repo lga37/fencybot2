@@ -53,8 +53,8 @@
         <input class="form-control" id="pac-input" class="pac-target-input" placeholder="Enter a Location"
             autocomplete="off">
     </div>
-
     <div id="mapa" class="border border-danger"></div>
+
 </form>
 
 <br>

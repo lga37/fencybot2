@@ -10,7 +10,7 @@ class Device extends Model
 {
     use TenantScoped;
 
-    protected $fillable = [ 'name','tel','r','d','t','partners' ];
+    protected $fillable = ['name', 'tel', 'r', 'd', 't',];
 
     protected $casts = [
         'partners' => 'array',
@@ -18,10 +18,10 @@ class Device extends Model
 
     public function getPartnersAttribute($v)
     {
-        if(is_null($v) || empty($v)){
+        if (is_null($v) || empty($v)) {
             return [];
         }
-        return Str::contains($v, ',')? explode(',',$v) : [$v];
+        return Str::contains($v, ',') ? explode(',', $v) : [$v];
     }
 
 
@@ -32,8 +32,12 @@ class Device extends Model
 
     public function fences()
     {
-        return $this->belongsToMany(Fence::class,'fence_device');
-        #return $this->belongsToMany('App\Fence')->using('App\DeviceFence','fence_device');
+        return $this->belongsToMany(Fence::class, 'fence_device');
+    }
+
+    public function partners()
+    {
+        return $this->hasMany(Partner::class, 'device_id','id');
     }
 
 

@@ -1,6 +1,4 @@
-@extends('layouts.adm')
-
-@section('css')
+<?php $__env->startSection('css'); ?>
 <style>
     .circle2 {
         border-radius: 50%;
@@ -102,45 +100,45 @@
 
     }
 </style>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
-@include('shared.msgs')
-@include('shared.header', ['name' => 'Drag and Drop on Blue Area to Configure Device'])
+<?php $__env->startSection('content'); ?>
+<?php echo $__env->make('shared.msgs', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('shared.header', ['name' => 'Drag and Drop on Blue Area to Configure Device'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3">
-            <form method="POST" id="myForm" action="{{ route('device.configure') }}">
-                <input type="hidden" name="device_id" value="{{ $device->id }}">
+            <form method="POST" id="myForm" action="<?php echo e(route('device.configure')); ?>">
+                <input type="hidden" name="device_id" value="<?php echo e($device->id); ?>">
                 <div class="menu">
                     <b>Fences</b> (to monitore)
                     <div class="box" data-draggable="target">
-                        @forelse ($nao_fencedevices as $fence)
+                        <?php $__empty_1 = true; $__currentLoopData = $nao_fencedevices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fence): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
-                        <span data-fencedevice_id="{{ $fence['id'] }}" data-draggable="item"><span
-                                data-feather="map-pin"></span> {{ $fence['name'] }}</span>
+                        <span data-fencedevice_id="<?php echo e($fence['id']); ?>" data-draggable="item"><span
+                                data-feather="map-pin"></span> <?php echo e($fence['name']); ?></span>
 
 
-                        @empty
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                         <p><b>No Fences</b></p>
-                        @endforelse
+                        <?php endif; ?>
 
 
                     </div>
                     <hr>
                     <b>Devices</b> (to silent if meet)
                     <div class="box" data-draggable="target">
-                        @forelse ($nao_partners as $nao_partner)
-                        @if ($nao_partner['id'] != $device->id)
-                        <span data-device_partner_id="{{ $nao_partner['id'] }}" data-draggable="item"><span
-                                data-feather="target"></span> {{ $nao_partner['name'] }}</span>
+                        <?php $__empty_1 = true; $__currentLoopData = $nao_partners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $nao_partner): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <?php if($nao_partner['id'] != $device->id): ?>
+                        <span data-device_partner_id="<?php echo e($nao_partner['id']); ?>" data-draggable="item"><span
+                                data-feather="target"></span> <?php echo e($nao_partner['name']); ?></span>
 
-                        @endif
-                        @empty
+                        <?php endif; ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                         <p><b>No Devices</b></p>
-                        @endforelse
+                        <?php endif; ?>
                     </div>
                     <br>
 
@@ -151,11 +149,11 @@
                         </div>
                         <div class="col-md-9 range">
                             <input type="range" class="custom-range" id="radius" name="r" min="1" step=".5" max="5"
-                                value="{{$device->r }}" oninput="this.form.r_input.value=this.value">
+                                value="<?php echo e($device->r); ?>" oninput="this.form.r_input.value=this.value">
                         </div>
                         <div class="col-md-1 pos_range">
                             <input class="border-0 input-sm pos_input_range pl-0" type="number" id="radius_input"
-                                name="r_input" min="1" step=".5" max="5" value="{{$device->r }}"
+                                name="r_input" min="1" step=".5" max="5" value="<?php echo e($device->r); ?>"
                                 oninput="this.form.r.value=this.value">
                         </div>
                     </div>
@@ -168,11 +166,11 @@
                         </div>
                         <div class="col-md-9 range">
                             <input type="range" class="custom-range" id="time" name="t" min="0" step="5" max="60"
-                                value="{{$device->t }}" oninput="this.form.t_input.value=this.value">
+                                value="<?php echo e($device->t); ?>" oninput="this.form.t_input.value=this.value">
                         </div>
                         <div class="col-md-1 pos_range">
                             <input class="border-0 input-sm pos_input_range pl-0" type="number" id="time_input"
-                                name="t_input" value="{{$device->t }}" min="0" step="5" max="60"
+                                name="t_input" value="<?php echo e($device->t); ?>" min="0" step="5" max="60"
                                 oninput="this.form.t.value=this.value">
                         </div>
                     </div>
@@ -185,11 +183,11 @@
                         </div>
                         <div class="col-md-9 range">
                             <input type="range" class="custom-range" id="dist" name="d" min="10" step="5" max="50"
-                                value="{{$device->d }}" oninput="this.form.d_input.value=this.value">
+                                value="<?php echo e($device->d); ?>" oninput="this.form.d_input.value=this.value">
                         </div>
                         <div class="col-md-1 pos_range">
                             <input class="border-0 input-sm pos_input_range pl-0" type="number" id="dist_input"
-                                name="d_input" value="{{$device->d }}" min="10" step="5" max="50"
+                                name="d_input" value="<?php echo e($device->d); ?>" min="10" step="5" max="50"
                                 oninput="this.form.d.value=this.value">
                         </div>
                     </div>
@@ -208,27 +206,28 @@
         <div class="circle">
             <div class="">
                 <div class="dentro">
-                    <span data-feather="user"></span> {{ $device->name }}<br>
-                    <span class="" data-feather="phone"></span> {{ $device->tel }}
+                    <span data-feather="user"></span> <?php echo e($device->name); ?><br>
+                    <span class="" data-feather="phone"></span> <?php echo e($device->tel); ?>
+
                 </div>
 
                 <div class="fences_partners">
                     <b>Associated Fences:</b>
                     <div class="box" id="associated_fences" data-draggable="target">
-                        @forelse ($fencedevices as $fencedevice)
-                        <span data-fencedevice_id="{{ $fencedevice['id'] }}" data-draggable="item"><span
-                                data-feather="map-pin"></span> {{ $fencedevice['name'] }}</span>
-                        @empty
-                        @endforelse
+                        <?php $__empty_1 = true; $__currentLoopData = $fencedevices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fencedevice): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <span data-fencedevice_id="<?php echo e($fencedevice['id']); ?>" data-draggable="item"><span
+                                data-feather="map-pin"></span> <?php echo e($fencedevice['name']); ?></span>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                        <?php endif; ?>
                     </div>
 
                     <b>Silent Invasions With:</b>
                     <div class="box" id="devices_partners" data-draggable="target">
-                        @forelse ($partners as $partner)
-                        <span data-device_partner_id="{{ $partner['id'] }}" data-draggable="item"><span
-                                data-feather="target"></span> {{ $partner['name'] }}</span>
-                        @empty
-                        @endforelse
+                        <?php $__empty_1 = true; $__currentLoopData = $partners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $partner): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <span data-device_partner_id="<?php echo e($partner['id']); ?>" data-draggable="item"><span
+                                data-feather="target"></span> <?php echo e($partner['name']); ?></span>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                        <?php endif; ?>
                     </div>
 
                 </div>
@@ -251,9 +250,9 @@
 
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('js')
+<?php $__env->startSection('js'); ?>
 
 <script>
 
@@ -352,4 +351,6 @@
 </script>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.adm', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/fencybot/resources/views/device/show.blade.php ENDPATH**/ ?>

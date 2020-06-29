@@ -35,14 +35,14 @@
         <div class="input-group-prepend">
             <label class="input-group-text" for="dt1">dt1</label>
         </div>
-        <input class="form-control" type="date"
-        value="<?php echo e(\Carbon\Carbon::parse(now()->subDays(7))->format('Y-m-d')); ?>" id="dt1" name="dt1">
+        <input class="form-control" type="date" value="<?php echo e(\Carbon\Carbon::parse(now()->subDays(7))->format('Y-m-d')); ?>"
+            id="dt1" name="dt1">
 
         <div class="input-group-prepend">
             <label class="input-group-text" for="dt1">dt2</label>
         </div>
-        <input class="form-control" type="date"
-        value="<?php echo e(\Carbon\Carbon::parse(now())->format('Y-m-d')); ?>" id="dt2" name="dt2">
+        <input class="form-control" type="date" value="<?php echo e(\Carbon\Carbon::parse(now())->format('Y-m-d')); ?>" id="dt2"
+            name="dt2">
 
 
         <div class="input-group-append">
@@ -64,7 +64,7 @@
 
 <table class="table table-striped table-sm">
     <tr>
-        <th><input type="checkbox" class="" value="1" name="checkAll"></th>
+        <th><input type="checkbox" class="" value="1" id="checkAll" name="checkAll"></th>
         <th>id</th>
         <th>type</th>
         <th>fence</th>
@@ -74,57 +74,47 @@
         <th>map</th>
         <th>del</th>
     </tr>
+
     <?php $__empty_1 = true; $__currentLoopData = $alerts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $alert): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
     <tr>
-
         <td><input type="checkbox" value="<?php echo e($alert->id); ?>" name="ids[]"></td>
-
         <td><?php echo e($alert->id); ?></td>
         <td>
             <?php switch($alert->type):
             case (0): ?>
             <span class="badge badge-secondary">default</span>
             <?php break; ?>
-
             <?php case (1): ?>
             <span class="badge badge-danger">close</span>
             <?php break; ?>
-
             <?php case (2): ?>
             <span class="badge badge-success">very close</span>
             <?php break; ?>
-
             <?php case (3): ?>
             <span class="badge badge-info">invasion</span>
             <?php break; ?>
-
             <?php case (4): ?>
             <span class="badge badge-warning">off</span>
             <?php break; ?>
-
             <?php default: ?>
             <span class="badge badge-secondary">default</span>
             <?php endswitch; ?>
-
-
         </td>
         <td><?php echo e($alert->fence->name ?? ''); ?></td>
         <td><?php echo e($alert->device->name ?? ''); ?></td>
         <td><?php echo e($alert->dt->format('l d/M H:i:s')); ?></td>
-
-<!--         <td><a class="btn btn-sm btn-info"
+        <!--         <td><a class="btn btn-sm btn-info"
                 onclick="javascript:geocodeLatLng('<?php echo e($alert->lat); ?>','<?php echo e($alert->lng); ?>')">local</a>
         </td>
  -->
         <td><?php echo e($alert->d ?? '-'); ?></td>
-
-
         <td class="">
-            <button class="btn btn-primary" data-lat="<?php echo e($alert->lat); ?>" data-lng="<?php echo e($alert->lng); ?>"
-                data-cerca="<?php echo e($alert->fence->fence ?? false); ?>" data-toggle="modal" data-target="#modal">map</button>
+            <a class="btn btn-info" data-lat="<?php echo e($alert->lat); ?>" data-lng="<?php echo e($alert->lng); ?>"
+                data-cerca="<?php echo e($alert->fence->fence ?? false); ?>" data-toggle="modal" data-target="#modal">map
+            </a>
         </td>
         <td class="">
-            <form method="POST" action="<?php echo e(route('alert.destroy',['alert'=>$alert])); ?>">
+            <form method="POST" name="<?php echo e($alert->id); ?>" action="<?php echo e(route('alert.destroy',['alert'=>$alert])); ?>">
                 <?php echo method_field('DELETE'); ?>
                 <?php echo csrf_field(); ?>
                 <button class="btn btn-danger">del</button>
@@ -133,18 +123,23 @@
     </tr>
 
     <?php if($loop->last): ?>
-    <tr><td colspan="2">
-        <form method="POST" action="<?php echo e(route('alert.massDestroy')); ?>">
+        <form method="POST" name="form_delAll" action="<?php echo e(route('alert.massDestroy')); ?>">
             <?php echo csrf_field(); ?>
-            <button class="btn btn-sm btn-outline-danger">del all</button>
+            <tr>
+                <td colspan="2">
+                    <button class="btn btn-sm btn-outline-danger">del all</button>
         </form>
-    </td><td colspan="9">--</td></tr>
+        </td>
+        <td colspan="9">--
+            <input type="text" name="checkAllCopy" id="checkAllCopy">
+
+
+        </td>
+        </tr>
     <?php endif; ?>
 
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
     <p><b>No records</b></p>
-
-
     <?php endif; ?>
 </table>
 
@@ -180,6 +175,20 @@
 <script>
 
 
+    $("#checkAll").click(function () {
+        $('input:checkbox').not(this).prop('checked', this.checked);
+    });
+
+
+    $(function () {
+        $('input[type="checkbox"]').bind('click', function () {
+            if ($(this).is(':checked')) {
+                $('#checkAllCopy').val($(this).val());
+            }
+        });
+    });
+
+    
 
     function geocodeLatLng(lat, lng) {
         var geocoder = new google.maps.Geocoder;

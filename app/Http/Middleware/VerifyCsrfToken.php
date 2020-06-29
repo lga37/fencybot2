@@ -16,7 +16,7 @@ class VerifyCsrfToken extends Middleware
         '/adm/fence/add',
         '/adm/fence',
         '/adm/alert/*',
-        '/adm/device',
+        '/adm/device/*',
         '/adm/meet',
         '/adm/track',
         '/broadcasting/*',

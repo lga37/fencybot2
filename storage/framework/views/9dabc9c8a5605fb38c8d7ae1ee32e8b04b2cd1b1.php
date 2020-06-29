@@ -38,8 +38,7 @@ unset($__errorArgs, $__bag); ?>
         <label for="tel" class="col-md-2 col-form-label text-md-right"><?php echo e(__('Tel')); ?></label>
 
         <div class="col-md-10">
-            <input id="tel" type="text" id="tel"
-
+            <input type="text"
             class="form-control <?php $__errorArgs = ['tel'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -131,8 +130,8 @@ unset($__errorArgs, $__bag); ?>
 <?php $__env->startSection('js'); ?>
 
 <script>
-    var input = document.querySelector("#tel");
-    //var input = $("#tel");
+/*     var input = document.querySelector("#tel");
+
     window.intlTelInput(input, {
 
         preferredCountries: ["us", "br"],
@@ -147,7 +146,7 @@ unset($__errorArgs, $__bag); ?>
             .intlTelInput("getSelectedCountryData").dialCode));
 
     });
-</script>
+ */</script>
 
 <?php $__env->stopSection(); ?>
 

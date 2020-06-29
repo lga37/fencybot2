@@ -26,8 +26,7 @@
         <label for="tel" class="col-md-2 col-form-label text-md-right">{{ __('Tel') }}</label>
 
         <div class="col-md-10">
-            <input id="tel" type="text" id="tel"
-
+            <input type="text"
             class="form-control @error('tel') is-invalid @enderror" name="tel"
                 value="{{ $user->tel ?? old('tel') }}" required autocomplete="tel" autofocus>
 
@@ -91,8 +90,8 @@
 @section('js')
 
 <script>
-    var input = document.querySelector("#tel");
-    //var input = $("#tel");
+/*     var input = document.querySelector("#tel");
+
     window.intlTelInput(input, {
 
         preferredCountries: ["us", "br"],
@@ -107,6 +106,6 @@
             .intlTelInput("getSelectedCountryData").dialCode));
 
     });
-</script>
+ */</script>
 
 @endsection

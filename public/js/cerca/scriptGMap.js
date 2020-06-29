@@ -1068,9 +1068,12 @@ function openContextMenu(ev) {
 
     // Recupera a posição da DIV onde o mapa está sendo apresentado
     let mapPosition = $("#mapa").offset();
-
+    console.log(ev);
+    console.log(mapPosition);
     // Abre o menu de contexto no local do marker clicado
-    ctxMenu.open(p.x + mapPosition.left, p.y + mapPosition.top, this);
+    //ctxMenu.open(p.x , p.y , this);
+    //ctxMenu.open(p.x + mapPosition.left, p.y + mapPosition.top, this);
+    ctxMenu.open(p.x + 40 , p.y + (mapPosition.top / 4), this);
 }
 
 /*--------------------------------------------------------------------------------------*/

@@ -12,10 +12,36 @@
 @section('content')
 
 @include('shared.msgs')
-@include('shared.header', ['name' => 'Devices'])
 
 
-<div class="card border-success mb-3">
+<form method="POST" action="{{ route('device.store') }}">
+    @csrf
+    <div class="input-group mt-1">
+        <div class="input-group-prepend">
+            <div class="input-group-text" data-toggle="tooltip" data-placement="top" title="Name of this device">Add New
+                Device</div>
+        </div>
+        <div class="input-group-prepend ml-1">
+            <div class="input-group-text" data-toggle="tooltip" data-placement="top" title="Name of this device"><span
+                    data-feather="target"></span></div>
+        </div>
+        <input class="form-control" placeholder="Device Name" name="name">
+
+
+        <div class="input-group-prepend ml-1">
+            <div class="input-group-text" data-toggle="tooltip" data-placement="top"
+                title="Phone number of this device"><span data-feather="phone"></span></div>
+        </div>
+        <input class="form-control" placeholder="Device Tel Number" name="tel">
+
+        <button class="ml-1 btn btn-outline-success">Add</button>
+    </div>
+
+
+</form>
+
+
+<!-- <div class="card border-success mb-3">
     <div class="card-header">Add New Device</div>
     <div class="card-body text-success">
 
@@ -132,7 +158,7 @@
 
 
     </div>
-</div>
+</div> -->
 
 <br>
 
@@ -156,7 +182,7 @@
                         <div class="input-group mt-1">
                             <div class="input-group-prepend">
                                 <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                                    title="Name of this device"><span data-feather="target"></span></div>
+                                    title="Name of this device"><span data-feather="user"></span></div>
                             </div>
                             <input class="form-control" name="name" value="{{ $device->name }}">
                         </div>
@@ -171,9 +197,7 @@
 
 
 
-                        <br>
-
-                        <div class="row">
+<!--                         <div class="row">
                             <div class="col-md-1">
                                 <div class="" data-toggle="tooltip" data-placement="top"
                                     title="Time to receive the alert in seconds, from 0 to 60">?</div>
@@ -186,8 +210,6 @@
                                 <output name="t_output" id="t_output">{{ $device->t }}</output>
                             </div>
                         </div>
-
-
                         <div class="row">
                             <div class="col-md-1">
                                 <div class="" data-toggle="tooltip" data-placement="top"
@@ -201,8 +223,6 @@
                                 <output name="d_output" id="d_output">{{ $device->d }}</output>
                             </div>
                         </div>
-
-
                         <div class="row">
                             <div class="col-md-1">
                                 <div class="" data-toggle="tooltip" data-placement="top" title="Radius of the Personal Area, from 1 to 5 meters,
@@ -216,9 +236,6 @@
                                 <output name="r_output" id="r_output">{{ $device->r }}</output>
                             </div>
                         </div>
-
-
-
                         <div class="input-group my-3">
                             <div class="input-group-prepend">
                                 <div class="input-group-text" data-toggle="tooltip" data-placement="top"
@@ -228,18 +245,15 @@
                             </div>
                             @php $partners = ''; @endphp
                             @foreach ($device->partners as $v)
-                                @php $partners .= $v.','; @endphp
+                            @php $partners .= $v.','; @endphp
                             @endforeach
                             @php $partners = trim($partners,','); @endphp
                             @php $partners = trim($partners,'"'); @endphp
 
 
-                            <input class="form-control"
-                                value="{{ $partners }}"
+                            <input class="form-control" value="{{ $partners }}"
                                 placeholder="XXYYYYYYYYY, XXYYYYYYYYY, ..." name="partners">
                         </div>
-
-
                         <select title="Fences Associated to this Device" name="fences_id[]"
                             class="form-control border border-info selectpicker" multiple>
                             <?php
@@ -251,25 +265,35 @@
                                 echo sprintf("<option %s value='%d'>%s</option>",$sel,$fence->id,$fence->name);
                             endforeach;
                             ?>
-                        </select>
+                        </select> -->
+
+
+
+
                         <button class="btn mt-2 btn-sm btn-success">save</button>
                     </form>
 
                 </div>
                 <div class="card-footer">
-
                     <form method="POST" action="{{ route('device.destroy',['device'=>$device]) }}">
                         @method('DELETE')
                         @csrf
 
+                        <a href="{{ route('device.show',['device'=>$device] ) }}" class="btn mr-2 btn-sm btn-info">
+                            edit
+                        </a>
+
+
                         @if (count($device->fences)>0)
                         <a href="#" class="mr-2 btn btn-sm btn-primary" data-cercas="{{ $device->fences ?? false }}"
                             data-name="{{ $device->name }}" data-toggle="modal" data-target="#device_modal">
-                            map
+                            is tracked
                         </a>
+                        @else
+                            not tracked
                         @endif
 
-                        <button class="btn btn-sm btn-danger">del</button>
+                        <button class="btn ml-2 btn-sm btn-danger">del</button>
 
                     </form>
 
@@ -286,6 +310,29 @@
 @empty
 <p><b>No records</b></p>
 @endforelse
+
+
+<div class="modal fade" id="update_modal" tabindex="-1" role="dialog"
+    aria-labelledby="update_modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="label_header">Edit and Configure</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="map_cerca" class="mb-2" style="width:99%;height:600px; "></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 <div class="modal fade" id="device_modal" tabindex="-1" role="dialog" aria-labelledby="device_modal" aria-hidden="true">
@@ -314,14 +361,27 @@
 <script src="https://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE')}}" async defer></script>
 <script>
 
+    $('#update_modal').on('show.bs.modal', function (event) {
+
+        var button = $(event.relatedTarget)
+        var device_id = button.data('device_id');
+        $("#label_header").text('Edit: '+device_id);
+
+
+    });
+
+
+
+
+
+
+
     $('#device_modal').on('show.bs.modal', function (event) {
 
         var button = $(event.relatedTarget)
         var cercas = button.data('cercas');
         var label_device = button.data('name');
         $("#label_cerca").text(label_device);
-
-        //console.log(cercas);
 
         var center_cerca = JSON.parse(cercas[0].fence);
         var center = { 'lat': parseFloat(center_cerca[0].lat), 'lng': parseFloat(center_cerca[0].lng) };
@@ -356,8 +416,6 @@
 
             pl.setMap(map);
         }
-
-
     });
 
 

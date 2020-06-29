@@ -37,14 +37,14 @@
         <div class="input-group-prepend">
             <label class="input-group-text" for="dt1">dt1</label>
         </div>
-        <input class="form-control" type="date"
-        value="{{ \Carbon\Carbon::parse(now()->subDays(7))->format('Y-m-d') }}" id="dt1" name="dt1">
+        <input class="form-control" type="date" value="{{ \Carbon\Carbon::parse(now()->subDays(7))->format('Y-m-d') }}"
+            id="dt1" name="dt1">
 
         <div class="input-group-prepend">
             <label class="input-group-text" for="dt1">dt2</label>
         </div>
-        <input class="form-control" type="date"
-        value="{{ \Carbon\Carbon::parse(now())->format('Y-m-d') }}" id="dt2" name="dt2">
+        <input class="form-control" type="date" value="{{ \Carbon\Carbon::parse(now())->format('Y-m-d') }}" id="dt2"
+            name="dt2">
 
 
         <div class="input-group-append">
@@ -66,7 +66,7 @@
 
 <table class="table table-striped table-sm">
     <tr>
-        <th><input type="checkbox" class="" value="1" name="checkAll"></th>
+        <th><input type="checkbox" class="" value="1" id="checkAll" name="checkAll"></th>
         <th>id</th>
         <th>type</th>
         <th>fence</th>
@@ -76,57 +76,47 @@
         <th>map</th>
         <th>del</th>
     </tr>
+
     @forelse ($alerts as $alert)
     <tr>
-
         <td><input type="checkbox" value="{{$alert->id}}" name="ids[]"></td>
-
         <td>{{ $alert->id }}</td>
         <td>
             @switch($alert->type)
             @case(0)
             <span class="badge badge-secondary">default</span>
             @break
-
             @case(1)
             <span class="badge badge-danger">close</span>
             @break
-
             @case(2)
             <span class="badge badge-success">very close</span>
             @break
-
             @case(3)
             <span class="badge badge-info">invasion</span>
             @break
-
             @case(4)
             <span class="badge badge-warning">off</span>
             @break
-
             @default
             <span class="badge badge-secondary">default</span>
             @endswitch
-
-
         </td>
         <td>{{ $alert->fence->name ?? '' }}</td>
         <td>{{ $alert->device->name ?? '' }}</td>
         <td>{{ $alert->dt->format('l d/M H:i:s') }}</td>
-
-<!--         <td><a class="btn btn-sm btn-info"
+        <!--         <td><a class="btn btn-sm btn-info"
                 onclick="javascript:geocodeLatLng('{{$alert->lat}}','{{$alert->lng}}')">local</a>
         </td>
  -->
         <td>{{ $alert->d ?? '-' }}</td>
-
-
         <td class="">
-            <button class="btn btn-primary" data-lat="{{ $alert->lat }}" data-lng="{{ $alert->lng }}"
-                data-cerca="{{ $alert->fence->fence ?? false }}" data-toggle="modal" data-target="#modal">map</button>
+            <a class="btn btn-info" data-lat="{{ $alert->lat }}" data-lng="{{ $alert->lng }}"
+                data-cerca="{{ $alert->fence->fence ?? false }}" data-toggle="modal" data-target="#modal">map
+            </a>
         </td>
         <td class="">
-            <form method="POST" action="{{ route('alert.destroy',['alert'=>$alert]) }}">
+            <form method="POST" name="{{ $alert->id }}" action="{{ route('alert.destroy',['alert'=>$alert]) }}">
                 @method('DELETE')
                 @csrf
                 <button class="btn btn-danger">del</button>
@@ -135,18 +125,23 @@
     </tr>
 
     @if ($loop->last)
-    <tr><td colspan="2">
-        <form method="POST" action="{{ route('alert.massDestroy') }}">
+        <form method="POST" name="form_delAll" action="{{ route('alert.massDestroy') }}">
             @csrf
-            <button class="btn btn-sm btn-outline-danger">del all</button>
+            <tr>
+                <td colspan="2">
+                    <button class="btn btn-sm btn-outline-danger">del all</button>
         </form>
-    </td><td colspan="9">--</td></tr>
+        </td>
+        <td colspan="9">--
+            <input type="text" name="checkAllCopy" id="checkAllCopy">
+
+
+        </td>
+        </tr>
     @endif
 
     @empty
     <p><b>No records</b></p>
-
-
     @endforelse
 </table>
 
@@ -182,6 +177,20 @@
 <script>
 
 
+    $("#checkAll").click(function () {
+        $('input:checkbox').not(this).prop('checked', this.checked);
+    });
+
+
+    $(function () {
+        $('input[type="checkbox"]').bind('click', function () {
+            if ($(this).is(':checked')) {
+                $('#checkAllCopy').val($(this).val());
+            }
+        });
+    });
+
+    
 
     function geocodeLatLng(lat, lng) {
         var geocoder = new google.maps.Geocoder;

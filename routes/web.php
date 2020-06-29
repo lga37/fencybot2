@@ -45,6 +45,9 @@ Route::group(['prefix' => 'adm', 'middleware' => ['auth']], function () {
     Route::get('/user/changepass', 'UserController@changepass')->name('user.changepass');
     Route::post('/user/savepass', 'UserController@savepass')->name('user.savepass');
     Route::resource('fence', 'FenceController');
+
+
+    Route::post('/device/configure', 'DeviceController@configure')->name('device.configure');
     Route::resource('device', 'DeviceController', [
         'only' => ['destroy', 'update', 'store', 'index', 'show']
     ]);

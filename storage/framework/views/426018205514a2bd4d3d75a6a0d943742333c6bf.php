@@ -233,7 +233,7 @@
                             <a class="nav-link
                                 <?php echo e(request()->routeIs('alert.invasions') ? 'active' : ''); ?>"
                                 href="<?php echo e(route('alert.invasions')); ?>">
-                                <span data-feather="check"></span>
+                                <span data-feather="users"></span>
                                 Invasions
                             </a>
                             <span class="invisible badge badge-pill badge-success">0</span>

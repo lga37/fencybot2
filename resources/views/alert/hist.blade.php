@@ -159,14 +159,14 @@
     }
 
 
-    
+
 
     function init() {
-        return;
+        //return;
 
         alert(11)
-        alert({{ $alerts[0]->lat }});
-        if("{{ $alerts[0]->lat }}" != 'undefined'){
+
+        @if (isset($alerts[0]) && isset($alerts[0]->lat) )
             alert(22)
             map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 13,
@@ -180,7 +180,7 @@
                 map: map
             });
 
-        }
+        @endif
 
     }
 
@@ -235,9 +235,7 @@
     function geocodeLatLng(lat, lng) {
         var geocoder = new google.maps.Geocoder;
         var latlng = { lat: parseFloat(lat), lng: parseFloat(lng) };
-        geocoder.geocode({ 'location': latlng }, function (results, status) {
-            console.log(results);
-            console.log(status);
+            geocoder.geocode({ 'location': latlng }, function (results, status) {
             if (status == 'OK') {
                 if (results[0]) {
                     alert(results[0].formatted_address);
@@ -257,64 +255,61 @@
 
         var modal = $(this)
         modal.find('.modal-title').text('Tracking Details');
-        lat = parseFloat("{{ $alerts[0]->lat }}");
-        lng = parseFloat("{{ $alerts[0]->lng }}");
+        @if (isset($alerts[0]) && isset($alerts[0]->lat) )
 
-        var map_modal = new google.maps.Map(document.getElementById('map_modal'), {
-            center: { lat: lat, lng: lng },
-            zoom: 13,
-            mapTypeControl: false,
-            scaleControl: false,
-            streetViewControl: false,
-            rotateControl: false
-        });
+            lat = parseFloat("{{ $alerts[0]->lat }}");
+            lng = parseFloat("{{ $alerts[0]->lng }}");
 
-        var path = [];
-        var marker, contentString, infowindow;
-        @forelse ($alerts as $k=>$alert)
-            lat = parseFloat("{{ $alert->lat }}");
-            lng = parseFloat("{{ $alert->lng }}");
-            marker = new google.maps.Marker({
-                map: map_modal,
-                label:"{{ $k }}",
-                position: { lat: lat, lng: lng }
+            var map_modal = new google.maps.Map(document.getElementById('map_modal'), {
+                center: { lat: lat, lng: lng },
+                zoom: 13,
+                mapTypeControl: false,
+                scaleControl: false,
+                streetViewControl: false,
+                rotateControl: false
             });
 
-            contentString = "{{ $alert->dt->format('l d/M H:i:s') }}";
+            var path = [];
+            var marker, contentString, infowindow;
+            @forelse ($alerts as $k=>$alert)
+                lat = parseFloat("{{ $alert->lat }}");
+                lng = parseFloat("{{ $alert->lng }}");
+                marker = new google.maps.Marker({
+                    map: map_modal,
+                    label:"{{ $k }}",
+                    position: { lat: lat, lng: lng }
+                });
 
-            infowindow = new google.maps.InfoWindow({
-                content: contentString
+                contentString = "{{ $alert->dt->format('l d/M H:i:s') }}";
+
+                infowindow = new google.maps.InfoWindow({
+                    content: contentString
+                });
+
+                marker.addListener('click', function() {
+                    infowindow.open(map_modal, marker);
+                });
+
+                path.push({ lat: parseFloat("{{ $alert->lat }}"), lng: parseFloat("{{ $alert->lng }}")});
+
+            @empty
+            @endforelse
+
+
+            var pl = new google.maps.Polyline({
+                path: path,
+                geodesic: true,
+                strokeColor: "#0000FF",
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: "#0000FF",
+                fillOpacity: 0.1
             });
+            pl.setMap(map_modal);
 
-            marker.addListener('click', function() {
-                infowindow.open(map_modal, marker);
-            });
-
-            path.push({ lat: parseFloat("{{ $alert->lat }}"), lng: parseFloat("{{ $alert->lng }}")});
-
-        @empty
-        @endforelse
-
-
-        var pl = new google.maps.Polyline({
-            path: path,
-            geodesic: true,
-            strokeColor: "#0000FF",
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: "#0000FF",
-            fillOpacity: 0.1
-        });
-        pl.setMap(map_modal);
-
-
+        @endif
 
     });
-
-
-
-
-
 
 
 

@@ -232,7 +232,7 @@
                             <a class="nav-link
                                 {{ request()->routeIs('alert.invasions') ? 'active' : '' }}"
                                 href="{{ route('alert.invasions') }}">
-                                <span data-feather="check"></span>
+                                <span data-feather="users"></span>
                                 Invasions
                             </a>
                             <span class="invisible badge badge-pill badge-success">0</span>

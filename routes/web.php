@@ -46,6 +46,10 @@ Route::group(['prefix' => 'adm', 'middleware' => ['auth']], function () {
     Route::post('/user/savepass', 'UserController@savepass')->name('user.savepass');
     Route::resource('fence', 'FenceController');
 
+    Route::resource('type', 'TypeController');
+    Route::resource('place', 'PlaceController');
+    #Route::resource('visit', 'VisitController');
+
 
     Route::post('/device/configure', 'DeviceController@configure')->name('device.configure');
     Route::resource('device', 'DeviceController', [

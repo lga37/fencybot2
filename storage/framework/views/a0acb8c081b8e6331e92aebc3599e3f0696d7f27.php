@@ -162,8 +162,58 @@
 
 <?php echo $__env->make('shared.header', ['name' => 'Edit your Devices'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
+trackeds e nao trackeds
 
-<?php $__empty_1 = true; $__currentLoopData = $devices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $device): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+<div class="row">
+    <div class="col-md-6">
+        <h1>Trackeds</h1>
+        <table class="table table-striped table-sm">
+            <tr>
+                <td>id</td>
+                <td>name</td>
+                <td>tel</td>
+                <td>untrack</td>
+                <td>edit</td>
+                <td>del</td>
+            </tr>
+            <tr>
+                <td>122</td>
+                <td>fsdfsdfsdd</td>
+                <td>11-99999999</td>
+                <td><button class="btn btn-info">untrack</button></td>
+                <td><button class="btn btn-primary">edit</button></td>
+                <td><button class="btn btn-danger">del</button></td>
+            </tr>
+        </table>
+    </div>
+
+
+    <div class="col-md-6">
+        <h1>UnTrackeds</h1>
+        <table class="table table-striped table-sm">
+            <tr>
+                <td>id</td>
+                <td>name</td>
+                <td>tel</td>
+                <td>track</td>
+                <td>del</td>
+            </tr>
+            <tr>
+                <td>122</td>
+                <td>fsdfsdfsdd</td>
+                <td>11-99999999</td>
+                <td><button class="btn btn-secondary">track</button></td>
+                <td><button class="btn btn-danger">del</button></td>
+            </tr>
+        </table>
+    </div>
+
+
+
+</div>
+
+
+<?php $__empty_1 = true; $__currentLoopData = $trackeds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $device): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
 <?php if($loop->first): ?>
 
@@ -192,79 +242,6 @@
                             </div>
                             <input class="form-control" name="tel" value="<?php echo e($device->tel); ?>">
                         </div>
-
-
-
-<!--                         <div class="row">
-                            <div class="col-md-1">
-                                <div class="" data-toggle="tooltip" data-placement="top"
-                                    title="Time to receive the alert in seconds, from 0 to 60">?</div>
-                            </div>
-                            <div class="col-md-9">
-                                <input type="range" name="t" id="t" class="custom-range" value=" <?php echo e($device->t); ?>"
-                                    min="0" step="5" max="60" oninput="t_output.value = t.value">
-                            </div>
-                            <div class="col-md-1">
-                                <output name="t_output" id="t_output"><?php echo e($device->t); ?></output>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-1">
-                                <div class="" data-toggle="tooltip" data-placement="top"
-                                    title="Minimal distance to Associated Fence, from 10 to 50 meters ">?</div>
-                            </div>
-                            <div class="col-md-9">
-                                <input type="range" name="d" id="d" class="custom-range" value=" <?php echo e($device->d); ?>"
-                                    min="10" step="5" max="50" oninput="d_output.value = d.value">
-                            </div>
-                            <div class="col-md-1">
-                                <output name="d_output" id="d_output"><?php echo e($device->d); ?></output>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-1">
-                                <div class="" data-toggle="tooltip" data-placement="top" title="Radius of the Personal Area, from 1 to 5 meters,
-            used to fire a meet event with others registered Users">?</div>
-                            </div>
-                            <div class="col-md-9">
-                                <input type="range" name="r" id="r" class="custom-range" value=" <?php echo e($device->r); ?>"
-                                    min="1" step=".5" max="5" oninput="r_output.value = r.value">
-                            </div>
-                            <div class="col-md-1">
-                                <output name="r_output" id="r_output"><?php echo e($device->r); ?></output>
-                            </div>
-                        </div>
-                        <div class="input-group my-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                                    title="Partners, assign numbers that will not be computed, if occurs a meeting inside your personal circle">
-                                    <span data-feather="user"></span>
-                                </div>
-                            </div>
-                            <?php $partners = ''; ?>
-                            <?php $__currentLoopData = $device->partners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <?php $partners .= $v.','; ?>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            <?php $partners = trim($partners,','); ?>
-                            <?php $partners = trim($partners,'"'); ?>
-
-
-                            <input class="form-control" value="<?php echo e($partners); ?>"
-                                placeholder="XXYYYYYYYYY, XXYYYYYYYYY, ..." name="partners">
-                        </div>
-                        <select title="Fences Associated to this Device" name="fences_id[]"
-                            class="form-control border border-info selectpicker" multiple>
-                            <?php
-                            foreach ($fences as $fence):
-                                $sel = '';
-                                if(isset($device->fences)){
-                                    $sel = in_array($fence->id,$device->fences->pluck('id')->toArray())? 'selected':'';
-                                }
-                                echo sprintf("<option %s value='%d'>%s</option>",$sel,$fence->id,$fence->name);
-                            endforeach;
-                            ?>
-                        </select> -->
-
 
 
 
@@ -367,10 +344,6 @@
 
 
     });
-
-
-
-
 
 
 

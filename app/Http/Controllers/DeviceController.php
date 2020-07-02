@@ -16,11 +16,28 @@ class DeviceController extends Controller
     public function index(Request $request)
     {
         $devices = Device::all();
-        $fencedevices = FenceDevice::all();
+        #$fencedevices = FenceDevice::all();
+        $trackeds = Device::join('fence_device', function ($join) {
+            $join->on('fence_device.device_id', '=', 'devices.id');
+        })->orderBy('devices.id')->with(['fences'])
+        ->select('devices.*')->distinct()->get();
 
-        #dd($fencedevices);
+
+        $tracked_ids = $trackeds->pluck('id')->toArray();
+
+        #dump($tracked_ids);
+
+        $not_trackeds = Device::whereNotIn('id',$tracked_ids)
+        ->orderBy('id')->get()->toArray();
+
+        #dd($not_trackeds);
+
+
         $fences = Fence::all();
-        return view('device.index', compact('fences', 'devices', 'fencedevices'));
+        #dd($fencedevices);
+
+
+        return view('device.index', compact('fences', 'trackeds', 'not_trackeds'));
     }
 
 

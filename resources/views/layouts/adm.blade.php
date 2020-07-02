@@ -193,6 +193,22 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link
+                            {{ request()->routeIs('type.*') ? 'active' : '' }}"
+                            href="{{ route('type.index') }}">
+                                <span data-feather="map-pin"></span>
+                                Types
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link
+                            {{ request()->routeIs('place.*') ? 'active' : '' }}"
+                            href="{{ route('place.index') }}">
+                                <span data-feather="map-pin"></span>
+                                Places
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link
                             {{ request()->routeIs('fence.*') ? 'active' : '' }}" href="{{ route('fence.index') }}">
                                 <span data-feather="map-pin"></span>
                                 Fences

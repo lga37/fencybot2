@@ -19,7 +19,7 @@ class AlertController extends Controller
     public function index(Request $request)
     {
 
-/*         0 - dentro da cerca
+        /*         0 - dentro da cerca
         1 - usuário próximo à borda da cerca.
         2 - usuário fora da cerca.
         3 - invasão da cerca pessoal.
@@ -32,8 +32,8 @@ class AlertController extends Controller
 
         $alerts = Alert::join('devices', function ($join) {
             $join->on('alerts.device_id', '=', 'devices.id')
-            ->whereIn('alerts.type',[1,2,4,5])
-            ->where('devices.user_id', '=', (int) Auth::id());
+                ->whereIn('alerts.type', [1, 2, 4, 5])
+                ->where('devices.user_id', '=', (int) Auth::id());
         })->with(['fence', 'device'])->select('alerts.*')->get();
 
         #dd($alerts);
@@ -49,11 +49,14 @@ class AlertController extends Controller
         //$alerts = Alert::orderBy('device_id')->with(['device'])->get();
 
         $alerts = Alert::join('devices', function ($join) {
-            $join->on('alerts.device_id', '=', 'devices.id')->where('devices.user_id', '=', (int) Auth::id());
+            $join->on('alerts.device_id', '=', 'devices.id')
+            ->where('devices.user_id', '=', (int) Auth::id());
         })->where('type', 0)->orderBy('device_id')->with(['fence', 'device'])
-        ->select('alerts.*')->get();
+            ->select('alerts.*')->get();
 
-        return view('alert.hist', compact('devices', 'alerts'));
+        $exibe='false';
+        $alerts = [];
+        return view('alert.hist', compact('devices','exibe' ,'alerts'));
     }
 
     public function invasions(Request $request)
@@ -62,7 +65,7 @@ class AlertController extends Controller
 
         $alerts = Alert::join('devices', function ($join) {
             $join->on('alerts.device_id', '=', 'devices.id')
-            ->where('devices.user_id', '=', (int) Auth::id());
+                ->where('devices.user_id', '=', (int) Auth::id());
         })
             ->where('type', 3)
             ->with(['device'])->select('alerts.*')->get();
@@ -89,7 +92,7 @@ class AlertController extends Controller
 
         $alerts = Alert::join('devices', function ($join) {
             $join->on('alerts.device_id', '=', 'devices.id')
-            ->where('devices.user_id', '=', (int) Auth::id());
+                ->where('devices.user_id', '=', (int) Auth::id());
         })
             ->whereIn('type', [0, 1, 2, 3])
 
@@ -148,7 +151,9 @@ class AlertController extends Controller
         #DB::table('users')->where('votes', '>', 100)->dd();
         # DB::table('users')->where('votes', '>', 100)->dump();
 
-        return view('alert.hist', compact('devices', 'alerts','device_id'));
+        $tot = $alerts->count();
+        $exibe=true;
+        return view('alert.hist', compact('devices', 'alerts', 'device_id','exibe','tot'));
     }
 
 
@@ -166,23 +171,21 @@ class AlertController extends Controller
         $devices = $this->getDevicesByTel($tel);
 
         $lotes = $request->json();
-        #dd($lotes);
-        #dd($request->getContent());
-
 
         if ($devices->count() > 0) {
             $devices->each(function ($item, $key) use ($lotes) {
-                foreach ($lotes as $v) {
-                    if(!$v['fence_id']>0){
+                foreach ($lotes as $k=>$v) {
+
+                    if (!$v['fence_id'] > 0) {
                         dd('fence_id is missing');
                         return response()->json(['status' => 'fence_id is missing'], 406);
                     }
-                    $exists = FenceDevice::where('fence_id','=',$v['fence_id'])
-                    ->where('device_id','=',$item->id)
-                    ->where('user_id','=',$item->user_id)->exists();
+                    $exists = FenceDevice::where('fence_id', '=', $v['fence_id'])
+                        ->where('device_id', '=', $item->id)
+                        ->where('user_id', '=', $item->user_id)->exists();
                     #dd($exists);
                     #if(!$exists) continue;
-                    if(!$exists){
+                    if (!$exists) {
                         dd('device_id/user_id mismatch');
                         return response()->json(['status' => 'device_id/user_id mismatch'], 406);
                     }
@@ -199,7 +202,9 @@ class AlertController extends Controller
                     $alert->dist = $v['dist'] ?? null;
                     $alert->type = $v['type'] ?? 0;
                     $alert->dt = $v['dt'] ?? null;
-                    $alert->save();
+                    #dd($alert);
+                    $res = $alert->save();
+                    #dump($res);
                     $user_id = (int) $item->user_id;
 
                     $user = User::find($user_id);
@@ -323,18 +328,19 @@ class AlertController extends Controller
     public function massDestroy(Request $request)
     {
 
-        dd($request);
+        #dd($request);
+        #dd($request->post('ids'));
 
         $request->validate([
             'ids'   => 'bail|required|array',
             'ids.*' => 'exists:alerts,id',
         ]);
 
-        Alert::whereIn('id', request('ids'))->delete();
+        $ids = $request->post('ids');
+        Alert::whereIn('id', $ids )->delete();
 
-        return back()->withSuccess('Record Deleted with Success');
+        return redirect()->route('alert.hist')->withSuccess('Alerts deleted with success!');;
 
-        #return response(null, Response::HTTP_NO_CONTENT);
 
     }
 }

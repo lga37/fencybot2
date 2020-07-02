@@ -15,7 +15,7 @@ class Alert extends Model
         'dt' => 'datetime',
     ];
 
-    protected $fillable = ['lat','lng','dt','device_id','invaded'];
+    protected $fillable = ['lat','lng','dt','device_id','fence_id','lat_fence','lng_fence'];
 
     public function fencedevice ()
     {

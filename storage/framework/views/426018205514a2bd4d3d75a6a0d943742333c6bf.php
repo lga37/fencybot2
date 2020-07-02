@@ -194,6 +194,22 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link
+                            <?php echo e(request()->routeIs('type.*') ? 'active' : ''); ?>"
+                            href="<?php echo e(route('type.index')); ?>">
+                                <span data-feather="map-pin"></span>
+                                Types
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link
+                            <?php echo e(request()->routeIs('place.*') ? 'active' : ''); ?>"
+                            href="<?php echo e(route('place.index')); ?>">
+                                <span data-feather="map-pin"></span>
+                                Places
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link
                             <?php echo e(request()->routeIs('fence.*') ? 'active' : ''); ?>" href="<?php echo e(route('fence.index')); ?>">
                                 <span data-feather="map-pin"></span>
                                 Fences

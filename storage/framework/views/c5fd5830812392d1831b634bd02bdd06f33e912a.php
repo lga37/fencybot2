@@ -1,118 +1,22 @@
-<?php $__env->startSection('css'); ?>
-<style>
-    #wrap {
-        position: relative;
-
-    }
-
-    #floating-panel {
-        position: absolute;
-        top: 10px;
-        left: 25%;
-        z-index: 5;
-        background-color: #fff;
-        padding: 5px;
-        border: 1px solid #999;
-        text-align: center;
-        font-family: 'Roboto', 'sans-serif';
-        line-height: 30px;
-        padding-left: 10px;
-    }
-</style>
-<?php $__env->stopSection(); ?>
-
-
 <?php $__env->startSection('content'); ?>
 
 <?php echo $__env->make('shared.msgs', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php echo $__env->make('shared.header', ['name' => 'Trackings'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 
-<form method="POST" action="<?php echo e(route('alert.filterTracks')); ?>">
-    <div class="input-group mb-3">
-
-        <input type="hidden" name="type" value="0">
-        <select class="custom-select" name="device_id">
-            <option selected disabled>Device</option>
-            <?php $__empty_1 = true; $__currentLoopData = $devices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $device): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-            <option value="<?php echo e($device->id); ?>"><?php echo e($device->name); ?></option>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-
-            <?php endif; ?>
-        </select>
-
-
-        <!--         <div class="input-group-prepend">
-            <label class="input-group-text" for="dt1">dt1</label>
-        </div>
-        <input class="form-control" type="date"
-        value="<?php echo e(\Carbon\Carbon::parse(now()->subDays(7))->format('Y-m-d')); ?>" id="dt1" name="dt1">
-
-        <div class="input-group-prepend">
-            <label class="input-group-text" for="dt1">dt2</label>
-        </div>
-        <input class="form-control" type="date"
-        value="<?php echo e(\Carbon\Carbon::parse(now())->format('Y-m-d')); ?>" id="dt2" name="dt2">
- -->
-
-        <button class="btn btn-sm btn-outline-secondary">Track</button>
-
-    </div>
-</form>
-
-<br>
-
-
-<?php if($exibe): ?>
-<table class="table table-striped table-sm">
-    <tr>
-        <th>#</th>
-        <th>device</th>
-        <th>time</th>
-        <th>map</th>
-        <th>del</th>
-    </tr>
-    <?php $i = 1; ?>
-    <?php $__empty_1 = true; $__currentLoopData = $alerts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $alert): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-
-    <?php if($loop->first): ?>
-    <?php $davez = $alert->device_id; ?>
-    <?php $exibe = true; ?>
-    <?php else: ?>
-    <?php $exibe = $alert->device_id != $davez; ?>
-    <?php endif; ?>
-    <?php $i = $exibe? 1: $i+1; ?>
-    <?php if($exibe): ?>
-    <tr>
-        <td><?php echo e($tot); ?></td>
-        <td><?php echo e($alert->device->name ?? ''); ?></td>
-        <td><?php echo e($alert->dt->format('l d/M H:i:s')); ?></td>
-        <td class="">
-            <button class="btn btn-sm btn-primary" data-lat="<?php echo e($alert->lat); ?>" data-lng="<?php echo e($alert->lng); ?>"
-                data-cerca="<?php echo e($alert->fence->fence ?? false); ?>" data-toggle="modal" data-target="#modal">track</button>
-        </td>
-        <td class="">-</td>
-    </tr>
-
-    <?php else: ?>
-
-    <?php endif; ?>
-    <?php $davez = $alert->device_id; ?>
-
-    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-    <p><b>No records</b></p>
-    <?php endif; ?>
-</table>
-
-<hr>
+<?php if(request()->get('d') > 0 && request()->get('m') > 0): ?>
+<a class="btn btn-sm btn-outline-info" href="<?php echo e(route('alert.hist')); ?>">back</a><br><br>
 
 <form method="POST" name="form_delAll" action="<?php echo e(route('alert.massDestroy')); ?>">
 
     <table class="table table-striped table-sm">
 
         <tr>
-            <th><input type="checkbox" class="" value="1" id="checkAll" name="checkAll"></th>
-            <th colspan="8">-</th>
+            <th colspan="3">
+                <input type="checkbox" class="" value="1" id="checkAll" name="checkAll">
+                select all
+            </th>
+            <th colspan="6"></th>
         </tr>
 
         <?php $__empty_1 = true; $__currentLoopData = $alerts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $alert): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
@@ -120,23 +24,21 @@
             <td><input type="checkbox" value="<?php echo e($alert->id); ?>" name="ids[]"></td>
             <td><?php echo e($alert->id); ?></td>
             <td><?php echo e($alert->device->name ?? ''); ?></td>
+            <td><?php echo e($alert->fence->name ?? ''); ?></td>
             <td><?php echo e($alert->dt->format('l d/M H:i:s')); ?></td>
             <td class="">
-                <a class="btn btn-sm btn-primary" data-lat="<?php echo e($alert->lat); ?>" data-lng="<?php echo e($alert->lng); ?>"
+                <a class="btn btn-sm btn-outline-info" data-lat="<?php echo e($alert->lat); ?>" data-lng="<?php echo e($alert->lng); ?>"
                     data-cerca="<?php echo e($alert->fence->fence ?? false); ?>" data-toggle="modal" data-target="#modal">detail</a>
-            </td>
-            <td class="">
-
             </td>
         </tr>
 
         <?php if($loop->last): ?>
         <tr>
             <td colspan="2">
-                <button class="btn btn-sm btn-outline-danger">del all</button>
+                <button class="btn btn-sm btn-outline-danger">del selected</button>
             </td>
-            <td colspan="9">--
-                <input type="text" name="checkAllCopy" id="checkAllCopy">
+            <td colspan="7">
+
             </td>
         </tr>
         <?php endif; ?>
@@ -148,8 +50,60 @@
 </form>
 
 <?php else: ?>
-    <p><b>Select Device Above</b></p>
+<div class="row">
+    <div class="col-md-6">
+        <?php echo $__env->make('shared.header', ['name' => 'Grouped By Device'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
+        <table class="table table-striped table-sm">
+            <tr>
+                <th>Total</th>
+                <th>dd/mm</th>
+                <th>device</th>
+            </tr>
+            <?php $__empty_1 = true; $__currentLoopData = $device_days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+            <tr>
+                <td><?php echo e($day->tot); ?></td>
+                <td><a
+                        href="<?php echo e(route('alert.hist',['d'=>$day->d,'m'=>$day->m,'device_id'=>$day->device_id ])); ?>"><?php echo e($day->d); ?>/<?php echo e($day->m); ?></a>
+                </td>
+                <td><?php echo e($day->device->name); ?></td>
+            </tr>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+            <p><b>No records</b></p>
+            <?php endif; ?>
+        </table>
+
+    </div>
+    <div class="col-md-6">
+        <?php echo $__env->make('shared.header', ['name' => 'Grouped By Fence'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
+        <table class="table table-striped table-sm">
+            <tr>
+                <th>Total</th>
+                <th>dd/mm</th>
+                <th>fence</th>
+            </tr>
+            <?php $__empty_1 = true; $__currentLoopData = $fence_days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+            <tr>
+                <td><?php echo e($day->tot); ?></td>
+                <td><a
+                        href="<?php echo e(route('alert.hist',['d'=>$day->d,'m'=>$day->m,'fence_id'=>$day->fence_id ])); ?>"><?php echo e($day->d); ?>/<?php echo e($day->m); ?></a>
+                </td>
+                <td><?php echo e($day->fence->name); ?></td>
+            </tr>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+            <p><b>No records</b></p>
+            <?php endif; ?>
+        </table>
+
+    </div>
+</div>
+
 <?php endif; ?>
+
+
+
+
 
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -186,13 +140,6 @@
     });
 
 
-    $(function () {
-        $('input[type="checkbox"]').bind('click', function () {
-            if ($(this).is(':checked')) {
-                $('#checkAllCopy').val($(this).val());
-            }
-        });
-    });
 
 
     $('#modal').on('show.bs.modal', function (event) {
@@ -216,29 +163,31 @@
         });
 
         var path = [];
-        var marker, contentString, infowindow;
+        var marker, contentString;
+        //var infowindow = new google.maps.InfoWindow();
         <?php $__empty_1 = true; $__currentLoopData = $alerts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k=> $alert): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+
+
         lat = parseFloat("<?php echo e($alert->lat); ?>");
         lng = parseFloat("<?php echo e($alert->lng); ?>");
         marker = new google.maps.Marker({
             map: map_modal,
-            label: "<?php echo e($k); ?>",
+            label: "<?php echo e($loop->iteration); ?>",
             position: { lat: lat, lng: lng }
         });
 
-        contentString = "<?php echo e($alert->dt->format('l d/M H:i:s')); ?>";
 
-        infowindow = new google.maps.InfoWindow({
-            content: contentString
+        google.maps.event.addListener(marker, "click", function () {
+            //new google.maps.InfoWindow({ content: "<?php echo e($loop->iteration); ?>" }).open(map, marker);
+            new google.maps.InfoWindow({ content: "<?php echo e($alert->dt->format('l d/M H:i:s')); ?>" }).open(map, marker);
         });
 
-        marker.addListener('click', function () {
-            infowindow.open(map_modal, marker);
-        });
+
 
         path.push({ lat: parseFloat("<?php echo e($alert->lat); ?>"), lng: parseFloat("<?php echo e($alert->lng); ?>") });
 
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+        alert('No alerts');
         <?php endif; ?>
 
 

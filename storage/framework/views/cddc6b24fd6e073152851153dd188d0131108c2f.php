@@ -4,151 +4,142 @@
 <?php echo $__env->make('shared.header', ['name' => 'Alerts'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 
-<form method="POST" action="<?php echo e(route('alert.filter')); ?>">
-    <div class="input-group mb-3">
+<?php if(request()->get('d') > 0 && request()->get('m') > 0): ?>
+<a class="btn btn-sm btn-outline-info" href="<?php echo e(route('alert.index')); ?>">back</a><br><br>
 
-        <select class="custom-select" name="type">
-            <option selected disabled>Type</option>
-            <option value="1">close</option>
-            <option value="2">very close</option>
-
-        </select>
-        <select class="custom-select" name="fence_id">
-            <option selected disabled>Fence</option>
-            <?php $__empty_1 = true; $__currentLoopData = $fences; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fence): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-            <option value="<?php echo e($fence->id); ?>"><?php echo e($fence->name); ?></option>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-
-            <?php endif; ?>
-        </select>
-
-        <select class="custom-select" name="device_id">
-            <option selected disabled>Device</option>
-            <?php $__empty_1 = true; $__currentLoopData = $devices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $device): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-            <option value="<?php echo e($device->id); ?>"><?php echo e($device->name); ?></option>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-
-            <?php endif; ?>
-        </select>
+<form method="POST" name="form_delAll" action="<?php echo e(route('alert.massDestroy')); ?>">
+    <?php echo csrf_field(); ?>
+    <table class="table table-striped table-sm">
+        <tr>
+            <th><input type="checkbox" class="" value="1" id="checkAll" name="checkAll"> select all</th>
+            <th>id</th>
+            <th>type</th>
+            <th>fence</th>
+            <th>device</th>
+            <th>time</th>
+            <th>dist</th>
+            <th>map</th>
+        </tr>
 
 
-        <div class="input-group-prepend">
-            <label class="input-group-text" for="dt1">dt1</label>
-        </div>
-        <input class="form-control" type="date" value="<?php echo e(\Carbon\Carbon::parse(now()->subDays(7))->format('Y-m-d')); ?>"
-            id="dt1" name="dt1">
+        <?php $__empty_1 = true; $__currentLoopData = $alerts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $alert): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
-        <div class="input-group-prepend">
-            <label class="input-group-text" for="dt1">dt2</label>
-        </div>
-        <input class="form-control" type="date" value="<?php echo e(\Carbon\Carbon::parse(now())->format('Y-m-d')); ?>" id="dt2"
-            name="dt2">
+        <tr>
+            <td><input type="checkbox" value="<?php echo e($alert->id); ?>" name="ids[]"></td>
+            <td><?php echo e($alert->id); ?></td>
+            <td>
+                <?php switch($alert->type):
+                case (0): ?>
+                <span class="badge badge-secondary">default/inside</span>
+                <?php break; ?>
+                <?php case (1): ?>
+                <span class="badge badge-danger">close</span>
+                <?php break; ?>
+                <?php case (2): ?>
+                <span class="badge badge-success">out of fence</span>
+                <?php break; ?>
+                <?php case (3): ?>
+                <span class="badge badge-info">invasion</span>
+                <?php break; ?>
+                <?php case (4): ?>
+                <span class="badge badge-warning">off</span>
+                <?php break; ?>
+                <?php case (5): ?>
+                <span class="badge badge-primary">back</span>
+                <?php break; ?>
+                <?php default: ?>
+                <span class="badge badge-secondary">default</span>
+                <?php endswitch; ?>
+            </td>
+            <td><?php echo e($alert->fence->name ?? '-'); ?></td>
+            <td><?php echo e($alert->device->name ?? '-'); ?></td>
+            <td><?php echo e($alert->dt->format('l d/M H:i:s')); ?></td>
+            <td><?php echo e($alert->dist ?? '-'); ?></td>
+            <td class="">
+                <a class="btn btn-sm btn-info" data-lat="<?php echo e($alert->lat); ?>" data-lng="<?php echo e($alert->lng); ?>"
+                    data-cerca="<?php echo e($alert->fence->fence ?? false); ?>" data-toggle="modal" data-target="#modal">map
+                </a>
+            </td>
+        </tr>
 
+        <?php if($loop->last): ?>
+        <tr>
+            <td colspan="2">
+                <button class="btn btn-sm btn-outline-danger">del selected</button>
+            </td>
+            <td colspan="9"></td>
+        </tr>
+        <?php endif; ?>
 
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">Order</button>
-            <div class="dropdown-menu">
-                <input type="submit" value="Asc" name="order" class="dropdown-item">
-                <input type="submit" value="Desc" name="order" class="dropdown-item">
-                <div role="separator" class="dropdown-divider"></div>
-                <input type="submit" value="Separated" name="y" class="dropdown-item">
-            </div>
-        </div>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+        <p><b>No records</b></p>
+        <?php endif; ?>
+    </table>
 
-    </div>
 </form>
 
-<br>
+<?php else: ?>
 
 
-<table class="table table-striped table-sm">
-    <tr>
-        <th><input type="checkbox" class="" value="1" id="checkAll" name="checkAll"></th>
-        <th>id</th>
-        <th>type</th>
-        <th>fence</th>
-        <th>device</th>
-        <th>time</th>
-        <th>dist</th>
-        <th>map</th>
-        <th>del</th>
-    </tr>
+<div class="row">
+    <div class="col-md-6">
+        <?php echo $__env->make('shared.header', ['name' => 'Grouped By Device'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-
-    <?php $__empty_1 = true; $__currentLoopData = $alerts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $alert): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-    <tr>
-        <td><input type="checkbox" value="<?php echo e($alert->id); ?>" name="ids[]"></td>
-        <td><?php echo e($alert->id); ?></td>
-        <td>
-            <?php switch($alert->type):
-            case (0): ?>
-            <span class="badge badge-secondary">default/inside</span>
-            <?php break; ?>
-            <?php case (1): ?>
-            <span class="badge badge-danger">close</span>
-            <?php break; ?>
-            <?php case (2): ?>
-            <span class="badge badge-success">out of fence</span>
-            <?php break; ?>
-            <?php case (3): ?>
-            <span class="badge badge-info">invasion</span>
-            <?php break; ?>
-            <?php case (4): ?>
-            <span class="badge badge-warning">off</span>
-            <?php break; ?>
-            <?php case (5): ?>
-            <span class="badge badge-primary">back</span>
-            <?php break; ?>
-            <?php default: ?>
-            <span class="badge badge-secondary">default</span>
-            <?php endswitch; ?>
-        </td>
-        <td><?php echo e($alert->fence->name ?? '-'); ?></td>
-        <td><?php echo e($alert->device->name ?? '-'); ?></td>
-        <td><?php echo e($alert->dt->format('l d/M H:i:s')); ?></td>
-        <!--         <td><a class="btn btn-sm btn-info"
-                onclick="javascript:geocodeLatLng('<?php echo e($alert->lat); ?>','<?php echo e($alert->lng); ?>')">local</a>
-        </td>
- -->
-        <td><?php echo e($alert->d ?? '-'); ?></td>
-        <td class="">
-            <a class="btn btn-info" data-lat="<?php echo e($alert->lat); ?>" data-lng="<?php echo e($alert->lng); ?>"
-                data-cerca="<?php echo e($alert->fence->fence ?? false); ?>" data-toggle="modal" data-target="#modal">map
-            </a>
-        </td>
-        <td class="">
-            <form method="POST" name="<?php echo e($alert->id); ?>"
-                action="<?php echo e(route('alert.destroy',['alert'=>$alert])); ?>">
-                <?php echo method_field('DELETE'); ?>
-                <?php echo csrf_field(); ?>
-                <button class="btn btn-danger">del</button>
-            </form>
-        </td>
-    </tr>
-
-    <?php if($loop->last): ?>
-        <form method="POST" name="form_delAll" action="<?php echo e(route('alert.massDestroy')); ?>">
-            <?php echo csrf_field(); ?>
+        <table class="table table-striped table-sm">
             <tr>
-                <td colspan="2">
-                    <button class="btn btn-sm btn-outline-danger">del all</button>
-        </form>
-        </td>
-        <td colspan="9">--
-            <input type="text" name="checkAllCopy" id="checkAllCopy">
+                <th>Total</th>
+                <th>dd/mm</th>
+                <th>device</th>
+            </tr>
+            <?php $__empty_1 = true; $__currentLoopData = $device_days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+            <tr>
+                <td><?php echo e($day->tot); ?></td>
+                <td><a
+                        href="<?php echo e(route('alert.index',['d'=>$day->d,'m'=>$day->m,'device_id'=>$day->device_id ])); ?>"><?php echo e($day->d); ?>/<?php echo e($day->m); ?></a>
+                </td>
+                <td><?php echo e($day->device->name); ?></td>
+            </tr>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+            <p><b>No records</b></p>
+            <?php endif; ?>
+        </table>
+
+    </div>
+    <div class="col-md-6">
+        <?php echo $__env->make('shared.header', ['name' => 'Grouped By Fence'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <table class="table table-striped table-sm">
+            <tr>
+                <th>Total</th>
+                <th>dd/mm</th>
+                <th>fence</th>
+            </tr>
+            <?php $__empty_1 = true; $__currentLoopData = $fence_days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+            <tr>
+                <td><?php echo e($day->tot); ?></td>
+                <td><a
+                        href="<?php echo e(route('alert.index',['d'=>$day->d,'m'=>$day->m,'fence_id'=>$day->fence_id ])); ?>"><?php echo e($day->d); ?>/<?php echo e($day->m); ?></a>
+                </td>
+                <td><?php echo e($day->fence->name); ?></td>
+            </tr>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+            <p><b>No records</b></p>
+            <?php endif; ?>
+        </table>
+
+    </div>
+</div>
 
 
-        </td>
-        </tr>
-    <?php endif; ?>
+<?php endif; ?>
 
-    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-    <p><b>No records</b></p>
-    <?php endif; ?>
-</table>
 
-<hr>
+
+
+
+
+
+
+
 
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -184,14 +175,6 @@
         $('input:checkbox').not(this).prop('checked', this.checked);
     });
 
-
-    $(function () {
-        $('input[type="checkbox"]').bind('click', function () {
-            if ($(this).is(':checked')) {
-                $('#checkAllCopy').val($(this).val());
-            }
-        });
-    });
 
 
 
@@ -281,5 +264,6 @@
 
 
 <?php $__env->stopSection(); ?>
+our met
 
 <?php echo $__env->make('layouts.adm', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/fencybot/resources/views/alert/index.blade.php ENDPATH**/ ?>

@@ -52,6 +52,9 @@ Route::group(['prefix' => 'adm', 'middleware' => ['auth']], function () {
 
 
     Route::post('/device/configure', 'DeviceController@configure')->name('device.configure');
+    Route::post('/device/patch/{device}', 'DeviceController@patch')->name('device.patch');
+    Route::post('/device/untrack/{device}', 'DeviceController@untrack')->name('device.untrack');
+
     Route::resource('device', 'DeviceController', [
         'only' => ['destroy', 'update', 'store', 'index', 'show']
     ]);
@@ -67,6 +70,8 @@ Route::group(['prefix' => 'adm', 'middleware' => ['auth']], function () {
     Route::post('/alert/filterTracks', 'AlertController@filterTracks')->name('alert.filterTracks');
 
     Route::post('/alert/massDestroy', 'AlertController@massDestroy')->name('alert.massDestroy');
+
+    Route::get('/alert/parse/{device_id}', 'AlertController@parse')->name('alert.parse');
 
 
     Route::resource('alert', 'AlertController', [

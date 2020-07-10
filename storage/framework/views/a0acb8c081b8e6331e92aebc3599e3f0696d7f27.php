@@ -11,207 +11,171 @@
 
 <?php echo $__env->make('shared.msgs', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
+<?php echo $__env->make('shared.header', ['name' => 'Add new Device'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-<form method="POST" action="<?php echo e(route('device.store')); ?>">
-    <?php echo csrf_field(); ?>
-    <div class="input-group mt-1">
-        <div class="input-group-prepend">
-            <div class="input-group-text" data-toggle="tooltip" data-placement="top" title="Name of this device">Add New
-                Device</div>
+
+<div class="container">
+    <form method="POST" action="<?php echo e(route('device.store')); ?>">
+        <?php echo csrf_field(); ?>
+        <div class="input-group mt-1">
+            <div class="input-group-prepend">
+                <div class="input-group-text" data-toggle="tooltip" data-placement="top" title="Name of this device">Add
+                    New
+                    Device</div>
+            </div>
+            <div class="input-group-prepend ml-1">
+                <div class="input-group-text" data-toggle="tooltip" data-placement="top" title="Name of this device">
+                    <span data-feather="target"></span></div>
+            </div>
+            <input class="form-control" placeholder="Device Name" name="name">
+
+
+            <div class="input-group-prepend ml-1">
+                <div class="input-group-text" data-toggle="tooltip" data-placement="top"
+                    title="Phone number of this device"><span data-feather="phone"></span></div>
+            </div>
+            <input class="form-control" placeholder="Device Tel Number" name="tel">
+
+            <button class="ml-1 btn btn-outline-success">Add</button>
         </div>
-        <div class="input-group-prepend ml-1">
-            <div class="input-group-text" data-toggle="tooltip" data-placement="top" title="Name of this device"><span
-                    data-feather="target"></span></div>
-        </div>
-        <input class="form-control" placeholder="Device Name" name="name">
+    </form>
 
+</div>
 
-        <div class="input-group-prepend ml-1">
-            <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                title="Phone number of this device"><span data-feather="phone"></span></div>
-        </div>
-        <input class="form-control" placeholder="Device Tel Number" name="tel">
-
-        <button class="ml-1 btn btn-outline-success">Add</button>
-    </div>
-
-
-</form>
-
-
-<!-- <div class="card border-success mb-3">
-    <div class="card-header">Add New Device</div>
-    <div class="card-body text-success">
-
-
-        <form method="POST" action="<?php echo e(route('device.store')); ?>">
-            <?php echo csrf_field(); ?>
-
-            <div class="input-group mt-1">
-                <div class="input-group-prepend">
-                    <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                        title="Name of this device"><span data-feather="target"></span></div>
-                </div>
-                <input class="form-control" placeholder="Device Name" name="name">
-            </div>
-
-            <div class="input-group mt-1">
-                <div class="input-group-prepend">
-                    <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                        title="Phone number of this device"><span data-feather="phone"></span></div>
-                </div>
-                <input class="form-control" placeholder="Device Tel Number" name="tel">
-            </div>
-
-            <br>
-
-            <div class="row">
-                <div class="col-md-1">
-                    <div class="" data-toggle="tooltip" data-placement="top"
-                        title="Time to receive the alert in seconds, from 0 to 60">? time</div>
-                </div>
-
-                <div class="col-md-9">
-
-                    <input type="range" class="custom-range" name="t" min="0" step="5" max="60" value="20"
-                        oninput="this.form.t_input.value=this.value">
-                </div>
-                <div class="col-md-1">
-                    <input class="border-0 input-sm" type="number" name="t_input" min="0" step="5" max="60" value="20"
-                        oninput="this.form.t.value=this.value">
-
-                </div>
-
-
-            </div>
-
-
-            <div class="row">
-                <div class="col-md-1">
-                    <div class="" data-toggle="tooltip" data-placement="top"
-                        title="Minimal distance to Associated Fence, from 10 to 50 meters ">? dist</div>
-                </div>
-
-                <div class="col-md-9">
-
-                    <input type="range" class="custom-range" name="d" min="10" step="5" max="50" value="20"
-                        oninput="this.form.d_input.value=this.value">
-                </div>
-                <div class="col-md-1">
-                    <input class="border-0 input-sm" type="number" name="d_input" min="10" step="5" max="50" value="20"
-                        oninput="this.form.d.value=this.value">
-
-                </div>
-
-            </div>
-
-
-            <div class="row">
-                <div class="col-md-1">
-                    <div class="" data-toggle="tooltip" data-placement="top" title="Radius of the Personal Area, from 1 to 5 meters,
-                    used to fire a meet event with others registered Users">? radius</div>
-                </div>
-                <div class="col-md-9">
-
-                    <input type="range" class="custom-range" name="r" min="1" step=".5" max="5" value="2"
-                        oninput="this.form.r_input.value=this.value">
-                </div>
-                <div class="col-md-1">
-                    <input class="border-0 input-sm" type="number" name="r_input" min="1" step=".5" max="5" value="2"
-                        oninput="this.form.r.value=this.value">
-
-                </div>
-            </div>
-
-
-            <div class="input-group my-3">
-                <div class="input-group-prepend">
-                    <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                        title="Partners, assign numbers that will not be computed, if occurs a meeting inside your personal circle">
-                        <span data-feather="user"></span></div>
-                </div>
-                <input class="form-control" placeholder="Partners Tels on the format XXYYYYYYYYY, XXYYYYYYYYY, ..."
-                    name="partners">
-            </div>
-
-
-
-            <div class="input-group my-2">
-                <div class="input-group-prepend">
-                    <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                        title="Associated Fences for this Device">?</div>
-                </div>
-                <select title="Fences Associated to this Device" name="fences_id[]"
-                    class="form-control border border-info selectpicker" multiple>
-                    <?php
-                    foreach ($fences as $fence):
-                        echo sprintf("<option value='%d'>%s</option>",$fence->id,$fence->name);
-                    endforeach;
-                    ?>
-                </select>
-            </div>
-
-            <button class="btn mt-2 btn-lg btn-success">create</button>
-        </form>
-
-
-    </div>
-</div> -->
 
 <br>
 
 <?php echo $__env->make('shared.header', ['name' => 'Edit your Devices'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-trackeds e nao trackeds
 
 <div class="row">
     <div class="col-md-6">
-        <h1>Trackeds</h1>
+        <?php echo $__env->make('shared.header', ['name' => 'Trackeds'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         <table class="table table-striped table-sm">
             <tr>
-                <td>id</td>
-                <td>name</td>
-                <td>tel</td>
-                <td>untrack</td>
-                <td>edit</td>
-                <td>del</td>
+                <thead>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>tel</th>
+                    <th>save</th>
+                    <th>untrack</th>
+                    <th>edit</th>
+                    <th>del</th>
+                </thead>
             </tr>
+            <?php $__empty_1 = true; $__currentLoopData = $trackeds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tracked): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
             <tr>
-                <td>122</td>
-                <td>fsdfsdfsdd</td>
-                <td>11-99999999</td>
-                <td><button class="btn btn-info">untrack</button></td>
-                <td><button class="btn btn-primary">edit</button></td>
-                <td><button class="btn btn-danger">del</button></td>
+                <td><?php echo e($tracked->id); ?></td>
+
+                <form method="POST" action="<?php echo e(route('device.patch',['device'=>$tracked->id])); ?>">
+                    <?php echo csrf_field(); ?>
+                    <td>
+                        <input class="form-control" name="name" value="<?php echo e($tracked->name); ?>">
+                    </td>
+                    <td>
+                        <input class="form-control" name="tel" value="<?php echo e($tracked->tel); ?>">
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-success">Save</button>
+                    </td>
+                </form>
+
+                <td>
+                    <form method="POST" action="<?php echo e(route('device.untrack',['device'=>$tracked->id])); ?>">
+                        <?php echo csrf_field(); ?>
+                        <button class="btn btn-sm btn-info">untrack</button>
+                    </form>
+
+                </td>
+
+                <td>
+                    <a href="<?php echo e(route('device.show',['device'=>$tracked] )); ?>" class="btn btn-sm btn-warning">
+                        edit
+                    </a>
+                </td>
+
+
+                <td>
+                    <form method="POST" action="<?php echo e(route('device.destroy',['device'=>$tracked])); ?>">
+                        <?php echo method_field('DELETE'); ?>
+                        <?php echo csrf_field(); ?>
+
+                        <button class="btn btn-sm btn-outline-danger">del</button>
+                    </form>
+
+                </td>
+
+
             </tr>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+            <p><b>No records</b></p>
+
+            <?php endif; ?>
+
         </table>
     </div>
 
 
     <div class="col-md-6">
-        <h1>UnTrackeds</h1>
+        <?php echo $__env->make('shared.header', ['name' => 'UnTrackeds'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
         <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>tel</th>
+                    <th>save</th>
+                    <th>track</th>
+                    <th>del</th>
+                </tr>
+            </thead>
+            <?php $__empty_1 = true; $__currentLoopData = $not_trackeds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $not_tracked): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
             <tr>
-                <td>id</td>
-                <td>name</td>
-                <td>tel</td>
-                <td>track</td>
-                <td>del</td>
+                <td><?php echo e($not_tracked->id); ?></td>
+                <form method="POST" action="<?php echo e(route('device.patch',['device'=>$not_tracked->id])); ?>">
+                    <?php echo csrf_field(); ?>
+                    <td>
+                        <input class="form-control" name="name" value="<?php echo e($not_tracked->name); ?>">
+                    </td>
+                    <td>
+                        <input class="form-control" name="tel" value="<?php echo e($not_tracked->tel); ?>">
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-success">Save</button>
+                    </td>
+                </form>
+
+                <td>
+                    <a href="<?php echo e(route('device.show',['device'=>$not_tracked] )); ?>" class="btn btn-sm btn-info">
+                        track
+                    </a>
+                </td>
+
+
+                <td>
+                    <form method="POST" action="<?php echo e(route('device.destroy',['device'=>$not_tracked])); ?>">
+                        <?php echo method_field('DELETE'); ?>
+                        <?php echo csrf_field(); ?>
+
+                        <button class="btn btn-sm btn-outline-danger">del</button>
+                    </form>
+
+                </td>
             </tr>
-            <tr>
-                <td>122</td>
-                <td>fsdfsdfsdd</td>
-                <td>11-99999999</td>
-                <td><button class="btn btn-secondary">track</button></td>
-                <td><button class="btn btn-danger">del</button></td>
-            </tr>
+
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+            <p><b>No records</b></p>
+
+            <?php endif; ?>
+
         </table>
     </div>
-
-
-
 </div>
 
+<!-- ----------------------------------------- card -->
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
+vou tirar depoissssss
 
 <?php $__empty_1 = true; $__currentLoopData = $trackeds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $device): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
@@ -243,8 +207,6 @@ trackeds e nao trackeds
                             <input class="form-control" name="tel" value="<?php echo e($device->tel); ?>">
                         </div>
 
-
-
                         <button class="btn mt-2 btn-sm btn-success">save</button>
                     </form>
 
@@ -258,18 +220,16 @@ trackeds e nao trackeds
                             edit
                         </a>
 
-
                         <?php if(count($device->fences)>0): ?>
                         <a href="#" class="mr-2 btn btn-sm btn-primary" data-cercas="<?php echo e($device->fences ?? false); ?>"
                             data-name="<?php echo e($device->name); ?>" data-toggle="modal" data-target="#device_modal">
                             is tracked
                         </a>
                         <?php else: ?>
-                            not tracked
+                        not tracked
                         <?php endif; ?>
 
                         <button class="btn ml-2 btn-sm btn-danger">del</button>
-
                     </form>
 
 
@@ -283,12 +243,10 @@ trackeds e nao trackeds
 </div>
 <?php endif; ?>
 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-<p><b>No records</b></p>
 <?php endif; ?>
 
 
-<div class="modal fade" id="update_modal" tabindex="-1" role="dialog"
-    aria-labelledby="update_modal" aria-hidden="true">
+<div class="modal fade" id="update_modal" tabindex="-1" role="dialog" aria-labelledby="update_modal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -306,9 +264,6 @@ trackeds e nao trackeds
         </div>
     </div>
 </div>
-
-
-
 
 <div class="modal fade" id="device_modal" tabindex="-1" role="dialog" aria-labelledby="device_modal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -340,7 +295,7 @@ trackeds e nao trackeds
 
         var button = $(event.relatedTarget)
         var device_id = button.data('device_id');
-        $("#label_header").text('Edit: '+device_id);
+        $("#label_header").text('Edit: ' + device_id);
 
 
     });

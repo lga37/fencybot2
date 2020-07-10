@@ -1,36 +1,11 @@
 @extends('layouts.adm')
 
-@section('css')
-<style>
-    #wrap{
-        position: relative;
-
-    }
-    #floating-panel {
-        position: absolute;
-        top: 10px;
-        left: 25%;
-        z-index: 5;
-        background-color: #fff;
-        padding: 5px;
-        border: 1px solid #999;
-        text-align: center;
-        font-family: 'Roboto', 'sans-serif';
-        line-height: 30px;
-        padding-left: 10px;
-    }
-
-
-</style>
-@endsection
-
-
 @section('content')
 
 @include('shared.msgs')
 @include('shared.header', ['name' => 'Invasions'])
 
-
+<!--
 <form method="POST" action="{{ route('alert.filterTracks') }}">
     <div class="input-group mb-3">
         <input type="hidden" name="type" value="3">
@@ -61,8 +36,8 @@
 
     </div>
 </form>
+-->
 
-<br>
 
 
 <table class="table table-striped table-sm">
@@ -81,17 +56,13 @@
         <td>{{ $alert->id }}</td>
 
 
-<!--         <td><a class="btn btn-sm btn-info"
-            onclick="javascript:geocodeLatLng('{{$alert->lat}}','{{$alert->lng}}')">local</a>
-        </td>
- -->
             <td>{{ $alert->device->name ?? '' }}</td>
             <td>{{ $alert->dt->format('l d/M H:i:s') }}</td>
 
             <td>{{ $alert->phone ?? '-' }}</td>
 
         <td class="">
-            <button class="btn btn-primary" data-lat="{{ $alert->lat }}" data-lng="{{ $alert->lng }}"
+            <button class="btn btn-sm btn-primary" data-lat="{{ $alert->lat }}" data-lng="{{ $alert->lng }}"
                 data-cerca="{{ $alert->fence->fence ?? false }}"
                 data-toggle="modal" data-target="#modal">map</button>
         </td>
@@ -99,7 +70,7 @@
             <form method="POST" action="{{ route('alert.destroy',['alert'=>$alert]) }}">
                 @method('DELETE')
                 @csrf
-                <button class="btn btn-danger">del</button>
+                <button class="btn btn-sm btn-danger">del</button>
             </form>
         </td>
     </tr>

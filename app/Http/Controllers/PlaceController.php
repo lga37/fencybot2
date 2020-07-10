@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Alert;
 use App\Place;
+use App\Visit;
 use Illuminate\Http\Request;
 
 class PlaceController extends Controller
@@ -16,10 +17,10 @@ class PlaceController extends Controller
     public function index()
     {
         $places = Place::all();
-        $alerts = Alert::all();
+        $visits = Visit::all();
 
 
-        return view('place.index', compact('places','alerts'));
+        return view('place.index', compact('places','visits'));
     }
 
     /**

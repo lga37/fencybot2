@@ -7,6 +7,7 @@ use App\Fence;
 use App\Device;
 use App\Partner;
 use App\FenceDevice;
+use Twilio\Http\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,27 +19,24 @@ class FenceController extends Controller
     {
         #dd($request);
 
-        #$devices = Device::with('fences')->get();
-        $devices = Device::all();
+
+        $fences = Fence::all(['id'])->toArray();
+        #dd($fences);
+        $ids = array_column($fences,'id');
+        #dd($ids);
+
+        $fencedevices = FenceDevice::whereIn('fence_id',$ids)->get();
+        #dd($fencedevices);
         $fences = Fence::all();
-        $fencedevices = FenceDevice::all();
 
-        #dd($devices);
-        #$user_id = (int) Auth::id();
-        $alerts = Alert::with(['fence','device'])->get();
-
-        return view('fence.index', compact('fences','devices','alerts','fencedevices'));
+        return view('fence.index', compact('fences', 'fencedevices'));
     }
 
-    public function create()
+
+    private function isValid(Request $request)
     {
-        $fence = [];
-        return view('fence.create',compact('fence'));
-    }
 
-    private function isValid(Request $request){
-
-        $request->only(['name', 'fence', ]);
+        $request->only(['name', 'fence',]);
 
         $request->validate([
             'name' => 'required|min:2',
@@ -49,7 +47,6 @@ class FenceController extends Controller
 
     public function store(Request $request)
     {
-
     }
 
     public function add(Request $request)
@@ -58,14 +55,13 @@ class FenceController extends Controller
         ### atencao aqui, pois se usar fence p json e fence p model da aquela baita confusao
         $cerca = $request->json('fence');
         $user_id = (int) $request->json('user_id');
-        if(!$user_id > 0){
+        if (!$user_id > 0) {
             return response()->json(['error' => 'Incorrect User'], 406);
-
         }
 
         #dd((int) $user_id);
         #dd($cerca);
-        $cerca_prepare = json_encode($cerca,JSON_UNESCAPED_SLASHES);
+        $cerca_prepare = json_encode($cerca, JSON_UNESCAPED_SLASHES);
         #dd($cerca_prepare);
 
         $fence = new Fence();  #############)->withoutGlobalScopes();
@@ -75,8 +71,22 @@ class FenceController extends Controller
         #vou testar o scoped
         $fence->user_id = $user_id;
         $fence->save();
-        return response()->json(['status' => 'OK'], 201);
 
+
+        return response()->json(['status' => 'OK'], 201);
+    }
+
+
+    private function sendMessage($message, $recipients)
+    {
+        $account_sid = getenv("TWILIO_SID");
+        $auth_token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio_number = getenv("TWILIO_NUMBER");
+        $client = new Client($account_sid, $auth_token);
+        $client->messages->create(
+            $recipients,
+            ['from' => $twilio_number, 'body' => $message]
+        );
     }
 
 
@@ -102,15 +112,14 @@ class FenceController extends Controller
         #dd($devices_id);
 
         $user_id = (int) Auth::id();
-        if($devices_id){
-            foreach($devices_id as $device_id){
-                $devices_com_user[]=compact('device_id','user_id');
+        if ($devices_id) {
+            foreach ($devices_id as $device_id) {
+                $devices_com_user[] = compact('device_id', 'user_id');
             }
 
             $fence->devices()->sync($devices_com_user);
         } else {
             $fence->devices()->sync([]);
-
         }
 
 
@@ -126,43 +135,41 @@ class FenceController extends Controller
         return $devices_id;
     }
 
-    public function getFences (string $tel)
+    public function getFences(string $tel)
     {
         $devices = $this->getDevicesByTel($tel);
 
         #dump($devices);
-        if(!$devices){
+        if (!$devices) {
             return response()->json(['status' => 'ERROR'], 406);
         }
 
         $device_id = (int) $devices[0]['id'];
         #dump($device_id);
-        $partners = Device::join('partners', function ($join) use ($device_id){
+        $partners = Device::join('partners', function ($join) use ($device_id) {
             $join->on('partners.partner_id', '=', 'devices.id')
-            #->where('devices.user_id', '=', (int) Auth::id())
-            ->where('partners.device_id', '=', $device_id);
-
+                #->where('devices.user_id', '=', (int) Auth::id())
+                ->where('partners.device_id', '=', $device_id);
         })->select('tel')->get()->toArray();
 
         #dump($partners);
 
-        $tels = $partners? array_column($partners,'tel') : [];
+        $tels = $partners ? array_column($partners, 'tel') : [];
         #dump($tels);
 
-        $device = Device::where('tel','=',$tel)
+        $device = Device::where('tel', '=', $tel)
 
-        ->select('id','user_id','name','t as wait_alert','d as border', 'r as pfence')
-        ->with('fences:fence_id,name,fence as coords')
-        ->first();
+            ->select('id', 'user_id', 'name', 't as wait_alert', 'd as border', 'r as pfence')
+            ->with('fences:fence_id,name,fence as coords')
+            ->first();
 
         $device->partners = $tels;
         #dd($device);
-        if(!$device){
+        if (!$device) {
             return response()->json(['status' => 'ERROR'], 406);
         }
         $device->toArray();
-        return response()->json(compact('device'),200);
-
+        return response()->json(compact('device'), 200);
     }
 
 

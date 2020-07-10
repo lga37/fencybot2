@@ -1,120 +1,24 @@
 @extends('layouts.adm')
 
-@section('css')
-<style>
-    #wrap {
-        position: relative;
-
-    }
-
-    #floating-panel {
-        position: absolute;
-        top: 10px;
-        left: 25%;
-        z-index: 5;
-        background-color: #fff;
-        padding: 5px;
-        border: 1px solid #999;
-        text-align: center;
-        font-family: 'Roboto', 'sans-serif';
-        line-height: 30px;
-        padding-left: 10px;
-    }
-</style>
-@endsection
-
-
 @section('content')
 
 @include('shared.msgs')
 @include('shared.header', ['name' => 'Trackings'])
 
 
-<form method="POST" action="{{ route('alert.filterTracks') }}">
-    <div class="input-group mb-3">
-
-        <input type="hidden" name="type" value="0">
-        <select class="custom-select" name="device_id">
-            <option selected disabled>Device</option>
-            @forelse ($devices as $device)
-            <option value="{{ $device->id }}">{{ $device->name }}</option>
-            @empty
-
-            @endforelse
-        </select>
-
-
-        <!--         <div class="input-group-prepend">
-            <label class="input-group-text" for="dt1">dt1</label>
-        </div>
-        <input class="form-control" type="date"
-        value="{{ \Carbon\Carbon::parse(now()->subDays(7))->format('Y-m-d') }}" id="dt1" name="dt1">
-
-        <div class="input-group-prepend">
-            <label class="input-group-text" for="dt1">dt2</label>
-        </div>
-        <input class="form-control" type="date"
-        value="{{ \Carbon\Carbon::parse(now())->format('Y-m-d') }}" id="dt2" name="dt2">
- -->
-
-        <button class="btn btn-sm btn-outline-secondary">Track</button>
-
-    </div>
-</form>
-
-<br>
-
-
-@if ($exibe)
-<table class="table table-striped table-sm">
-    <tr>
-        <th>#</th>
-        <th>device</th>
-        <th>time</th>
-        <th>map</th>
-        <th>del</th>
-    </tr>
-    @php $i = 1; @endphp
-    @forelse ($alerts as $alert)
-
-    @if ($loop->first)
-    @php $davez = $alert->device_id; @endphp
-    @php $exibe = true; @endphp
-    @else
-    @php $exibe = $alert->device_id != $davez; @endphp
-    @endif
-    @php $i = $exibe? 1: $i+1; @endphp
-    @if ($exibe)
-    <tr>
-        <td>{{ $tot }}</td>
-        <td>{{ $alert->device->name ?? '' }}</td>
-        <td>{{ $alert->dt->format('l d/M H:i:s') }}</td>
-        <td class="">
-            <button class="btn btn-sm btn-primary" data-lat="{{ $alert->lat }}" data-lng="{{ $alert->lng }}"
-                data-cerca="{{ $alert->fence->fence ?? false }}" data-toggle="modal" data-target="#modal">track</button>
-        </td>
-        <td class="">-</td>
-    </tr>
-
-    @else
-
-    @endif
-    @php $davez = $alert->device_id; @endphp
-
-    @empty
-    <p><b>No records</b></p>
-    @endforelse
-</table>
-
-<hr>
+@if (request()->get('d') > 0 && request()->get('m') > 0)
+<a class="btn btn-sm btn-outline-info" href="{{ route('alert.hist') }}">back</a><br><br>
 
 <form method="POST" name="form_delAll" action="{{ route('alert.massDestroy') }}">
 
     <table class="table table-striped table-sm">
 
         <tr>
-            <th><input type="checkbox" class="" value="1" id="checkAll" name="checkAll"></th>
-            <th colspan="8">-</th>
+            <th colspan="3">
+                <input type="checkbox" class="" value="1" id="checkAll" name="checkAll">
+                select all
+            </th>
+            <th colspan="6"></th>
         </tr>
 
         @forelse ($alerts as $alert)
@@ -122,23 +26,21 @@
             <td><input type="checkbox" value="{{ $alert->id }}" name="ids[]"></td>
             <td>{{ $alert->id }}</td>
             <td>{{ $alert->device->name ?? '' }}</td>
+            <td>{{ $alert->fence->name ?? '' }}</td>
             <td>{{ $alert->dt->format('l d/M H:i:s') }}</td>
             <td class="">
-                <a class="btn btn-sm btn-primary" data-lat="{{ $alert->lat }}" data-lng="{{ $alert->lng }}"
+                <a class="btn btn-sm btn-outline-info" data-lat="{{ $alert->lat }}" data-lng="{{ $alert->lng }}"
                     data-cerca="{{ $alert->fence->fence ?? false }}" data-toggle="modal" data-target="#modal">detail</a>
-            </td>
-            <td class="">
-
             </td>
         </tr>
 
         @if ($loop->last)
         <tr>
             <td colspan="2">
-                <button class="btn btn-sm btn-outline-danger">del all</button>
+                <button class="btn btn-sm btn-outline-danger">del selected</button>
             </td>
-            <td colspan="9">--
-                <input type="text" name="checkAllCopy" id="checkAllCopy">
+            <td colspan="7">
+
             </td>
         </tr>
         @endif
@@ -150,8 +52,60 @@
 </form>
 
 @else
-    <p><b>Select Device Above</b></p>
+<div class="row">
+    <div class="col-md-6">
+        @include('shared.header', ['name' => 'Grouped By Device'])
+
+        <table class="table table-striped table-sm">
+            <tr>
+                <th>Total</th>
+                <th>dd/mm</th>
+                <th>device</th>
+            </tr>
+            @forelse ($device_days as $day)
+            <tr>
+                <td>{{ $day->tot }}</td>
+                <td><a
+                        href="{{ route('alert.hist',['d'=>$day->d,'m'=>$day->m,'device_id'=>$day->device_id ]) }}">{{ $day->d }}/{{ $day->m }}</a>
+                </td>
+                <td>{{ $day->device->name }}</td>
+            </tr>
+            @empty
+            <p><b>No records</b></p>
+            @endforelse
+        </table>
+
+    </div>
+    <div class="col-md-6">
+        @include('shared.header', ['name' => 'Grouped By Fence'])
+
+        <table class="table table-striped table-sm">
+            <tr>
+                <th>Total</th>
+                <th>dd/mm</th>
+                <th>fence</th>
+            </tr>
+            @forelse ($fence_days as $day)
+            <tr>
+                <td>{{ $day->tot }}</td>
+                <td><a
+                        href="{{ route('alert.hist',['d'=>$day->d,'m'=>$day->m,'fence_id'=>$day->fence_id ]) }}">{{ $day->d }}/{{ $day->m }}</a>
+                </td>
+                <td>{{ $day->fence->name }}</td>
+            </tr>
+            @empty
+            <p><b>No records</b></p>
+            @endforelse
+        </table>
+
+    </div>
+</div>
+
 @endif
+
+
+
+
 
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -188,13 +142,6 @@
     });
 
 
-    $(function () {
-        $('input[type="checkbox"]').bind('click', function () {
-            if ($(this).is(':checked')) {
-                $('#checkAllCopy').val($(this).val());
-            }
-        });
-    });
 
 
     $('#modal').on('show.bs.modal', function (event) {
@@ -218,29 +165,31 @@
         });
 
         var path = [];
-        var marker, contentString, infowindow;
+        var marker, contentString;
+        //var infowindow = new google.maps.InfoWindow();
         @forelse($alerts as $k=> $alert)
+
+
         lat = parseFloat("{{ $alert->lat }}");
         lng = parseFloat("{{ $alert->lng }}");
         marker = new google.maps.Marker({
             map: map_modal,
-            label: "{{ $k }}",
+            label: "{{ $loop->iteration }}",
             position: { lat: lat, lng: lng }
         });
 
-        contentString = "{{ $alert->dt->format('l d/M H:i:s') }}";
 
-        infowindow = new google.maps.InfoWindow({
-            content: contentString
+        google.maps.event.addListener(marker, "click", function () {
+            //new google.maps.InfoWindow({ content: "{{ $loop->iteration }}" }).open(map, marker);
+            new google.maps.InfoWindow({ content: "{{ $alert->dt->format('l d/M H:i:s') }}" }).open(map, marker);
         });
 
-        marker.addListener('click', function () {
-            infowindow.open(map_modal, marker);
-        });
+
 
         path.push({ lat: parseFloat("{{ $alert->lat }}"), lng: parseFloat("{{ $alert->lng }}") });
 
         @empty
+        alert('No alerts');
         @endforelse
 
 

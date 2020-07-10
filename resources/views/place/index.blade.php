@@ -40,7 +40,19 @@
         <th>num. visits</th>
         <th>del</th>
     </tr>
+    @forelse($visits as $visit)
 
+    <tr>
+        <td>{{ $visit->id }}</td>
+        <td>{{ $visit->place->name }}</td>
+        <td>{{ $visit->place->lat }} {{ $visit->place->type->name }} </td>
+        <td>{{ $visit->alert->device->name }}</td>
+        <td>del</td>
+    </tr>
+
+    @empty
+    no recs
+    @endforelse
 
     </table>
 
@@ -92,7 +104,7 @@
 
 
 
-        @if (isset($alerts[0]) && isset($alerts[0]->lat) )
+        @if (isset($visits[0]) && isset($visits[0]->place->lat) )
             //alert(22)
             let lat = -22.90278;
             let lng = -43.2075;
@@ -100,7 +112,7 @@
             map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 8,
                 center: { lat: lat, lng: lng },
-                //center: { lat: parseFloat("{{ $alerts[0]->lat }}"), lng: parseFloat("{{ $alerts[0]->lat }}") },
+                //center: { lat: parseFloat("{{ $visits[0]->lat }}"), lng: parseFloat("{{ $visits[0]->lat }}") },
                 mapTypeId: 'terrain'
             });
 
@@ -148,8 +160,8 @@
     function getPoints() {
 
         var points = [
-            @forelse ($alerts as $alert)
-                new google.maps.LatLng("{{ $alert->lat }}", "{{ $alert->lng }}"),
+            @forelse ($visits as $visit)
+                new google.maps.LatLng("{{ $visit->place->lat }}", "{{ $visit->place->lng }}"),
             @empty
             @endforelse
         ];

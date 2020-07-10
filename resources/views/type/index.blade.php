@@ -7,6 +7,16 @@
 @include('shared.header', ['name' => 'Types'])
 
 
+@forelse($devices as $device)
+
+<a href="{{ route('alert.parse',['device_id'=>$device->id ]) }}">parse {{ $device->name }}</a> <br>
+
+
+@empty
+sem regs
+@endforelse
+
+
 {{ $types }}
 
 @endsection

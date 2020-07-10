@@ -1,6 +1,5 @@
 <?php $__env->startSection('css'); ?>
 <style>
-
     .vitrine:hover {
         border: 1px solid blue;
     }
@@ -79,6 +78,7 @@
 <?php echo $__env->make('shared.header', ['name' => 'Edit your Fences'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 
+
 <?php $__empty_1 = true; $__currentLoopData = $fences; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fence): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 <?php if($loop->first): ?>
 <div class="container-fluid mt-4">
@@ -94,48 +94,57 @@
                                 title="Name of this fence"><span data-feather="map-pin"></span></div>
                         </div>
                         <input class="form-control" name="name" value="<?php echo e($fence->name); ?>">
+
+
+                        <div class="input-group-append">
+                            <button class="btn btn-sm btn-outline-success">Save</button>
+                        </div>
+
                     </div>
+                </form>
 
-                    <div class="card-body">
-                        <?php echo method_field('PUT'); ?>
+                <div class="card-body">
+
+                    <?php $tot=0; ?>
+                    <?php $__empty_2 = true; $__currentLoopData = $fencedevices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fencedevice): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_2 = false; ?>
+                    <?php if($fence->id == $fencedevice->fence_id): ?>
+                    <?php $tot++; ?>
+
+                    <?php endif; ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_2): ?>
+                    <?php endif; ?>
+                    <?php if($tot > 0): ?>
+                    <?php echo e($tot); ?> device(s) associated
+                    <?php else: ?>
+                    Not associated yet
+                    <?php endif; ?>
+
+
+
+                </div>
+                <div class="card-footer">
+
+                    <form method="POST" action="<?php echo e(route('fence.destroy',['fence'=>$fence])); ?>">
+                        <?php echo method_field('DELETE'); ?>
                         <?php echo csrf_field(); ?>
-                        <select title="Associated Devices" name="devices_id[]"
-                            class="form-control border border-info selectpicker" multiple>
-                            <?php
-                        foreach ($devices as $device):
-                            $sel = '';
-                            if(isset($device->fences)){
-                                $sel = in_array($device->id,$fence->devices->pluck('id')->toArray())? 'selected':'';
-                            }
-                            echo sprintf("<option %s value='%d'>%s</option>",$sel,$device->id,$device->name);
-                        endforeach;
-                        ?>
-                        </select>
-                        <button class="btn mt-2 btn-sm btn-success">save</button>
 
-                </form>
+                        <a href="<?php echo e(route('device.index')); ?>" class="btn mr-2 btn-sm btn-info">
+                            configure
+                        </a>
+                        <a href="#" class="mr-2 btn btn-sm btn-primary" data-cerca="<?php echo e($fence->fence ?? false); ?>"
+                            data-name="<?php echo e($fence->name); ?>" data-toggle="modal" data-target="#cerca_modal">
+                            view
+                        </a>
+                        <button class="btn btn-sm btn-danger mr-2">del</button>
+                    </form>
 
-            </div>
-            <div class="card-footer">
-
-                <form method="POST" action="<?php echo e(route('fence.destroy',['fence'=>$fence])); ?>">
-                    <?php echo method_field('DELETE'); ?>
-                    <?php echo csrf_field(); ?>
-
-                    <button class="btn btn-sm btn-danger mr-2">del</button>
-                    <a href="#" class="mr-2 btn btn-sm btn-primary" data-cerca="<?php echo e($fence->fence ?? false); ?>"
-                        data-name="<?php echo e($fence->name); ?>" data-toggle="modal" data-target="#cerca_modal">
-                        view
-                    </a>
-                </form>
-
+                </div>
             </div>
         </div>
+
+
+        <?php if($loop->last): ?>
     </div>
-
-
-    <?php if($loop->last): ?>
-</div>
 </div>
 <?php endif; ?>
 
@@ -198,7 +207,7 @@
 
         var centralPoint = fence.centralPointLatLng();
         //console.log(centralPoint);
-        var center = fence.isValid()? {'lat':centralPoint._lat,'lng':centralPoint._lon} : cerca[0];
+        var center = fence.isValid() ? { 'lat': centralPoint._lat, 'lng': centralPoint._lon } : cerca[0];
         //console.log(center);
 
         var map = new google.maps.Map(document.getElementById('map_cerca'), {

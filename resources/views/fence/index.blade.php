@@ -2,7 +2,6 @@
 
 @section('css')
 <style>
-
     .vitrine:hover {
         border: 1px solid blue;
     }
@@ -81,6 +80,7 @@
 @include('shared.header', ['name' => 'Edit your Fences'])
 
 
+
 @forelse ($fences as $fence)
 @if ($loop->first)
 <div class="container-fluid mt-4">
@@ -96,48 +96,57 @@
                                 title="Name of this fence"><span data-feather="map-pin"></span></div>
                         </div>
                         <input class="form-control" name="name" value="{{ $fence->name }}">
+
+
+                        <div class="input-group-append">
+                            <button class="btn btn-sm btn-outline-success">Save</button>
+                        </div>
+
                     </div>
+                </form>
 
-                    <div class="card-body">
-                        @method('PUT')
+                <div class="card-body">
+
+                    @php $tot=0; @endphp
+                    @forelse ($fencedevices as $fencedevice)
+                    @if ($fence->id == $fencedevice->fence_id)
+                    @php $tot++; @endphp
+
+                    @endif
+                    @empty
+                    @endforelse
+                    @if ($tot > 0)
+                    {{ $tot }} device(s) associated
+                    @else
+                    Not associated yet
+                    @endif
+
+
+
+                </div>
+                <div class="card-footer">
+
+                    <form method="POST" action="{{ route('fence.destroy',['fence'=>$fence]) }}">
+                        @method('DELETE')
                         @csrf
-                        <select title="Associated Devices" name="devices_id[]"
-                            class="form-control border border-info selectpicker" multiple>
-                            <?php
-                        foreach ($devices as $device):
-                            $sel = '';
-                            if(isset($device->fences)){
-                                $sel = in_array($device->id,$fence->devices->pluck('id')->toArray())? 'selected':'';
-                            }
-                            echo sprintf("<option %s value='%d'>%s</option>",$sel,$device->id,$device->name);
-                        endforeach;
-                        ?>
-                        </select>
-                        <button class="btn mt-2 btn-sm btn-success">save</button>
 
-                </form>
+                        <a href="{{ route('device.index') }}" class="btn mr-2 btn-sm btn-info">
+                            configure
+                        </a>
+                        <a href="#" class="mr-2 btn btn-sm btn-primary" data-cerca="{{ $fence->fence ?? false }}"
+                            data-name="{{ $fence->name }}" data-toggle="modal" data-target="#cerca_modal">
+                            view
+                        </a>
+                        <button class="btn btn-sm btn-danger mr-2">del</button>
+                    </form>
 
-            </div>
-            <div class="card-footer">
-
-                <form method="POST" action="{{ route('fence.destroy',['fence'=>$fence]) }}">
-                    @method('DELETE')
-                    @csrf
-
-                    <button class="btn btn-sm btn-danger mr-2">del</button>
-                    <a href="#" class="mr-2 btn btn-sm btn-primary" data-cerca="{{ $fence->fence ?? false }}"
-                        data-name="{{ $fence->name }}" data-toggle="modal" data-target="#cerca_modal">
-                        view
-                    </a>
-                </form>
-
+                </div>
             </div>
         </div>
+
+
+        @if ($loop->last)
     </div>
-
-
-    @if ($loop->last)
-</div>
 </div>
 @endif
 
@@ -200,7 +209,7 @@
 
         var centralPoint = fence.centralPointLatLng();
         //console.log(centralPoint);
-        var center = fence.isValid()? {'lat':centralPoint._lat,'lng':centralPoint._lon} : cerca[0];
+        var center = fence.isValid() ? { 'lat': centralPoint._lat, 'lng': centralPoint._lon } : cerca[0];
         //console.log(center);
 
         var map = new google.maps.Map(document.getElementById('map_cerca'), {

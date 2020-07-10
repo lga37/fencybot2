@@ -13,87 +13,171 @@
 
 @include('shared.msgs')
 
+@include('shared.header', ['name' => 'Add new Device'])
 
-<form method="POST" action="{{ route('device.store') }}">
-    @csrf
-    <div class="input-group mt-1">
-        <div class="input-group-prepend">
-            <div class="input-group-text" data-toggle="tooltip" data-placement="top" title="Name of this device">Add New
-                Device</div>
+
+<div class="container">
+    <form method="POST" action="{{ route('device.store') }}">
+        @csrf
+        <div class="input-group mt-1">
+            <div class="input-group-prepend">
+                <div class="input-group-text" data-toggle="tooltip" data-placement="top" title="Name of this device">Add
+                    New
+                    Device</div>
+            </div>
+            <div class="input-group-prepend ml-1">
+                <div class="input-group-text" data-toggle="tooltip" data-placement="top" title="Name of this device">
+                    <span data-feather="target"></span></div>
+            </div>
+            <input class="form-control" placeholder="Device Name" name="name">
+
+
+            <div class="input-group-prepend ml-1">
+                <div class="input-group-text" data-toggle="tooltip" data-placement="top"
+                    title="Phone number of this device"><span data-feather="phone"></span></div>
+            </div>
+            <input class="form-control" placeholder="Device Tel Number" name="tel">
+
+            <button class="ml-1 btn btn-outline-success">Add</button>
         </div>
-        <div class="input-group-prepend ml-1">
-            <div class="input-group-text" data-toggle="tooltip" data-placement="top" title="Name of this device"><span
-                    data-feather="target"></span></div>
-        </div>
-        <input class="form-control" placeholder="Device Name" name="name">
+    </form>
 
+</div>
 
-        <div class="input-group-prepend ml-1">
-            <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                title="Phone number of this device"><span data-feather="phone"></span></div>
-        </div>
-        <input class="form-control" placeholder="Device Tel Number" name="tel">
-
-        <button class="ml-1 btn btn-outline-success">Add</button>
-    </div>
-
-
-</form>
 
 <br>
 
 @include('shared.header', ['name' => 'Edit your Devices'])
 
-trackeds e nao trackeds
 
 <div class="row">
     <div class="col-md-6">
-        <h1>Trackeds</h1>
+        @include('shared.header', ['name' => 'Trackeds'])
         <table class="table table-striped table-sm">
             <tr>
-                <td>id</td>
-                <td>name</td>
-                <td>tel</td>
-                <td>untrack</td>
-                <td>edit</td>
-                <td>del</td>
+                <thead>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>tel</th>
+                    <th>save</th>
+                    <th>untrack</th>
+                    <th>edit</th>
+                    <th>del</th>
+                </thead>
             </tr>
+            @forelse ($trackeds as $tracked)
             <tr>
-                <td>122</td>
-                <td>fsdfsdfsdd</td>
-                <td>11-99999999</td>
-                <td><button class="btn btn-info">untrack</button></td>
-                <td><button class="btn btn-primary">edit</button></td>
-                <td><button class="btn btn-danger">del</button></td>
+                <td>{{ $tracked->id }}</td>
+
+                <form method="POST" action="{{ route('device.patch',['device'=>$tracked->id]) }}">
+                    @csrf
+                    <td>
+                        <input class="form-control" name="name" value="{{ $tracked->name }}">
+                    </td>
+                    <td>
+                        <input class="form-control" name="tel" value="{{ $tracked->tel }}">
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-success">Save</button>
+                    </td>
+                </form>
+
+                <td>
+                    <form method="POST" action="{{ route('device.untrack',['device'=>$tracked->id]) }}">
+                        @csrf
+                        <button class="btn btn-sm btn-info">untrack</button>
+                    </form>
+
+                </td>
+
+                <td>
+                    <a href="{{ route('device.show',['device'=>$tracked] ) }}" class="btn btn-sm btn-warning">
+                        edit
+                    </a>
+                </td>
+
+
+                <td>
+                    <form method="POST" action="{{ route('device.destroy',['device'=>$tracked]) }}">
+                        @method('DELETE')
+                        @csrf
+
+                        <button class="btn btn-sm btn-outline-danger">del</button>
+                    </form>
+
+                </td>
+
+
             </tr>
+            @empty
+            <p><b>No records</b></p>
+
+            @endforelse
+
         </table>
     </div>
 
 
     <div class="col-md-6">
-        <h1>UnTrackeds</h1>
+        @include('shared.header', ['name' => 'UnTrackeds'])
+
         <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>tel</th>
+                    <th>save</th>
+                    <th>track</th>
+                    <th>del</th>
+                </tr>
+            </thead>
+            @forelse ($not_trackeds as $not_tracked)
             <tr>
-                <td>id</td>
-                <td>name</td>
-                <td>tel</td>
-                <td>track</td>
-                <td>del</td>
+                <td>{{ $not_tracked->id }}</td>
+                <form method="POST" action="{{ route('device.patch',['device'=>$not_tracked->id]) }}">
+                    @csrf
+                    <td>
+                        <input class="form-control" name="name" value="{{ $not_tracked->name }}">
+                    </td>
+                    <td>
+                        <input class="form-control" name="tel" value="{{ $not_tracked->tel }}">
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-success">Save</button>
+                    </td>
+                </form>
+
+                <td>
+                    <a href="{{ route('device.show',['device'=>$not_tracked] ) }}" class="btn btn-sm btn-info">
+                        track
+                    </a>
+                </td>
+
+
+                <td>
+                    <form method="POST" action="{{ route('device.destroy',['device'=>$not_tracked]) }}">
+                        @method('DELETE')
+                        @csrf
+
+                        <button class="btn btn-sm btn-outline-danger">del</button>
+                    </form>
+
+                </td>
             </tr>
-            <tr>
-                <td>122</td>
-                <td>fsdfsdfsdd</td>
-                <td>11-99999999</td>
-                <td><button class="btn btn-secondary">track</button></td>
-                <td><button class="btn btn-danger">del</button></td>
-            </tr>
+
+            @empty
+            <p><b>No records</b></p>
+
+            @endforelse
+
         </table>
     </div>
-
-
-
 </div>
 
+<!-- ----------------------------------------- card -->
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
+vou tirar depoissssss
 
 @forelse ($trackeds as $device)
 
@@ -125,8 +209,6 @@ trackeds e nao trackeds
                             <input class="form-control" name="tel" value="{{ $device->tel }}">
                         </div>
 
-
-
                         <button class="btn mt-2 btn-sm btn-success">save</button>
                     </form>
 
@@ -140,18 +222,16 @@ trackeds e nao trackeds
                             edit
                         </a>
 
-
                         @if (count($device->fences)>0)
                         <a href="#" class="mr-2 btn btn-sm btn-primary" data-cercas="{{ $device->fences ?? false }}"
                             data-name="{{ $device->name }}" data-toggle="modal" data-target="#device_modal">
                             is tracked
                         </a>
                         @else
-                            not tracked
+                        not tracked
                         @endif
 
                         <button class="btn ml-2 btn-sm btn-danger">del</button>
-
                     </form>
 
 
@@ -165,12 +245,10 @@ trackeds e nao trackeds
 </div>
 @endif
 @empty
-<p><b>No records</b></p>
 @endforelse
 
 
-<div class="modal fade" id="update_modal" tabindex="-1" role="dialog"
-    aria-labelledby="update_modal" aria-hidden="true">
+<div class="modal fade" id="update_modal" tabindex="-1" role="dialog" aria-labelledby="update_modal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -188,9 +266,6 @@ trackeds e nao trackeds
         </div>
     </div>
 </div>
-
-
-
 
 <div class="modal fade" id="device_modal" tabindex="-1" role="dialog" aria-labelledby="device_modal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -222,7 +297,7 @@ trackeds e nao trackeds
 
         var button = $(event.relatedTarget)
         var device_id = button.data('device_id');
-        $("#label_header").text('Edit: '+device_id);
+        $("#label_header").text('Edit: ' + device_id);
 
 
     });

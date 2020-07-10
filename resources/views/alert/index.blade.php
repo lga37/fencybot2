@@ -6,151 +6,142 @@
 @include('shared.header', ['name' => 'Alerts'])
 
 
-<form method="POST" action="{{ route('alert.filter') }}">
-    <div class="input-group mb-3">
+@if (request()->get('d') > 0 && request()->get('m') > 0)
+<a class="btn btn-sm btn-outline-info" href="{{ route('alert.index') }}">back</a><br><br>
 
-        <select class="custom-select" name="type">
-            <option selected disabled>Type</option>
-            <option value="1">close</option>
-            <option value="2">very close</option>
-
-        </select>
-        <select class="custom-select" name="fence_id">
-            <option selected disabled>Fence</option>
-            @forelse ($fences as $fence)
-            <option value="{{ $fence->id }}">{{ $fence->name }}</option>
-            @empty
-
-            @endforelse
-        </select>
-
-        <select class="custom-select" name="device_id">
-            <option selected disabled>Device</option>
-            @forelse ($devices as $device)
-            <option value="{{ $device->id }}">{{ $device->name }}</option>
-            @empty
-
-            @endforelse
-        </select>
+<form method="POST" name="form_delAll" action="{{ route('alert.massDestroy') }}">
+    @csrf
+    <table class="table table-striped table-sm">
+        <tr>
+            <th><input type="checkbox" class="" value="1" id="checkAll" name="checkAll"> select all</th>
+            <th>id</th>
+            <th>type</th>
+            <th>fence</th>
+            <th>device</th>
+            <th>time</th>
+            <th>dist</th>
+            <th>map</th>
+        </tr>
 
 
-        <div class="input-group-prepend">
-            <label class="input-group-text" for="dt1">dt1</label>
-        </div>
-        <input class="form-control" type="date" value="{{ \Carbon\Carbon::parse(now()->subDays(7))->format('Y-m-d') }}"
-            id="dt1" name="dt1">
+        @forelse ($alerts as $alert)
 
-        <div class="input-group-prepend">
-            <label class="input-group-text" for="dt1">dt2</label>
-        </div>
-        <input class="form-control" type="date" value="{{ \Carbon\Carbon::parse(now())->format('Y-m-d') }}" id="dt2"
-            name="dt2">
+        <tr>
+            <td><input type="checkbox" value="{{$alert->id}}" name="ids[]"></td>
+            <td>{{ $alert->id }}</td>
+            <td>
+                @switch($alert->type)
+                @case(0)
+                <span class="badge badge-secondary">default/inside</span>
+                @break
+                @case(1)
+                <span class="badge badge-danger">close</span>
+                @break
+                @case(2)
+                <span class="badge badge-success">out of fence</span>
+                @break
+                @case(3)
+                <span class="badge badge-info">invasion</span>
+                @break
+                @case(4)
+                <span class="badge badge-warning">off</span>
+                @break
+                @case(5)
+                <span class="badge badge-primary">back</span>
+                @break
+                @default
+                <span class="badge badge-secondary">default</span>
+                @endswitch
+            </td>
+            <td>{{ $alert->fence->name ?? '-' }}</td>
+            <td>{{ $alert->device->name ?? '-' }}</td>
+            <td>{{ $alert->dt->format('l d/M H:i:s') }}</td>
+            <td>{{ $alert->dist ?? '-' }}</td>
+            <td class="">
+                <a class="btn btn-sm btn-info" data-lat="{{ $alert->lat }}" data-lng="{{ $alert->lng }}"
+                    data-cerca="{{ $alert->fence->fence ?? false }}" data-toggle="modal" data-target="#modal">map
+                </a>
+            </td>
+        </tr>
 
+        @if ($loop->last)
+        <tr>
+            <td colspan="2">
+                <button class="btn btn-sm btn-outline-danger">del selected</button>
+            </td>
+            <td colspan="9"></td>
+        </tr>
+        @endif
 
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">Order</button>
-            <div class="dropdown-menu">
-                <input type="submit" value="Asc" name="order" class="dropdown-item">
-                <input type="submit" value="Desc" name="order" class="dropdown-item">
-                <div role="separator" class="dropdown-divider"></div>
-                <input type="submit" value="Separated" name="y" class="dropdown-item">
-            </div>
-        </div>
+        @empty
+        <p><b>No records</b></p>
+        @endforelse
+    </table>
 
-    </div>
 </form>
 
-<br>
+@else
 
 
-<table class="table table-striped table-sm">
-    <tr>
-        <th><input type="checkbox" class="" value="1" id="checkAll" name="checkAll"></th>
-        <th>id</th>
-        <th>type</th>
-        <th>fence</th>
-        <th>device</th>
-        <th>time</th>
-        <th>dist</th>
-        <th>map</th>
-        <th>del</th>
-    </tr>
+<div class="row">
+    <div class="col-md-6">
+        @include('shared.header', ['name' => 'Grouped By Device'])
 
-
-    @forelse ($alerts as $alert)
-    <tr>
-        <td><input type="checkbox" value="{{$alert->id}}" name="ids[]"></td>
-        <td>{{ $alert->id }}</td>
-        <td>
-            @switch($alert->type)
-            @case(0)
-            <span class="badge badge-secondary">default/inside</span>
-            @break
-            @case(1)
-            <span class="badge badge-danger">close</span>
-            @break
-            @case(2)
-            <span class="badge badge-success">out of fence</span>
-            @break
-            @case(3)
-            <span class="badge badge-info">invasion</span>
-            @break
-            @case(4)
-            <span class="badge badge-warning">off</span>
-            @break
-            @case(5)
-            <span class="badge badge-primary">back</span>
-            @break
-            @default
-            <span class="badge badge-secondary">default</span>
-            @endswitch
-        </td>
-        <td>{{ $alert->fence->name ?? '-' }}</td>
-        <td>{{ $alert->device->name ?? '-' }}</td>
-        <td>{{ $alert->dt->format('l d/M H:i:s') }}</td>
-        <!--         <td><a class="btn btn-sm btn-info"
-                onclick="javascript:geocodeLatLng('{{$alert->lat}}','{{$alert->lng}}')">local</a>
-        </td>
- -->
-        <td>{{ $alert->d ?? '-' }}</td>
-        <td class="">
-            <a class="btn btn-info" data-lat="{{ $alert->lat }}" data-lng="{{ $alert->lng }}"
-                data-cerca="{{ $alert->fence->fence ?? false }}" data-toggle="modal" data-target="#modal">map
-            </a>
-        </td>
-        <td class="">
-            <form method="POST" name="{{ $alert->id }}"
-                action="{{ route('alert.destroy',['alert'=>$alert]) }}">
-                @method('DELETE')
-                @csrf
-                <button class="btn btn-danger">del</button>
-            </form>
-        </td>
-    </tr>
-
-    @if ($loop->last)
-        <form method="POST" name="form_delAll" action="{{ route('alert.massDestroy') }}">
-            @csrf
+        <table class="table table-striped table-sm">
             <tr>
-                <td colspan="2">
-                    <button class="btn btn-sm btn-outline-danger">del all</button>
-        </form>
-        </td>
-        <td colspan="9">--
-            <input type="text" name="checkAllCopy" id="checkAllCopy">
+                <th>Total</th>
+                <th>dd/mm</th>
+                <th>device</th>
+            </tr>
+            @forelse ($device_days as $day)
+            <tr>
+                <td>{{ $day->tot }}</td>
+                <td><a
+                        href="{{ route('alert.index',['d'=>$day->d,'m'=>$day->m,'device_id'=>$day->device_id ]) }}">{{ $day->d }}/{{ $day->m }}</a>
+                </td>
+                <td>{{ $day->device->name }}</td>
+            </tr>
+            @empty
+            <p><b>No records</b></p>
+            @endforelse
+        </table>
+
+    </div>
+    <div class="col-md-6">
+        @include('shared.header', ['name' => 'Grouped By Fence'])
+        <table class="table table-striped table-sm">
+            <tr>
+                <th>Total</th>
+                <th>dd/mm</th>
+                <th>fence</th>
+            </tr>
+            @forelse ($fence_days as $day)
+            <tr>
+                <td>{{ $day->tot }}</td>
+                <td><a
+                        href="{{ route('alert.index',['d'=>$day->d,'m'=>$day->m,'fence_id'=>$day->fence_id ]) }}">{{ $day->d }}/{{ $day->m }}</a>
+                </td>
+                <td>{{ $day->fence->name }}</td>
+            </tr>
+            @empty
+            <p><b>No records</b></p>
+            @endforelse
+        </table>
+
+    </div>
+</div>
 
 
-        </td>
-        </tr>
-    @endif
+@endif
 
-    @empty
-    <p><b>No records</b></p>
-    @endforelse
-</table>
 
-<hr>
+
+
+
+
+
+
+
 
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -186,14 +177,6 @@
         $('input:checkbox').not(this).prop('checked', this.checked);
     });
 
-
-    $(function () {
-        $('input[type="checkbox"]').bind('click', function () {
-            if ($(this).is(':checked')) {
-                $('#checkAllCopy').val($(this).val());
-            }
-        });
-    });
 
 
 
@@ -283,3 +266,4 @@
 
 
 @endsection
+our met

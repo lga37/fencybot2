@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Type;
+use App\Device;
 use Illuminate\Http\Request;
 
 class TypeController extends Controller
@@ -15,7 +16,8 @@ class TypeController extends Controller
     public function index()
     {
         $types = Type::all();
-        return view('type.index', compact('types'));
+        $devices = Device::all();
+        return view('type.index', compact('types','devices'));
     }
 
     /**

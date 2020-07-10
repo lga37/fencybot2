@@ -12,6 +12,8 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js">
 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
@@ -196,7 +198,7 @@
                             {{ request()->routeIs('type.*') ? 'active' : '' }}"
                             href="{{ route('type.index') }}">
                                 <span data-feather="map-pin"></span>
-                                Types
+                                TypesXXX
                             </a>
                         </li>
                         <li class="nav-item">
@@ -204,7 +206,7 @@
                             {{ request()->routeIs('place.*') ? 'active' : '' }}"
                             href="{{ route('place.index') }}">
                                 <span data-feather="map-pin"></span>
-                                Places
+                                PlacesXXX
                             </a>
                         </li>
                         <li class="nav-item">
@@ -228,8 +230,8 @@
                                 <span data-feather="bell"></span>
                                 Alerts
                             </a>
-                            <span class="badge badge-pill badge-primary">1</span>
-                        </li>
+<!--                             <span class="badge badge-pill badge-primary">1</span>
+ -->                        </li>
 
 
 
@@ -241,7 +243,6 @@
                                 <span data-feather="check"></span>
                                 Trackings
                             </a>
-                            <span class="badge badge-pill badge-warning">3</span>
                         </li>
                         <li class="nav-item
                          d-flex justify-content-between align-items-center pr-4">
@@ -251,7 +252,6 @@
                                 <span data-feather="users"></span>
                                 Invasions
                             </a>
-                            <span class="invisible badge badge-pill badge-success">0</span>
                         </li>
                     </ul>
 

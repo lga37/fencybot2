@@ -4,6 +4,16 @@
 <?php echo $__env->make('shared.header', ['name' => 'Types'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 
+<?php $__empty_1 = true; $__currentLoopData = $devices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $device): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+
+<a href="<?php echo e(route('alert.parse',['device_id'=>$device->id ])); ?>">parse <?php echo e($device->name); ?></a> <br>
+
+
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+sem regs
+<?php endif; ?>
+
+
 <?php echo e($types); ?>
 
 

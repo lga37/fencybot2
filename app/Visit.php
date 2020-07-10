@@ -10,11 +10,11 @@ class Visit extends Model
 
     public function alert ()
     {
-        return $this->hasOne('App\Alert');
+        return $this->belongsTo('App\Alert');
     }
 
     public function place ()
     {
-        return $this->hasOne('App\Place');
+        return $this->belongsTo('App\Place');
     }
 }

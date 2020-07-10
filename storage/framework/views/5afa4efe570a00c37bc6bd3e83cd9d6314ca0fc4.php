@@ -38,7 +38,19 @@
         <th>num. visits</th>
         <th>del</th>
     </tr>
+    <?php $__empty_1 = true; $__currentLoopData = $visits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $visit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
+    <tr>
+        <td><?php echo e($visit->id); ?></td>
+        <td><?php echo e($visit->place->name); ?></td>
+        <td><?php echo e($visit->place->lat); ?> <?php echo e($visit->place->type->name); ?> </td>
+        <td><?php echo e($visit->alert->device->name); ?></td>
+        <td>del</td>
+    </tr>
+
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+    no recs
+    <?php endif; ?>
 
     </table>
 
@@ -90,7 +102,7 @@
 
 
 
-        <?php if(isset($alerts[0]) && isset($alerts[0]->lat) ): ?>
+        <?php if(isset($visits[0]) && isset($visits[0]->place->lat) ): ?>
             //alert(22)
             let lat = -22.90278;
             let lng = -43.2075;
@@ -98,7 +110,7 @@
             map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 8,
                 center: { lat: lat, lng: lng },
-                //center: { lat: parseFloat("<?php echo e($alerts[0]->lat); ?>"), lng: parseFloat("<?php echo e($alerts[0]->lat); ?>") },
+                //center: { lat: parseFloat("<?php echo e($visits[0]->lat); ?>"), lng: parseFloat("<?php echo e($visits[0]->lat); ?>") },
                 mapTypeId: 'terrain'
             });
 
@@ -146,8 +158,8 @@
     function getPoints() {
 
         var points = [
-            <?php $__empty_1 = true; $__currentLoopData = $alerts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $alert): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                new google.maps.LatLng("<?php echo e($alert->lat); ?>", "<?php echo e($alert->lng); ?>"),
+            <?php $__empty_1 = true; $__currentLoopData = $visits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $visit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                new google.maps.LatLng("<?php echo e($visit->place->lat); ?>", "<?php echo e($visit->place->lng); ?>"),
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
             <?php endif; ?>
         ];

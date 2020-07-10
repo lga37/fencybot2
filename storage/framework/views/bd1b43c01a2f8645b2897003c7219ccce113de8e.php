@@ -1,34 +1,9 @@
-<?php $__env->startSection('css'); ?>
-<style>
-    #wrap{
-        position: relative;
-
-    }
-    #floating-panel {
-        position: absolute;
-        top: 10px;
-        left: 25%;
-        z-index: 5;
-        background-color: #fff;
-        padding: 5px;
-        border: 1px solid #999;
-        text-align: center;
-        font-family: 'Roboto', 'sans-serif';
-        line-height: 30px;
-        padding-left: 10px;
-    }
-
-
-</style>
-<?php $__env->stopSection(); ?>
-
-
 <?php $__env->startSection('content'); ?>
 
 <?php echo $__env->make('shared.msgs', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php echo $__env->make('shared.header', ['name' => 'Invasions'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-
+<!--
 <form method="POST" action="<?php echo e(route('alert.filterTracks')); ?>">
     <div class="input-group mb-3">
         <input type="hidden" name="type" value="3">
@@ -59,8 +34,8 @@
 
     </div>
 </form>
+-->
 
-<br>
 
 
 <table class="table table-striped table-sm">
@@ -79,17 +54,13 @@
         <td><?php echo e($alert->id); ?></td>
 
 
-<!--         <td><a class="btn btn-sm btn-info"
-            onclick="javascript:geocodeLatLng('<?php echo e($alert->lat); ?>','<?php echo e($alert->lng); ?>')">local</a>
-        </td>
- -->
             <td><?php echo e($alert->device->name ?? ''); ?></td>
             <td><?php echo e($alert->dt->format('l d/M H:i:s')); ?></td>
 
             <td><?php echo e($alert->phone ?? '-'); ?></td>
 
         <td class="">
-            <button class="btn btn-primary" data-lat="<?php echo e($alert->lat); ?>" data-lng="<?php echo e($alert->lng); ?>"
+            <button class="btn btn-sm btn-primary" data-lat="<?php echo e($alert->lat); ?>" data-lng="<?php echo e($alert->lng); ?>"
                 data-cerca="<?php echo e($alert->fence->fence ?? false); ?>"
                 data-toggle="modal" data-target="#modal">map</button>
         </td>
@@ -97,7 +68,7 @@
             <form method="POST" action="<?php echo e(route('alert.destroy',['alert'=>$alert])); ?>">
                 <?php echo method_field('DELETE'); ?>
                 <?php echo csrf_field(); ?>
-                <button class="btn btn-danger">del</button>
+                <button class="btn btn-sm btn-danger">del</button>
             </form>
         </td>
     </tr>

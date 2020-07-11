@@ -265,9 +265,9 @@ class AlertController extends Controller
                     })
 
 
-                    ->where('type', 0);
+                    ->whereIn('type', [0,1,2,5]);
             })
-                ->select('alerts.id', 'alerts.dt', 'alerts.fence_id', 'alerts.device_id', 'alerts.lat', 'alerts.lng')->distinct()
+                ->select('alerts.id', 'alerts.type', 'alerts.dt', 'alerts.fence_id', 'alerts.device_id', 'alerts.lat', 'alerts.lng')->distinct()
 
                 ->whereRaw("day(dt) = $d AND month(dt) = $m")
                 ->orderBy('dt')
@@ -419,15 +419,16 @@ class AlertController extends Controller
         $devices = $this->getDevicesByTel($tel);
 
         $lotes = $request->json();
+        $errors = [];
 
         if ($devices->count() > 0) {
-            $devices->each(function ($item, $key) use ($lotes) {
+            $devices->each(function ($item, $key) use ($lotes, &$errors) {
                 foreach ($lotes as $k => $v) {
                     #extract($v);
 
                     if (!$v['fence_id'] > 0) {
-                        dd('fence_id is missing');
-                        return response()->json(['status' => 'fence_id is missing'], 406);
+                        $errors[] = "fence_id is missing (indice $k)";
+                        continue;
                     }
                     $exists = FenceDevice::where('fence_id', '=', $v['fence_id'])
                         ->where('device_id', '=', $item->id)
@@ -435,8 +436,8 @@ class AlertController extends Controller
                     #dd($exists);
                     #if(!$exists) continue;
                     if (!$exists) {
-                        dd('device_id/user_id mismatch');
-                        return response()->json(['status' => 'device_id/user_id mismatch'], 406);
+                        $errors[] = "device_id/user_id mismatch  (indice $k)";
+                        continue;
                     }
 
 
@@ -458,68 +459,71 @@ class AlertController extends Controller
 
                     $user = User::find($user_id);
 
-                    if($v['type']==2){
 
-                        $last_alert = Alert::where('type','=',2)
-                        ->where('fence_id','=',$v['fence_id'])
-                        ->where('device_id','=',$item->id)
-                        ->latest()->select('created_at','dt')->get()->toArray();
-                        #dd($last_alert);
+                    if ($v['type'] == 2) {
 
-                        if($last_alert){
-                            if($v['fence_id'] > 0){
-                                $fence = Fence::find($v['fence_id']);
-                                $fence_name = $fence->name;
+                        $last_alert = Alert::where('type', '=', 2)
+                            ->where('fence_id', '=', $v['fence_id'])
+                            ->where('device_id', '=', $item->id)
+                            ->latest()->select(DB::raw('id,day(created_at),day(dt), TIMESTAMPDIFF( MINUTE, created_at,now() ) AS diff'))
+                            ->get()->toArray();
+                        $last_minutes = $last_alert[0]['diff'] ?? 0;
 
-                                $tel = $user->tel;
-                                if(strlen($tel)==11){
-                                    $tel = '+55'.$tel;
-                                } elseif(strlen($tel)==13){
-                                    $tel = '+'.$tel;
+                        if ($last_minutes > 120 && $v['fence_id'] > 0) {
+                            $fence = Fence::find($v['fence_id']);
+                            $fence_name = $fence->name;
 
-                                } else {
-                                    break;
-                                }
-                                $place = $this->geo($v['lat'],$v['lng']);
-                                $mapa = "http://www.google.com/maps/place/{$v['lat']},{$v['lng']}";
-                                $msg = " FencyBot Alert! ";
-                                $msg .= " Hi ". $user->name;
-                                $msg .= " The device ". $item->name ." is out of fence (". $fence_name .").";
-                                if($place){
-                                    $msg .= " Place of Reference : $place";
-                                }
-                                $msg .= " Click To See on Map: $mapa ";
-                                $msg .= "FencyBot Monitor";
-                                #dd($msg);
-
-                                $this->sendMessage($msg, $tel);
-
-
-
+                            $tel = $user->tel;
+                            if (strlen($tel) == 11) {
+                                $tel = '+55' . $tel;
+                            } elseif (strlen($tel) == 13) {
+                                $tel = '+' . $tel;
+                            } else {
+                                $errors[] = "tel nao 11,13 dig ($tel , indice $k)";
+                                break;
                             }
+                            $place = $this->geo($v['lat'], $v['lng']);
+                            $mapa = "http://www.google.com/maps/place/{$v['lat']},{$v['lng']}";
+                            $msg = " FencyBot Alert! ";
+                            $msg .= " Hi " . $user->name;
+                            $msg .= " The device " . $item->name . " is out of fence (" . $fence_name . ").";
+                            if ($place) {
+                                $msg .= " Place of Reference : $place";
+                            }
+                            $msg .= " Click To See on Map: $mapa ";
+                            $msg .= "FencyBot Monitor";
+                            #dd($msg);
+
+                            $this->sendMessage($msg, $tel);
                         }
-
-
-
                     }
 
                     $user->notify((new AlertEmitted($alert)));
                     //event(new EventAlert($alert));
+
                 }
+
             });
+
         } else {
-            return response()->json(['status' => 'ERROR'], 406);
+            #return response()->json(['status' => 'ERROR'], 406);
+            $errors[] = 'nao encontrou devices para tel '.$tel;
         }
 
 
-        return response()->json(['status' => 'OK'], 201);
+        if (empty($errors)) {
+            return response()->json(['status' => 'OK'], 201);
+        } else {
+            return response()->json(['status' => 'ERROR', 'errors' => implode('; ',$errors)], 422);
+
+        }
     }
 
 
-    function geo($lat,$lng)
+    function geo($lat, $lng)
     {
-        $geolocation = $lat.','.$lng;
-        $u = "https://maps.googleapis.com/maps/api/geocode/json?key=". env('API_GOOGLE') ."&latlng=$geolocation&sensor=false";
+        $geolocation = $lat . ',' . $lng;
+        $u = "https://maps.googleapis.com/maps/api/geocode/json?key=" . env('API_GOOGLE') . "&latlng=$geolocation&sensor=false";
 
         $file_contents = file_get_contents($u);
         $json_decode = json_decode($file_contents);

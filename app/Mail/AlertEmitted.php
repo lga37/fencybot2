@@ -30,6 +30,7 @@ class AlertEmitted extends Mailable
 
         return $this->markdown('email.alert')
         ->with([
+            'device' => $this->alert->device,
             'fence' => $this->alert->fence,
             'alert' => $this->alert,
 

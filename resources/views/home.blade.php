@@ -3,11 +3,9 @@
 @section('content')
 
 <div class="jumbotron">
-    <h1 class="display-4">FencyBot - Real-time Monitoring</h1>
-    <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to
-        featured content or information.</p>
+    <h1 class="display-4">FencyBot - RealTime Monitoring</h1>
+    <p class="lead">More than monitore, but also tracking.</p>
     <hr class="my-0">
-
     <img src="https://webengage.com/blog/wp-content/uploads/sites/4/2017/09/push-notifications.gif"
     alt="">
 
@@ -55,58 +53,10 @@
 
 
 
-    // ============================================================
-    var ctx = document.getElementById('myChart');
-    var d = {
-        type: 'line',
-        data: {
-            labels: [
-                'Sunday',
-                'Monday',
-                'Tuesday',
-                'Wednesday',
-                'Thursday',
-                'Friday',
-                'Saturday'
-            ],
-            datasets: [{
-                data: [
-                    15339,
-                    21345,
-                    18483,
-                    24003,
-                    23489,
-                    24092,
-                    12034
-                ],
-                lineTension: 0,
-                backgroundColor: 'transparent',
-                borderColor: '#007bff',
-                borderWidth: 4,
-                pointBackgroundColor: '#007bff'
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: false
-                    }
-                }]
-            },
-            legend: {
-                display: false
-            }
-        }
-    };
-    var myChart = new Chart(ctx, d);
 
 </script>
 
 <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
 
-<script
-    src="https://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE')}}&libraries=drawing,places,geometry&callback=init"
-    async defer></script>
 
 @endsection

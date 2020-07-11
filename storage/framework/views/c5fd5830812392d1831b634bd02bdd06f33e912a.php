@@ -172,6 +172,15 @@
         lng = parseFloat("<?php echo e($alert->lng); ?>");
         marker = new google.maps.Marker({
             map: map_modal,
+
+            <?php if($alert->type==1): ?>
+                icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+            <?php elseif($alert->type==2): ?>
+                icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
+            <?php elseif($alert->type==5): ?>
+                icon: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
+            <?php endif; ?>
+
             label: "<?php echo e($loop->iteration); ?>",
             position: { lat: lat, lng: lng }
         });

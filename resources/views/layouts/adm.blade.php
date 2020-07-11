@@ -271,13 +271,7 @@
                                 Profile
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link
-                            {{ request()->routeIs('user.notify') ? 'active' : '' }}" href="{{ route('user.notify') }}">
-                                <span data-feather="bell-off"></span>
-                                Notifications
-                            </a>
-                        </li>
+                        
                         <li class="nav-item">
                             <a class="nav-link
                             {{ request()->routeIs('user.changepass') ? 'active' : '' }}"

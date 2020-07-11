@@ -1,11 +1,9 @@
 <?php $__env->startSection('content'); ?>
 
 <div class="jumbotron">
-    <h1 class="display-4">FencyBot - Real-time Monitoring</h1>
-    <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to
-        featured content or information.</p>
+    <h1 class="display-4">FencyBot - RealTime Monitoring</h1>
+    <p class="lead">More than monitore, but also tracking.</p>
     <hr class="my-0">
-
     <img src="https://webengage.com/blog/wp-content/uploads/sites/4/2017/09/push-notifications.gif"
     alt="">
 

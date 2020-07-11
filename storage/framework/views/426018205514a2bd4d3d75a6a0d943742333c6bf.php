@@ -272,13 +272,7 @@
                                 Profile
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link
-                            <?php echo e(request()->routeIs('user.notify') ? 'active' : ''); ?>" href="<?php echo e(route('user.notify')); ?>">
-                                <span data-feather="bell-off"></span>
-                                Notifications
-                            </a>
-                        </li>
+                        
                         <li class="nav-item">
                             <a class="nav-link
                             <?php echo e(request()->routeIs('user.changepass') ? 'active' : ''); ?>"

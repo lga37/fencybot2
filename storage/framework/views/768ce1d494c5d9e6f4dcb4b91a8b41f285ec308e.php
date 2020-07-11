@@ -105,7 +105,7 @@
                         <a href="https://twitter.com/steveschoger"
                             class="mt-6 sm:mt-0 sm:ml-12 flex items-center no-underline">
                             <div class="flex-shrink-0">
-                                <img class="h-12 w-12 rounded-full border-2 border-white" src="/img/steve.jpg" alt="">
+                                <img class="h-12 w-12 rounded-full border-2 border-white" src="<?php echo e(asset('images/jobson.jpg')); ?>" alt="">
                             </div>
                             <div class="ml-3">
                                 <p class="font-semibold text-white leading-tight">Jobson </p>

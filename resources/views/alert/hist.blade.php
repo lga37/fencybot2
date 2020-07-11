@@ -167,13 +167,22 @@
         var path = [];
         var marker, contentString;
         //var infowindow = new google.maps.InfoWindow();
-        @forelse($alerts as $k=> $alert)
+        @forelse ($alerts as $k=> $alert)
 
 
         lat = parseFloat("{{ $alert->lat }}");
         lng = parseFloat("{{ $alert->lng }}");
         marker = new google.maps.Marker({
             map: map_modal,
+
+            @if ($alert->type==1)
+                icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+            @elseif ($alert->type==2)
+                icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
+            @elseif ($alert->type==5)
+                icon: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
+            @endif
+
             label: "{{ $loop->iteration }}",
             position: { lat: lat, lng: lng }
         });

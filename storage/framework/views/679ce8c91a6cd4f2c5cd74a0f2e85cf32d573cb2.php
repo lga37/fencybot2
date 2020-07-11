@@ -4,9 +4,12 @@
 You are receiving a FencyBot Alert;
 
 <ul>
+    <li>Time: <?php echo e($alert->dt); ?></li>
+    <li>Device: <?php echo e($alert->device->name); ?></li>
+    <li>Fence: <?php echo e($alert->fence->name); ?></li>
+    <li>Link on Map: <a href="http://www.google.com/maps/place/<?php echo e($alert->lat); ?>,<?php echo e($alert->lng); ?>">Check</a></li>
     <li>Lat: <?php echo e($alert->lat); ?></li>
     <li>Lng: <?php echo e($alert->lng); ?></li>
-    <li>Time: <?php echo e($alert->dt); ?></li>
 
 </ul>
 

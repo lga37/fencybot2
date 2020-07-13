@@ -194,6 +194,8 @@
                                 Home
                             </a>
                         </li>
+
+<!--
                         <li class="nav-item">
                             <a class="nav-link
                             <?php echo e(request()->routeIs('type.*') ? 'active' : ''); ?>"
@@ -210,6 +212,8 @@
                                 PlacesXXX
                             </a>
                         </li>
+                    -->
+
                         <li class="nav-item">
                             <a class="nav-link
                             <?php echo e(request()->routeIs('fence.*') ? 'active' : ''); ?>" href="<?php echo e(route('fence.index')); ?>">
@@ -272,7 +276,7 @@
                                 Profile
                             </a>
                         </li>
-                        
+
                         <li class="nav-item">
                             <a class="nav-link
                             <?php echo e(request()->routeIs('user.changepass') ? 'active' : ''); ?>"

@@ -47,7 +47,6 @@
 
 <br>
 
-@include('shared.header', ['name' => 'Edit your Devices'])
 
 
 <div class="row">
@@ -175,7 +174,10 @@
     </div>
 </div>
 
+
 <!-- ----------------------------------------- card -->
+<!--
+
 <br><br><br><br><br><br><br><br><br><br><br><br><br>
 vou tirar depoissssss
 
@@ -247,6 +249,8 @@ vou tirar depoissssss
 @empty
 @endforelse
 
+-->
+<!-- ----------------------------------------- card -->
 
 <div class="modal fade" id="update_modal" tabindex="-1" role="dialog" aria-labelledby="update_modal" aria-hidden="true">
     <div class="modal-dialog modal-lg">

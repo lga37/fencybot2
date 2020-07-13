@@ -180,7 +180,6 @@ class AlertController extends Controller
         Tipos 1, 2, 4 e 5 vem dist
  */
 
-
         $d = $request->get('d') ?? 0;
         $m = $request->get('m') ?? 0;
         $device_id = $request->get('device_id') ?? false;
@@ -199,7 +198,12 @@ class AlertController extends Controller
                         return $q->where('alerts.fence_id', '=', (int) $fence_id);
                     })
                     ->where('devices.user_id', '=', (int) Auth::id());
-            })->with(['fence', 'device'])->select('alerts.*')->get();
+            })
+            ->whereRaw ("day(dt)=$d AND month(dt)=$m ")
+            ->with(['fence', 'device'])->orderBy('alerts.dt','asc')->select('alerts.*')->get();
+
+            $fences = $alerts->pluck('fence')->unique();
+            #dd($fences);
 
             $device_days = $fence_days = [];
         } else {
@@ -226,7 +230,7 @@ class AlertController extends Controller
                 ->with(['device'])
                 ->get();
 
-            $alerts = [];
+            $alerts = $fences = [];
         }
 
         #echo "<hr>";
@@ -234,9 +238,8 @@ class AlertController extends Controller
         #echo "<hr>";
 
 
-        #dd($alerts);
 
-        return view('alert.index', compact('alerts', 'device_days', 'fence_days'));
+        return view('alert.index', compact('fences','alerts', 'device_days', 'fence_days'));
     }
 
     public function hist(Request $request)
@@ -498,8 +501,17 @@ class AlertController extends Controller
                         }
                     }
 
-                    $user->notify((new AlertEmitted($alert)));
-                    //event(new EventAlert($alert));
+
+                    $last_alert = Alert::where('fence_id', '=', $v['fence_id'])
+                    ->where('device_id', '=', $item->id)
+                    ->latest()->select(DB::raw('id,day(created_at),day(dt), TIMESTAMPDIFF( MINUTE, created_at,now() ) AS diff'))
+                    ->get()->toArray();
+                    $last_minutes = $last_alert[0]['diff'] ?? 0;
+                    if ($last_minutes > 120 && $v['fence_id'] > 0) {
+                        $user->notify((new AlertEmitted($alert)));
+                        //event(new EventAlert($alert));
+
+                    }
 
                 }
 

@@ -181,7 +181,7 @@ class DeviceController extends Controller
         $id = (int) $request->post('device_id');
         $device = Device::findOrFail($id);
         $device->t =  $request->post('t');
-        $device->r =  $request->post('r') ? 2 : 1;
+        $device->r =  $request->post('r');
         $device->d =  $request->post('d');
         $device->save();
 

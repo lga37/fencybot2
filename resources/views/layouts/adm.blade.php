@@ -193,6 +193,8 @@
                                 Home
                             </a>
                         </li>
+
+<!--
                         <li class="nav-item">
                             <a class="nav-link
                             {{ request()->routeIs('type.*') ? 'active' : '' }}"
@@ -209,6 +211,8 @@
                                 PlacesXXX
                             </a>
                         </li>
+                    -->
+
                         <li class="nav-item">
                             <a class="nav-link
                             {{ request()->routeIs('fence.*') ? 'active' : '' }}" href="{{ route('fence.index') }}">
@@ -271,7 +275,7 @@
                                 Profile
                             </a>
                         </li>
-                        
+
                         <li class="nav-item">
                             <a class="nav-link
                             {{ request()->routeIs('user.changepass') ? 'active' : '' }}"

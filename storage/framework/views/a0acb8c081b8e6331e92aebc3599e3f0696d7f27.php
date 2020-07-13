@@ -45,7 +45,6 @@
 
 <br>
 
-<?php echo $__env->make('shared.header', ['name' => 'Edit your Devices'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 
 <div class="row">
@@ -173,7 +172,10 @@
     </div>
 </div>
 
+
 <!-- ----------------------------------------- card -->
+<!--
+
 <br><br><br><br><br><br><br><br><br><br><br><br><br>
 vou tirar depoissssss
 
@@ -245,6 +247,8 @@ vou tirar depoissssss
 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 <?php endif; ?>
 
+-->
+<!-- ----------------------------------------- card -->
 
 <div class="modal fade" id="update_modal" tabindex="-1" role="dialog" aria-labelledby="update_modal" aria-hidden="true">
     <div class="modal-dialog modal-lg">

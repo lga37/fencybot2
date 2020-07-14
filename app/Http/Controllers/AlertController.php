@@ -237,8 +237,6 @@ class AlertController extends Controller
         #dd($alerts->toArray());
         #echo "<hr>";
 
-
-
         return view('alert.index', compact('fences','alerts', 'device_days', 'fence_days'));
     }
 
@@ -275,6 +273,9 @@ class AlertController extends Controller
                 ->whereRaw("day(dt) = $d AND month(dt) = $m")
                 ->orderBy('dt')
                 ->get();
+            $fences = $alerts->pluck('fence')->unique();
+
+            #dd($fences);
 
             $device_days = $fence_days = [];
         } else {
@@ -301,12 +302,10 @@ class AlertController extends Controller
                 ->with(['device'])
                 ->get();
 
-            $alerts = [];
+            $alerts = $fences = [];
         }
 
-
-
-        return view('alert.hist', compact('fence_days', 'device_days', 'alerts'));
+        return view('alert.hist', compact('fences','fence_days', 'device_days', 'alerts'));
     }
 
     public function invasions(Request $request)

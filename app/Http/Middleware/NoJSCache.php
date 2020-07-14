@@ -18,6 +18,7 @@ class NoJSCache
         $response= $next($request);
         $response->header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0');
         $response->header('Cache-Control','post-check=0, pre-check=0, false');
+        $response->header('Access-Control-Allow-Origin','*');
         $response->header('Pragma','no-cache');
 
         return $response;

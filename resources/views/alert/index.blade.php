@@ -208,7 +208,7 @@ src="https://maps.googleapis.com/maps/api/js?key={{ env('API_GOOGLE') }}&callbac
         //alert(cerca);
         if (cerca) {
 
-
+            //alert(cerca);
 
             var div = document.createElement('div');
             var h3 = document.createElement('h3');
@@ -270,8 +270,6 @@ src="https://maps.googleapis.com/maps/api/js?key={{ env('API_GOOGLE') }}&callbac
         //var infowindow = new google.maps.InfoWindow();
         @php $pula=false; @endphp
         @foreach($alerts as $alert)
-
-
 
 
             lat = parseFloat("{{ $alert->lat }}");

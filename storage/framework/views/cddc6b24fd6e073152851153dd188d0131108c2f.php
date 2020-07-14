@@ -270,8 +270,6 @@ src="https://maps.googleapis.com/maps/api/js?key=<?php echo e(env('API_GOOGLE'))
         <?php $__currentLoopData = $alerts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $alert): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
 
-
-
             lat = parseFloat("<?php echo e($alert->lat); ?>");
             lng = parseFloat("<?php echo e($alert->lng); ?>");
             marker = new google.maps.Marker({

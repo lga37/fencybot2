@@ -19,6 +19,7 @@ class VerifyCsrfToken extends Middleware
         '/adm/device/*',
         '/adm/meet',
         '/adm/track',
+        '/broadcasting/auth',
         '/broadcasting/*',
         '/logout',
         '/login',

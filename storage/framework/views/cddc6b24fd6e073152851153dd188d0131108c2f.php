@@ -266,37 +266,52 @@ src="https://maps.googleapis.com/maps/api/js?key=<?php echo e(env('API_GOOGLE'))
         var path = [];
         var marker, contentString;
         //var infowindow = new google.maps.InfoWindow();
+        <?php $pula=false; ?>
         <?php $__currentLoopData = $alerts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $alert): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
 
-        lat = parseFloat("<?php echo e($alert->lat); ?>");
-        lng = parseFloat("<?php echo e($alert->lng); ?>");
-        marker = new google.maps.Marker({
-            map: map_modal,
 
-            <?php if($alert -> type == 0): ?>
-                icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
-            <?php elseif($alert -> type == 1): ?>
-                icon: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
-            <?php elseif($alert -> type == 2): ?>
-                icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
-            <?php elseif($alert -> type == 5): ?>
-                icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+
+            lat = parseFloat("<?php echo e($alert->lat); ?>");
+            lng = parseFloat("<?php echo e($alert->lng); ?>");
+            marker = new google.maps.Marker({
+                map: map_modal,
+
+                <?php if($alert -> type == 0): ?>
+                    icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
+                <?php elseif($alert -> type == 1): ?>
+                    icon: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
+                <?php elseif($alert -> type == 2): ?>
+                    icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+                <?php elseif($alert -> type == 5): ?>
+                    icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                <?php endif; ?>
+
+                label: "<?php echo e($loop->iteration); ?>",
+                position: { lat: lat, lng: lng }
+            });
+
+
+            google.maps.event.addListener(marker, "click", function () {
+                //new google.maps.InfoWindow({ content: "<?php echo e($loop->iteration); ?>" }).open(map, marker);
+                new google.maps.InfoWindow({ content: "<?php echo e($alert->dt->format('l d/M H:i:s')); ?>" }).open(map, marker);
+            });
+
+
+            <?php if($pula==false): ?>
+                path.push({ lat: parseFloat("<?php echo e($alert->lat); ?>"), lng: parseFloat("<?php echo e($alert->lng); ?>") });
+
             <?php endif; ?>
 
-            label: "<?php echo e($loop->iteration); ?>",
-            position: { lat: lat, lng: lng }
-    });
+
+            <?php if($alert->type==5): ?>
+                <?php $pula=true; ?>
+            <?php else: ?>
+                <?php $pula=false; ?>
+            <?php endif; ?>
 
 
-    google.maps.event.addListener(marker, "click", function () {
-        //new google.maps.InfoWindow({ content: "<?php echo e($loop->iteration); ?>" }).open(map, marker);
-        new google.maps.InfoWindow({ content: "<?php echo e($alert->dt->format('l d/M H:i:s')); ?>" }).open(map, marker);
-    });
-
-    path.push({ lat: parseFloat("<?php echo e($alert->lat); ?>"), lng: parseFloat("<?php echo e($alert->lng); ?>") });
-
-    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 
     var pl = new google.maps.Polyline({

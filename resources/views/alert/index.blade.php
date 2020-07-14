@@ -268,37 +268,52 @@ src="https://maps.googleapis.com/maps/api/js?key={{ env('API_GOOGLE') }}&callbac
         var path = [];
         var marker, contentString;
         //var infowindow = new google.maps.InfoWindow();
+        @php $pula=false; @endphp
         @foreach($alerts as $alert)
 
 
-        lat = parseFloat("{{ $alert->lat }}");
-        lng = parseFloat("{{ $alert->lng }}");
-        marker = new google.maps.Marker({
-            map: map_modal,
 
-            @if ($alert -> type == 0)
-                icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
-            @elseif($alert -> type == 1)
-                icon: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
-            @elseif($alert -> type == 2)
-                icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
-            @elseif($alert -> type == 5)
-                icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+
+            lat = parseFloat("{{ $alert->lat }}");
+            lng = parseFloat("{{ $alert->lng }}");
+            marker = new google.maps.Marker({
+                map: map_modal,
+
+                @if ($alert -> type == 0)
+                    icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
+                @elseif($alert -> type == 1)
+                    icon: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
+                @elseif($alert -> type == 2)
+                    icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+                @elseif($alert -> type == 5)
+                    icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                @endif
+
+                label: "{{ $loop->iteration }}",
+                position: { lat: lat, lng: lng }
+            });
+
+
+            google.maps.event.addListener(marker, "click", function () {
+                //new google.maps.InfoWindow({ content: "{{ $loop->iteration }}" }).open(map, marker);
+                new google.maps.InfoWindow({ content: "{{ $alert->dt->format('l d/M H:i:s') }}" }).open(map, marker);
+            });
+
+
+            @if ($pula==false)
+                path.push({ lat: parseFloat("{{ $alert->lat }}"), lng: parseFloat("{{ $alert->lng }}") });
+
             @endif
 
-            label: "{{ $loop->iteration }}",
-            position: { lat: lat, lng: lng }
-    });
+
+            @if ($alert->type==5)
+                @php $pula=true; @endphp
+            @else
+                @php $pula=false; @endphp
+            @endif
 
 
-    google.maps.event.addListener(marker, "click", function () {
-        //new google.maps.InfoWindow({ content: "{{ $loop->iteration }}" }).open(map, marker);
-        new google.maps.InfoWindow({ content: "{{ $alert->dt->format('l d/M H:i:s') }}" }).open(map, marker);
-    });
-
-    path.push({ lat: parseFloat("{{ $alert->lat }}"), lng: parseFloat("{{ $alert->lng }}") });
-
-    @endforeach
+        @endforeach
 
 
     var pl = new google.maps.Polyline({

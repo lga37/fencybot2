@@ -3,7 +3,7 @@
 @section('content')
 
 @include('shared.msgs')
-@include('shared.header', ['name' => 'Invasions'])
+@include('shared.header', ['name' => __('Invasions')])
 
 <!--
 <form method="POST" action="{{ route('alert.filterTracks') }}">

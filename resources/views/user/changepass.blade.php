@@ -4,7 +4,7 @@
 
 
 @include('shared.msgs')
-@include('shared.header', ['name' => 'Change Password'])
+@include('shared.header', ['name' => __('Change Password') ])
 
 
 

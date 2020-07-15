@@ -147,7 +147,7 @@
 
 
     <script>
-        window.Laravel = {!! json_encode([
+/*         window.Laravel = {!! json_encode([
             'csrf'=> csrf_token(),
             'pusher'=> [
                 'key'=> config('broadcasting.connections.pusher.key'),
@@ -155,7 +155,7 @@
             ],
             'user'=> auth() -> check() ? auth() -> user() -> id : '',
         ])!!}
-    </script>
+ */    </script>
 
 
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -165,10 +165,17 @@
 <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
         <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" style="color:#0decf2" href="#">FencyBot</a>
-        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
-            data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+
+        <button class="navbar-toggler position-absolute d-md-none collapsed"
+            type="button" data-toggle="collapse"
+            data-target="#sidebarMenu" aria-controls="sidebarMenu"
+            aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+        BR
+
+        EN
+
         <span class="pr-5" style="color:#51b4e1">
             RealTime Monitoring People Tracking
         </span>
@@ -217,14 +224,14 @@
                             <a class="nav-link
                             {{ request()->routeIs('fence.*') ? 'active' : '' }}" href="{{ route('fence.index') }}">
                                 <span data-feather="map-pin"></span>
-                                Fences
+                                {{ __('Fences') }}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link
                             {{ request()->routeIs('device.*') ? 'active' : '' }}" href="{{ route('device.index') }}">
                                 <span data-feather="target"></span>
-                                Devices
+                                {{ __('Devices') }}
                             </a>
                         </li>
                         <li class="nav-item
@@ -232,7 +239,7 @@
                             <a class="nav-link
                             {{ request()->routeIs('alert.index') ? 'active' : '' }}" href="{{ route('alert.index') }}">
                                 <span data-feather="bell"></span>
-                                Alerts
+                                {{ __('Alerts') }}
                             </a>
 <!--                             <span class="badge badge-pill badge-primary">1</span>
  -->                        </li>
@@ -245,7 +252,7 @@
                                 {{ request()->routeIs('alert.hist') ? 'active' : '' }}"
                                 href="{{ route('alert.hist') }}">
                                 <span data-feather="check"></span>
-                                Trackings
+                                {{ __('Trackings') }}
                             </a>
                         </li>
                         <li class="nav-item
@@ -254,7 +261,8 @@
                                 {{ request()->routeIs('alert.invasions') ? 'active' : '' }}"
                                 href="{{ route('alert.invasions') }}">
                                 <span data-feather="users"></span>
-                                Invasions
+                                {{ __('Invasions') }}
+
                             </a>
                         </li>
                     </ul>
@@ -272,7 +280,7 @@
                             {{ request()->routeIs('user.profile') ? 'active' : '' }}"
                                 href="{{ route('user.profile') }}">
                                 <span data-feather="user"></span>
-                                Profile
+                                {{ __('Profile') }}
                             </a>
                         </li>
 
@@ -281,7 +289,8 @@
                             {{ request()->routeIs('user.changepass') ? 'active' : '' }}"
                                 href="{{ route('user.changepass') }}">
                                 <span data-feather="unlock"></span>
-                                Change Password
+                                {{ __('Change Password') }}
+
                             </a>
                         </li>
                         <li class="nav-item">

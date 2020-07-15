@@ -1,7 +1,7 @@
 <?php $__env->startSection('content'); ?>
 
 <?php echo $__env->make('shared.msgs', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-<?php echo $__env->make('shared.header', ['name' => 'Invasions'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('shared.header', ['name' => __('Invasions')], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 <!--
 <form method="POST" action="<?php echo e(route('alert.filterTracks')); ?>">

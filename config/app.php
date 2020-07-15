@@ -10,10 +10,13 @@ return [
     'debug' => (bool) env('APP_DEBUG', false),
     'url' => env('APP_URL', 'http://localhost'),
     'asset_url' => env('ASSET_URL', null),
+
     'timezone' => 'America/Sao_Paulo',
-    'locale' => 'en',
-    'fallback_locale' => 'en',
+    'locale' => 'br',
     'faker_locale' => 'en_US',
+    'fallback_locale' => 'en',
+
+
     'key' => env('APP_KEY'),
     'cipher' => 'AES-256-CBC',
 

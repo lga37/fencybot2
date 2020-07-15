@@ -42,7 +42,7 @@
 @section('content')
 
 @include('shared.msgs')
-@include('shared.header', ['name' => 'Fences'])
+@include('shared.header', ['name' => __('Fences') ])
 
 <form>
     <div class="form-group">

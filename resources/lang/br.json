@@ -1,0 +1,24 @@
+{
+
+    "Login": "Login",
+    "Fences": "Cercas",
+    "Devices": "Dispositivos",
+    "Alerts": "Alertas",
+    "Trackings": "Rastreios",
+    "Invasions": "Invasões",
+    "Profile": "Perfil",
+    "Change Password": "Alterar Senha ",
+    "Change Email": "Alterar Email",
+
+    "Trackeds": "Rastreados",
+    "UnTrackeds": "Não Rastreados",
+    "Record Deleted with Success": "Registro deletado com sucesso",
+    "Record Updated with Success": "Registro alterado com sucesso",
+    "Record Inserted with Success": "Registro incluído com sucesso",
+    "Grouped By Device": "Agrupado por dispositivos",
+    "Grouped By Fence": "Agrupado por cercas",
+
+    "Profiless": "Perfil",
+    "Profilesss": "Perfil"
+
+}

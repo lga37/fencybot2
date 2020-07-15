@@ -1,7 +1,7 @@
 <?php $__env->startSection('content'); ?>
 
 <?php echo $__env->make('shared.msgs', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-<?php echo $__env->make('shared.header', ['name' => 'Alerts'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('shared.header', ['name' => __('Alerts')], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 
 <?php if(request()->get('d') > 0 && request()->get('m') > 0): ?>
@@ -10,10 +10,10 @@
 <div id="map" class="mb-2" style="width:98%;height:600px;"></div>
 
 <?php $__currentLoopData = $fences; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fence): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-<span class="tem_cerca"
-data-cercanome="<?php echo e($fence['name']); ?>"
-data-cerca="<?php echo e($fence['fence']); ?>"></span>
-
+    <span class="tem_cerca"
+    data-cercanome="<?php echo e($fence['name']); ?>"
+    data-cerca="<?php echo e($fence['fence']); ?>">
+    </span>
 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 <form method="POST" name="form_delAll" action="<?php echo e(route('alert.massDestroy')); ?>">
@@ -146,8 +146,6 @@ data-cerca="<?php echo e($fence['fence']); ?>"></span>
 
 
 <?php $__env->startSection('js'); ?>
-<script
-src="https://maps.googleapis.com/maps/api/js?key=<?php echo e(env('API_GOOGLE')); ?>&callback=show" async defer></script>
 <script>
 
 
@@ -206,7 +204,7 @@ src="https://maps.googleapis.com/maps/api/js?key=<?php echo e(env('API_GOOGLE'))
         //alert(cerca);
         if (cerca) {
 
-
+            //alert(cerca);
 
             var div = document.createElement('div');
             var h3 = document.createElement('h3');
@@ -355,6 +353,9 @@ src="https://maps.googleapis.com/maps/api/js?key=<?php echo e(env('API_GOOGLE'))
 
 
 </script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo e(env('API_GOOGLE')); ?>&callback=show"></script>
+
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.adm', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/fencybot/resources/views/alert/index.blade.php ENDPATH**/ ?>

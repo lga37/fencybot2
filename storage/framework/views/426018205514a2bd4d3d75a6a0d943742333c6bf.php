@@ -147,7 +147,7 @@
 
 
     <script>
-        window.Laravel = <?php echo json_encode([
+/*         window.Laravel = <?php echo json_encode([
             'csrf'=> csrf_token(),
             'pusher'=> [
                 'key'=> config('broadcasting.connections.pusher.key'),
@@ -156,7 +156,7 @@
             'user'=> auth() -> check() ? auth() -> user() -> id : '',
         ]); ?>
 
-    </script>
+ */    </script>
 
 
     <script src="<?php echo e(asset('js/app.js')); ?>" defer></script>
@@ -166,10 +166,17 @@
 <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
         <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" style="color:#0decf2" href="#">FencyBot</a>
-        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
-            data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+
+        <button class="navbar-toggler position-absolute d-md-none collapsed"
+            type="button" data-toggle="collapse"
+            data-target="#sidebarMenu" aria-controls="sidebarMenu"
+            aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+        BR
+
+        EN
+
         <span class="pr-5" style="color:#51b4e1">
             RealTime Monitoring People Tracking
         </span>
@@ -218,14 +225,16 @@
                             <a class="nav-link
                             <?php echo e(request()->routeIs('fence.*') ? 'active' : ''); ?>" href="<?php echo e(route('fence.index')); ?>">
                                 <span data-feather="map-pin"></span>
-                                Fences
+                                <?php echo e(__('Fences')); ?>
+
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link
                             <?php echo e(request()->routeIs('device.*') ? 'active' : ''); ?>" href="<?php echo e(route('device.index')); ?>">
                                 <span data-feather="target"></span>
-                                Devices
+                                <?php echo e(__('Devices')); ?>
+
                             </a>
                         </li>
                         <li class="nav-item
@@ -233,7 +242,8 @@
                             <a class="nav-link
                             <?php echo e(request()->routeIs('alert.index') ? 'active' : ''); ?>" href="<?php echo e(route('alert.index')); ?>">
                                 <span data-feather="bell"></span>
-                                Alerts
+                                <?php echo e(__('Alerts')); ?>
+
                             </a>
 <!--                             <span class="badge badge-pill badge-primary">1</span>
  -->                        </li>
@@ -246,7 +256,8 @@
                                 <?php echo e(request()->routeIs('alert.hist') ? 'active' : ''); ?>"
                                 href="<?php echo e(route('alert.hist')); ?>">
                                 <span data-feather="check"></span>
-                                Trackings
+                                <?php echo e(__('Trackings')); ?>
+
                             </a>
                         </li>
                         <li class="nav-item
@@ -255,7 +266,9 @@
                                 <?php echo e(request()->routeIs('alert.invasions') ? 'active' : ''); ?>"
                                 href="<?php echo e(route('alert.invasions')); ?>">
                                 <span data-feather="users"></span>
-                                Invasions
+                                <?php echo e(__('Invasions')); ?>
+
+
                             </a>
                         </li>
                     </ul>
@@ -273,7 +286,8 @@
                             <?php echo e(request()->routeIs('user.profile') ? 'active' : ''); ?>"
                                 href="<?php echo e(route('user.profile')); ?>">
                                 <span data-feather="user"></span>
-                                Profile
+                                <?php echo e(__('Profile')); ?>
+
                             </a>
                         </li>
 
@@ -282,7 +296,9 @@
                             <?php echo e(request()->routeIs('user.changepass') ? 'active' : ''); ?>"
                                 href="<?php echo e(route('user.changepass')); ?>">
                                 <span data-feather="unlock"></span>
-                                Change Password
+                                <?php echo e(__('Change Password')); ?>
+
+
                             </a>
                         </li>
                         <li class="nav-item">

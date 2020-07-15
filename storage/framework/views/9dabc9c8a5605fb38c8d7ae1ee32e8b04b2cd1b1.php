@@ -1,7 +1,7 @@
 <?php $__env->startSection('content'); ?>
 
 <?php echo $__env->make('shared.msgs', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-<?php echo $__env->make('shared.header', ['name' => 'Profile'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('shared.header', ['name' => __('Profile') ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 <form method="POST" action="<?php echo e(route('user.update')); ?>">
     <?php echo csrf_field(); ?>
@@ -79,7 +79,7 @@ unset($__errorArgs, $__bag); ?>
 </form>
 <br>
 
-<?php echo $__env->make('shared.header', ['name' => 'Change Email'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('shared.header', ['name' => __('Change Email')], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 <form method="POST" action="<?php echo e(route('user.emailchange')); ?>">
     <?php echo csrf_field(); ?>

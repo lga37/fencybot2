@@ -3,7 +3,7 @@
 @section('content')
 
 @include('shared.msgs')
-@include('shared.header', ['name' => 'Trackings'])
+@include('shared.header', ['name' => __('Trackings') ])
 
 
 @if (request()->get('d') > 0 && request()->get('m') > 0)
@@ -63,7 +63,7 @@
 @else
 <div class="row">
     <div class="col-md-6">
-        @include('shared.header', ['name' => 'Grouped By Device'])
+        @include('shared.header', ['name' => __('Grouped By Device') ])
 
         <table class="table table-striped table-sm">
             <tr>
@@ -86,7 +86,7 @@
 
     </div>
     <div class="col-md-6">
-        @include('shared.header', ['name' => 'Grouped By Fence'])
+        @include('shared.header', ['name' => __('Grouped By Fence') ])
 
         <table class="table table-striped table-sm">
             <tr>
@@ -140,8 +140,6 @@
 
 
 @section('js')
-
-<script src="https://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE')}}&callback=show" async defer></script>
 
 <script>
 
@@ -361,5 +359,7 @@
 
 
 </script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE')}}&callback=show"></script>
 
 @endsection

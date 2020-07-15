@@ -7,7 +7,7 @@
 
 <?php if(Session::has('success')): ?>
 <div class="mt-2 alert alert-success">
-    <i class="fas fa-check-circle"></i> <?php echo e(Session::get('success')); ?>
+    <i class="fas fa-check-circle"></i> <?php echo e(__(Session::get('success'))); ?>
 
 </div>
 <?php endif; ?>

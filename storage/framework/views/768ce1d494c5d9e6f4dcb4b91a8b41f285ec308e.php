@@ -92,7 +92,7 @@
                     </p>
                     <div class="mt-4 sm:flex">
 
-                        <a href="https://twitter.com/steveschoger"
+                        <a href="#" target="_blank"
                             class="mt-6 sm:mt-0 sm:ml-12 flex items-center no-underline">
                             <div class="flex-shrink-0">
                                 <img class="h-12 w-12 rounded-full border-2 border-white" src="<?php echo e(asset('images/cristina.jpg')); ?>" alt="">
@@ -102,7 +102,7 @@
                                 <p class="text-sm text-gray-500 leading-tight">Prof. Unirio</p>
                             </div>
                         </a>
-                        <a href="https://twitter.com/steveschoger"
+                        <a href="#" target="_blank"
                             class="mt-6 sm:mt-0 sm:ml-12 flex items-center no-underline">
                             <div class="flex-shrink-0">
                                 <img class="h-12 w-12 rounded-full border-2 border-white" src="<?php echo e(asset('images/jobson.jpg')); ?>" alt="">

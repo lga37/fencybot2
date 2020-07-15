@@ -11,7 +11,7 @@
 
 <?php echo $__env->make('shared.msgs', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-<?php echo $__env->make('shared.header', ['name' => 'Add new Device'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('shared.header', ['name' =>  __('Devices')  ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 
 <div class="container">
@@ -49,7 +49,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        <?php echo $__env->make('shared.header', ['name' => 'Trackeds'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php echo $__env->make('shared.header', ['name' => __('Trackeds') ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         <table class="table table-striped table-sm">
             <tr>
                 <thead>
@@ -116,7 +116,7 @@
 
 
     <div class="col-md-6">
-        <?php echo $__env->make('shared.header', ['name' => 'UnTrackeds'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php echo $__env->make('shared.header', ['name' => __('UnTrackeds') ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
         <table class="table table-striped table-sm">
             <thead>

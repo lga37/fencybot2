@@ -3,7 +3,7 @@
 @section('content')
 
 @include('shared.msgs')
-@include('shared.header', ['name' => 'Profile'])
+@include('shared.header', ['name' => __('Profile') ])
 
 <form method="POST" action="{{ route('user.update') }}">
     @csrf
@@ -53,7 +53,7 @@
 </form>
 <br>
 
-@include('shared.header', ['name' => 'Change Email'])
+@include('shared.header', ['name' => __('Change Email')])
 
 <form method="POST" action="{{ route('user.emailchange') }}">
     @csrf

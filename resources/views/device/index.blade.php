@@ -13,7 +13,7 @@
 
 @include('shared.msgs')
 
-@include('shared.header', ['name' => 'Add new Device'])
+@include('shared.header', ['name' =>  __('Devices')  ])
 
 
 <div class="container">
@@ -51,7 +51,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        @include('shared.header', ['name' => 'Trackeds'])
+        @include('shared.header', ['name' => __('Trackeds') ])
         <table class="table table-striped table-sm">
             <tr>
                 <thead>
@@ -118,7 +118,7 @@
 
 
     <div class="col-md-6">
-        @include('shared.header', ['name' => 'UnTrackeds'])
+        @include('shared.header', ['name' => __('UnTrackeds') ])
 
         <table class="table table-striped table-sm">
             <thead>

@@ -3,7 +3,7 @@
 @section('content')
 
 @include('shared.msgs')
-@include('shared.header', ['name' => 'Alerts'])
+@include('shared.header', ['name' => __('Alerts')])
 
 
 @if (request()->get('d') > 0 && request()->get('m') > 0)
@@ -12,10 +12,10 @@
 <div id="map" class="mb-2" style="width:98%;height:600px;"></div>
 
 @foreach ($fences as $fence)
-<span class="tem_cerca"
-data-cercanome="{{$fence['name']}}"
-data-cerca="{{$fence['fence']}}"></span>
-
+    <span class="tem_cerca"
+    data-cercanome="{{$fence['name']}}"
+    data-cerca="{{$fence['fence']}}">
+    </span>
 @endforeach
 
 <form method="POST" name="form_delAll" action="{{ route('alert.massDestroy') }}">
@@ -148,8 +148,6 @@ data-cerca="{{$fence['fence']}}"></span>
 
 
 @section('js')
-<script
-src="https://maps.googleapis.com/maps/api/js?key={{ env('API_GOOGLE') }}&callback=show" async defer></script>
 <script>
 
 
@@ -357,4 +355,7 @@ src="https://maps.googleapis.com/maps/api/js?key={{ env('API_GOOGLE') }}&callbac
 
 
 </script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key={{ env('API_GOOGLE') }}&callback=show"></script>
+
 @endsection

@@ -2,19 +2,32 @@
 
 use App\Events\EventAlert;
 use App\Mail\AlertEmitted;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Broadcast;
 
 
-Broadcast::routes();
+
 
 Auth::routes();
 
 
-Route::get('/', function () { return view('welcome'); });
+/* Route::get('/br', function () {
+    App::setLocale('gg');
+
+    if (App::isLocale('gg')) {
+        dd(App::getLocale());
+    }
+});
+ */
 
 
+
+
+Route::get('/', function () {
+    return view('welcome');
+});
 Route::post('/adm/fence/add', 'FenceController@add')->name('fence.add');
 
 # alerta simples, em lotes
@@ -28,8 +41,6 @@ Route::post('/adm/alert/invasion/{tel}', 'AlertController@invasion')->name('aler
 
 
 Route::get('/adm/fence/{tel}/get', 'FenceController@getFences')->name('fence.get');
-
-
 
 
 
@@ -75,7 +86,6 @@ Route::group(['prefix' => 'adm', 'middleware' => ['auth']], function () {
 
 
     Route::resource('alert', 'AlertController', [
-        'only' => ['destroy', 'store', 'index', ]
+        'only' => ['destroy', 'store', 'index',]
     ]);
-
 });

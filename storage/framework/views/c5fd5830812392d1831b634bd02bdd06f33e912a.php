@@ -1,7 +1,7 @@
 <?php $__env->startSection('content'); ?>
 
 <?php echo $__env->make('shared.msgs', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-<?php echo $__env->make('shared.header', ['name' => 'Trackings'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('shared.header', ['name' => __('Trackings') ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 
 <?php if(request()->get('d') > 0 && request()->get('m') > 0): ?>
@@ -61,7 +61,7 @@
 <?php else: ?>
 <div class="row">
     <div class="col-md-6">
-        <?php echo $__env->make('shared.header', ['name' => 'Grouped By Device'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php echo $__env->make('shared.header', ['name' => __('Grouped By Device') ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
         <table class="table table-striped table-sm">
             <tr>
@@ -84,7 +84,7 @@
 
     </div>
     <div class="col-md-6">
-        <?php echo $__env->make('shared.header', ['name' => 'Grouped By Fence'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php echo $__env->make('shared.header', ['name' => __('Grouped By Fence') ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
         <table class="table table-striped table-sm">
             <tr>
@@ -138,8 +138,6 @@
 
 
 <?php $__env->startSection('js'); ?>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo e(env('API_GOOGLE')); ?>&callback=show" async defer></script>
 
 <script>
 
@@ -359,6 +357,8 @@
 
 
 </script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo e(env('API_GOOGLE')); ?>&callback=show"></script>
 
 <?php $__env->stopSection(); ?>
 

@@ -178,7 +178,7 @@ class AlertController extends Controller
         4 - GPS desligado.
         5 - usuário volta para a cerca.
         Tipos 1, 2, 4 e 5 vem dist
- */
+        */
 
         $d = $request->get('d') ?? 0;
         $m = $request->get('m') ?? 0;
@@ -199,8 +199,8 @@ class AlertController extends Controller
                     })
                     ->where('devices.user_id', '=', (int) Auth::id());
             })
-            ->whereRaw ("day(dt)=$d AND month(dt)=$m ")
-            ->with(['fence', 'device'])->orderBy('alerts.dt','asc')->select('alerts.*')->get();
+                ->whereRaw("day(dt)=$d AND month(dt)=$m ")
+                ->with(['fence', 'device'])->orderBy('alerts.dt', 'asc')->select('alerts.*')->get();
 
             $fences = $alerts->pluck('fence')->unique();
             #dd($fences);
@@ -237,7 +237,7 @@ class AlertController extends Controller
         #dd($alerts->toArray());
         #echo "<hr>";
 
-        return view('alert.index', compact('fences','alerts', 'device_days', 'fence_days'));
+        return view('alert.index', compact('fences', 'alerts', 'device_days', 'fence_days'));
     }
 
     public function hist(Request $request)
@@ -266,7 +266,7 @@ class AlertController extends Controller
                     })
 
 
-                    ->whereIn('type', [0,1,2,5]);
+                    ->whereIn('type', [0, 1, 2, 5]);
             })
                 ->select('alerts.id', 'alerts.type', 'alerts.dt', 'alerts.fence_id', 'alerts.device_id', 'alerts.lat', 'alerts.lng')->distinct()
 
@@ -305,7 +305,7 @@ class AlertController extends Controller
             $alerts = $fences = [];
         }
 
-        return view('alert.hist', compact('fences','fence_days', 'device_days', 'alerts'));
+        return view('alert.hist', compact('fences', 'fence_days', 'device_days', 'alerts'));
     }
 
     public function invasions(Request $request)
@@ -442,6 +442,10 @@ class AlertController extends Controller
                         continue;
                     }
 
+                    #pegar os times antes do save
+                    $last_minutes_sms = $this->getLastAlertAddedInMinutesSMS($v['fence_id'], $item->id);
+                    $last_minutes_email = $this->getLastAlertAddedInMinutesEmail($v['fence_id'], $item->id);
+
 
                     $alert = new Alert();
                     $alert->device_id = (int) $item->id;
@@ -461,75 +465,85 @@ class AlertController extends Controller
 
                     $user = User::find($user_id);
 
-
-                    if ($v['type'] == 2) {
-
-                        $last_alert = Alert::where('type', '=', 2)
-                            ->where('fence_id', '=', $v['fence_id'])
-                            ->where('device_id', '=', $item->id)
-                            ->latest()->select(DB::raw('id,day(created_at),day(dt), TIMESTAMPDIFF( MINUTE, created_at,now() ) AS diff'))
-                            ->get()->toArray();
-                        $last_minutes = $last_alert[0]['diff'] ?? 0;
-
-                        if ($last_minutes > 120 && $v['fence_id'] > 0) {
-                            $fence = Fence::find($v['fence_id']);
-                            $fence_name = $fence->name;
-
-                            $tel = $user->tel;
-                            if (strlen($tel) == 11) {
-                                $tel = '+55' . $tel;
-                            } elseif (strlen($tel) == 13) {
-                                $tel = '+' . $tel;
-                            } else {
-                                $errors[] = "tel nao 11,13 dig ($tel , indice $k)";
-                                break;
-                            }
-                            $place = $this->geo($v['lat'], $v['lng']);
-                            $mapa = "http://www.google.com/maps/place/{$v['lat']},{$v['lng']}";
-                            $msg = " FencyBot Alert! ";
-                            $msg .= " Hi " . $user->name;
-                            $msg .= " The device " . $item->name . " is out of fence (" . $fence_name . ").";
-                            if ($place) {
-                                $msg .= " Place of Reference : $place";
-                            }
-                            $msg .= " Click To See on Map: $mapa ";
-                            $msg .= "FencyBot Monitor";
-                            #dd($msg);
-
-                            $this->sendMessage($msg, $tel);
+                    if ($last_minutes_sms > 120 && $v['type'] == 2) {
+                        $fence = Fence::find($v['fence_id']);
+                        $fence_name = $fence->name;
+                        $tel = $user->tel;
+                        if (strlen($tel) == 11) {
+                            $tel = '+55' . $tel;
+                        } elseif (strlen($tel) == 13) {
+                            $tel = '+' . $tel;
+                        } else {
+                            $errors[] = "tel nao tem 11/13 dig ($tel , indice $k)";
+                            break;
                         }
+                        $place = $this->geo($v['lat'], $v['lng']);
+                        $mapa = "http://www.google.com/maps/place/{$v['lat']},{$v['lng']}";
+                        $msg = " FencyBot Alert! ";
+                        $msg .= " Hi " . $user->name;
+                        $msg .= " The device " . $item->name . " is out of fence (" . $fence_name . ").";
+                        if ($place) {
+                            $msg .= " Place of Reference : $place ";
+                        }
+                        $msg .= " Click To See on Map: $mapa ";
+                        $msg .= "FencyBot Monitor";
+                        #dump('sms');
+                        $this->sendMessage($msg, $tel);
                     }
 
 
-                    $last_alert = Alert::where('fence_id', '=', $v['fence_id'])
-                    ->where('device_id', '=', $item->id)
-                    ->latest()->select(DB::raw('id,day(created_at),day(dt), TIMESTAMPDIFF( MINUTE, created_at,now() ) AS diff'))
-                    ->get()->toArray();
-                    $last_minutes = $last_alert[0]['diff'] ?? 0;
-                    if ($last_minutes > 120 && $v['fence_id'] > 0) {
+                    if ($last_minutes_email > 120) {
+                        #dump('email');
                         $user->notify((new AlertEmitted($alert)));
-                        //event(new EventAlert($alert));
-
                     }
-
                 }
-
             });
-
         } else {
             #return response()->json(['status' => 'ERROR'], 406);
-            $errors[] = 'nao encontrou devices para tel '.$tel;
+            $errors[] = 'nao encontrou devices para tel ' . $tel;
         }
 
 
         if (empty($errors)) {
             return response()->json(['status' => 'OK'], 201);
         } else {
-            return response()->json(['status' => 'ERROR', 'errors' => implode('; ',$errors)], 422);
-
+            return response()->json(['status' => 'ERROR', 'errors' => implode('; ', $errors)], 422);
         }
     }
 
+
+    private function getLastAlertAddedInMinutesSMS(int $fence_id, int $device_id)
+    {
+        $last_alert = Alert::where('fence_id', '=', $fence_id)
+        ->where('device_id', '=', $device_id)
+        ->where('type', '=', 2)
+        ->latest()->select(DB::raw('id,day(created_at),day(dt), TIMESTAMPDIFF( MINUTE, created_at,now() ) AS diff'))
+        ->get()->toArray();
+
+        #dump($last_alert);
+        if(!$last_alert){ #se nao tem ninguem retorna vazio, deve sim receber o alert
+            $last_minutes = 1000;
+        } else {
+            $last_minutes = $last_alert[0]['diff'] ?? 0;
+        }
+
+        return $last_minutes;
+    }
+
+    private function getLastAlertAddedInMinutesEmail(int $fence_id, int $device_id)
+    {
+        $last_alert = Alert::where('fence_id', '=', $fence_id)
+        ->where('device_id', '=', $device_id)
+        ->latest()->select(DB::raw('id,day(created_at),day(dt), TIMESTAMPDIFF( MINUTE, created_at,now() ) AS diff'))
+        ->get()->toArray();
+
+        if(!$last_alert){ #se nao tem ninguem retorna vazio, deve sim receber o alert
+            $last_minutes = 1000;
+        } else {
+            $last_minutes = $last_alert[0]['diff'] ?? 0;
+        }
+        return $last_minutes;
+    }
 
     function geo($lat, $lng)
     {

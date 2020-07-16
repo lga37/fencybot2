@@ -247,7 +247,7 @@
                                             <div class="col-md-1 pre_range">
                                                 <div class="" data-toggle="tooltip" data-placement="top"
                                                     title="Time to wait in the app to confirm that the user is really out of the fence.
-                                                    If leaves quickly and returns within that time, I disregard the exit.
+                                                    If leaves quickly and returns within that time, the app will disregard the exit.
                                                     From 0 to 60">0</div>
                                             </div>
                                             <div class="col-md-9 range">

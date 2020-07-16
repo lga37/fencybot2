@@ -38,7 +38,8 @@
             <td>{{ $alert->dt->format('l d/M H:i:s') }}</td>
             <td class="">
                 <a class="btn btn-sm btn-outline-info" data-lat="{{ $alert->lat }}" data-lng="{{ $alert->lng }}"
-                    data-cerca="{{ $alert->fence->fence ?? false }}" data-nome_cerca="{{ $alert->fence->name }}"
+                    data-cerca="{{ $alert->fence->fence ?? false }}"
+                    data-nome_cerca="{{ $alert->fence->name ?? false }}"
                     data-toggle="modal" data-target="#modal">detail</a>
             </td>
         </tr>

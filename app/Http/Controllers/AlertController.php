@@ -432,10 +432,11 @@ class AlertController extends Controller
                         $errors[] = "fence_id is missing (indice $k)";
                         continue;
                     }
+                    #aqui na verdade e o seguinte, checar se tem conexao, ai depois analisar o user
                     $exists = FenceDevice::where('fence_id', '=', $v['fence_id'])
                         ->where('device_id', '=', $item->id)
-                        ->where('user_id', '=', $item->user_id)->exists();
-                    #dd($exists);
+                        ->get()->toArray();
+                    #dump($exists);
                     #if(!$exists) continue;
                     if (!$exists) {
                         $errors[] = "device_id/user_id mismatch  (indice $k)";

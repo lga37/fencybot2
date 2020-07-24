@@ -304,6 +304,17 @@
 
 
                         </li>
+                        <li class="nav-item pl-4">
+                            <a href="lang/en">
+                                EN
+                            </a>
+                             - 
+                            <a href="lang/br">
+                                BR
+                            </a>
+
+
+                        </li>
 
 
 

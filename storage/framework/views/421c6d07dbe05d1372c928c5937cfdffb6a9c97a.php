@@ -50,7 +50,8 @@ unset($__errorArgs, $__bag); ?>
     <div class="form-group row mb-0">
         <div class="col-md-10 offset-md-2">
             <button class="btn btn-lg btn-outline-primary">
-                Save
+                <?php echo e(__('Save')); ?>
+
             </button>
         </div>
     </div>

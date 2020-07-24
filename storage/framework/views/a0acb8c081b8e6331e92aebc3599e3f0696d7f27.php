@@ -11,7 +11,7 @@
 
 <?php echo $__env->make('shared.msgs', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-<?php echo $__env->make('shared.header', ['name' =>  __('Devices')  ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('shared.header', ['name' => __('Devices') ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 
 <div class="container">
@@ -19,24 +19,23 @@
         <?php echo csrf_field(); ?>
         <div class="input-group mt-1">
             <div class="input-group-prepend">
-                <div class="input-group-text" data-toggle="tooltip" data-placement="top" title="Name of this device">Add
-                    New
-                    Device</div>
+                <div class="input-group-text" data-toggle="tooltip" data-placement="top" title="Name of this device">
+                    <?php echo e(__('Add New Device')); ?></div>
             </div>
             <div class="input-group-prepend ml-1">
                 <div class="input-group-text" data-toggle="tooltip" data-placement="top" title="Name of this device">
                     <span data-feather="target"></span></div>
             </div>
-            <input class="form-control" placeholder="Device Name" name="name">
+            <input class="form-control" placeholder="<?php echo e(__('Device Name')); ?>" name="name">
 
 
             <div class="input-group-prepend ml-1">
                 <div class="input-group-text" data-toggle="tooltip" data-placement="top"
                     title="Phone number of this device"><span data-feather="phone"></span></div>
             </div>
-            <input class="form-control" placeholder="Device Tel Number" name="tel">
+            <input class="form-control" placeholder="<?php echo e(__('Device Tel Number')); ?>" name="tel">
 
-            <button class="ml-1 btn btn-outline-success">Add</button>
+            <button class="ml-1 btn btn-outline-success"><?php echo e(__('Add')); ?></button>
         </div>
     </form>
 
@@ -53,18 +52,19 @@
         <table class="table table-striped table-sm">
             <tr>
                 <thead>
-                    <th>id</th>
-                    <th>name</th>
-                    <th>tel</th>
-                    <th>save</th>
-                    <th>untrack</th>
-                    <th>edit</th>
-                    <th>del</th>
+
+                    <th><?php echo e(__('name')); ?></th>
+                    <th><?php echo e(__('tel')); ?></th>
+                    <th><?php echo e(__('save')); ?></th>
+                    <th><?php echo e(__('untrack')); ?></th>
+                    <th><?php echo e(__('edit')); ?></th>
+                    <th><?php echo e(__('del')); ?></th>
+
                 </thead>
             </tr>
             <?php $__empty_1 = true; $__currentLoopData = $trackeds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tracked): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
             <tr>
-                <td><?php echo e($tracked->id); ?></td>
+
 
                 <form method="POST" action="<?php echo e(route('device.patch',['device'=>$tracked->id])); ?>">
                     <?php echo csrf_field(); ?>
@@ -75,21 +75,22 @@
                         <input class="form-control" name="tel" value="<?php echo e($tracked->tel); ?>">
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-outline-success">Save</button>
+                        <button class="btn btn-sm btn-outline-success"><?php echo e(__('Save')); ?></button>
                     </td>
                 </form>
 
                 <td>
                     <form method="POST" action="<?php echo e(route('device.untrack',['device'=>$tracked->id])); ?>">
                         <?php echo csrf_field(); ?>
-                        <button class="btn btn-sm btn-info">untrack</button>
+                        <button class="btn btn-sm btn-info"><?php echo e(__('untrack')); ?></button>
                     </form>
 
                 </td>
 
                 <td>
                     <a href="<?php echo e(route('device.show',['device'=>$tracked] )); ?>" class="btn btn-sm btn-warning">
-                        edit
+                        <?php echo e(__('edit')); ?>
+
                     </a>
                 </td>
 
@@ -99,7 +100,7 @@
                         <?php echo method_field('DELETE'); ?>
                         <?php echo csrf_field(); ?>
 
-                        <button class="btn btn-sm btn-outline-danger">del</button>
+                        <button class="btn btn-sm btn-outline-danger"><?php echo e(__('Del')); ?></button>
                     </form>
 
                 </td>
@@ -107,7 +108,7 @@
 
             </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-            <p><b>No records</b></p>
+            <p><b><?php echo e(__('No records')); ?></b></p>
 
             <?php endif; ?>
 
@@ -121,17 +122,17 @@
         <table class="table table-striped table-sm">
             <thead>
                 <tr>
-                    <th>id</th>
-                    <th>name</th>
-                    <th>tel</th>
-                    <th>save</th>
-                    <th>track</th>
-                    <th>del</th>
+
+                    <th><?php echo e(__('name')); ?></th>
+                    <th><?php echo e(__('tel')); ?></th>
+                    <th><?php echo e(__('save')); ?></th>
+                    <th><?php echo e(__('track')); ?></th>
+                    <th><?php echo e(__('del')); ?></th>
+
                 </tr>
             </thead>
             <?php $__empty_1 = true; $__currentLoopData = $not_trackeds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $not_tracked): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
             <tr>
-                <td><?php echo e($not_tracked->id); ?></td>
                 <form method="POST" action="<?php echo e(route('device.patch',['device'=>$not_tracked->id])); ?>">
                     <?php echo csrf_field(); ?>
                     <td>
@@ -141,13 +142,14 @@
                         <input class="form-control" name="tel" value="<?php echo e($not_tracked->tel); ?>">
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-outline-success">Save</button>
+                        <button class="btn btn-sm btn-outline-success"><?php echo e(__('Save')); ?></button>
                     </td>
                 </form>
 
                 <td>
                     <a href="<?php echo e(route('device.show',['device'=>$not_tracked] )); ?>" class="btn btn-sm btn-info">
-                        track
+                        <?php echo e(__('track')); ?>
+
                     </a>
                 </td>
 
@@ -157,14 +159,14 @@
                         <?php echo method_field('DELETE'); ?>
                         <?php echo csrf_field(); ?>
 
-                        <button class="btn btn-sm btn-outline-danger">del</button>
+                        <button class="btn btn-sm btn-outline-danger"><?php echo e(__('Del')); ?></button>
                     </form>
 
                 </td>
             </tr>
 
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-            <p><b>No records</b></p>
+            <p><b><?php echo e(__('No records')); ?></b></p>
 
             <?php endif; ?>
 
@@ -172,83 +174,6 @@
     </div>
 </div>
 
-
-<!-- ----------------------------------------- card -->
-<!--
-
-<br><br><br><br><br><br><br><br><br><br><br><br><br>
-vou tirar depoissssss
-
-<?php $__empty_1 = true; $__currentLoopData = $trackeds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $device): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-
-<?php if($loop->first): ?>
-
-<div class="container-fluid mt-4">
-    <div class="row justify-content-center">
-        <?php endif; ?>
-        <div class="col-auto mb-3">
-            <div class="card p-0 vitrine" style="width: 20rem;">
-                <div class="card-body p-2">
-                    <form method="POST" action="<?php echo e(route('device.update',['device'=>$device->id])); ?>">
-                        <?php echo method_field('PUT'); ?>
-                        <?php echo csrf_field(); ?>
-
-                        <div class="input-group mt-1">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                                    title="Name of this device"><span data-feather="user"></span></div>
-                            </div>
-                            <input class="form-control" name="name" value="<?php echo e($device->name); ?>">
-                        </div>
-
-                        <div class="input-group mt-1">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text" data-toggle="tooltip" data-placement="top"
-                                    title="Phone number of this device"><span data-feather="phone"></span></div>
-                            </div>
-                            <input class="form-control" name="tel" value="<?php echo e($device->tel); ?>">
-                        </div>
-
-                        <button class="btn mt-2 btn-sm btn-success">save</button>
-                    </form>
-
-                </div>
-                <div class="card-footer">
-                    <form method="POST" action="<?php echo e(route('device.destroy',['device'=>$device])); ?>">
-                        <?php echo method_field('DELETE'); ?>
-                        <?php echo csrf_field(); ?>
-
-                        <a href="<?php echo e(route('device.show',['device'=>$device] )); ?>" class="btn mr-2 btn-sm btn-info">
-                            edit
-                        </a>
-
-                        <?php if(count($device->fences)>0): ?>
-                        <a href="#" class="mr-2 btn btn-sm btn-primary" data-cercas="<?php echo e($device->fences ?? false); ?>"
-                            data-name="<?php echo e($device->name); ?>" data-toggle="modal" data-target="#device_modal">
-                            is tracked
-                        </a>
-                        <?php else: ?>
-                        not tracked
-                        <?php endif; ?>
-
-                        <button class="btn ml-2 btn-sm btn-danger">del</button>
-                    </form>
-
-
-                </div>
-            </div>
-        </div>
-
-
-        <?php if($loop->last): ?>
-    </div>
-</div>
-<?php endif; ?>
-<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-<?php endif; ?>
-
--->
-<!-- ----------------------------------------- card -->
 
 <div class="modal fade" id="update_modal" tabindex="-1" role="dialog" aria-labelledby="update_modal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -263,7 +188,7 @@ vou tirar depoissssss
                 <div id="map_cerca" class="mb-2" style="width:99%;height:600px; "></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo e(__('Close*')); ?></button>
             </div>
         </div>
     </div>
@@ -282,7 +207,7 @@ vou tirar depoissssss
                 <div id="map_cerca" class="mb-2" style="width:99%;height:600px; "></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo e(__('Close*')); ?></button>
             </div>
         </div>
     </div>

@@ -40,14 +40,16 @@
 <?php $__env->startSection('content'); ?>
 
 <?php echo $__env->make('shared.msgs', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-<?php echo $__env->make('shared.header', ['name' => 'Fences'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('shared.header', ['name' => __('Fences') ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 <form>
     <div class="form-group">
-        Adding New Fences
+        <?php echo e(__('Adding New Fences')); ?>
+
     </div>
     <div class="form-group">
-        <input class="form-control" id="pac-input" class="pac-target-input" placeholder="Enter a Location"
+        <input class="form-control" id="pac-input" class="pac-target-input"
+        placeholder="<?php echo e(__('Enter a Location')); ?>"
             autocomplete="off">
     </div>
     <div id="mapa" class="border border-danger"></div>
@@ -60,22 +62,23 @@
         <input type="hidden" id="user_id" value="<?php echo e(Auth()->id()); ?>">
         <div class="row">
             <div class="col-md-3">
-                <input class="form-control-lg  border border-success" id="nome_cerca" placeholder="Fence Name">
+                <input class="form-control-lg  border border-success" id="nome_cerca"
+                placeholder="<?php echo e(__('Fence Name')); ?>">
             </div>
             <div class="col-md-1">
             </div>
             <div class="col-md-3">
-                <button class="btn  btn-block btn-lg btn-outline-warning " id="limpar">Clean Fence</button>
+                <button class="btn  btn-block btn-lg btn-outline-warning " id="limpar"><?php echo e(__('Clean Fence')); ?></button>
             </div>
             <div class="col-md-3">
-                <button class="btn  btn-block btn-lg btn-outline-success" id="salvar">Save</button>
+                <button class="btn  btn-block btn-lg btn-outline-success" id="salvar"><?php echo e(__('Save')); ?></button>
             </div>
         </div>
     </div>
 </div>
 
 <br>
-<?php echo $__env->make('shared.header', ['name' => 'Edit your Fences'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('shared.header', ['name' => __('Edit your Fences') ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 
 
@@ -97,7 +100,7 @@
 
 
                         <div class="input-group-append">
-                            <button class="btn btn-sm btn-outline-success">Save</button>
+                            <button class="btn btn-sm btn-outline-success"><?php echo e(__('Save')); ?></button>
                         </div>
 
                     </div>
@@ -114,7 +117,8 @@
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_2): ?>
                     <?php endif; ?>
                     <?php if($tot > 0): ?>
-                    <?php echo e($tot); ?> device(s) associated
+                    <?php echo e($tot); ?> <?php echo e(__('device(s) associated')); ?>
+
                     <?php else: ?>
                     Not associated yet
                     <?php endif; ?>
@@ -129,13 +133,15 @@
                         <?php echo csrf_field(); ?>
 
                         <a href="<?php echo e(route('device.index')); ?>" class="btn mr-2 btn-sm btn-info">
-                            configure
+                            <?php echo e(__('configure')); ?>
+
                         </a>
                         <a href="#" class="mr-2 btn btn-sm btn-primary" data-cerca="<?php echo e($fence->fence ?? false); ?>"
                             data-name="<?php echo e($fence->name); ?>" data-toggle="modal" data-target="#cerca_modal">
-                            view
+                            <?php echo e(__('view')); ?>
+
                         </a>
-                        <button class="btn btn-sm btn-danger mr-2">del</button>
+                        <button class="btn btn-sm btn-danger mr-2"><?php echo e(__('Del')); ?></button>
                     </form>
 
                 </div>
@@ -177,7 +183,7 @@
                 <div id="map_cerca" class="mb-2" style="width:99%;height:600px; "></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo e(__('Close*')); ?></button>
             </div>
         </div>
     </div>

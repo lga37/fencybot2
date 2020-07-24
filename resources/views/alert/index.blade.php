@@ -11,23 +11,29 @@
 
 <div id="map" class="mb-2" style="width:98%;height:600px;"></div>
 
-@foreach ($fences as $fence)
-<span class="tem_cerca" data-cercanome="{{$fence['name']}}" data-cerca="{{$fence['fence']}}">
-</span>
-@endforeach
+@forelse ($fences as $fence)
+    @if (isset($fence->name))
+        <span class="tem_cerca" data-cercanome="{{$fence->name }}" data-cerca="{{$fence->fence }}"></span>
+
+    @endif
+@empty
+@endforelse
 
 <form method="POST" name="form_delAll" action="{{ route('alert.massDestroy') }}">
     @csrf
     <table class="table table-striped table-sm">
         <tr>
-            <th><input type="checkbox" class="" value="1" id="checkAll" name="checkAll"> select all</th>
+            <th><input type="checkbox" class="" value="1" id="checkAll" name="checkAll">{{ __('select all')}}</th>
             <th>id</th>
-            <th>type</th>
-            <th>fence</th>
-            <th>device</th>
-            <th>time</th>
-            <th>dist</th>
-            <th>map</th>
+
+            <th>{{ __('type')}}</th>
+            <th>{{ __('fence')}}</th>
+            <th>{{ __('device')}}</th>
+            <th>{{ __('time')}}</th>
+            <th>{{ __('dist')}}</th>
+            <th>{{ __('map')}}</th>
+
+
         </tr>
         @forelse ($alerts as $alert)
         <tr>
@@ -36,25 +42,25 @@
             <td>
                 @switch($alert->type)
                 @case(0)
-                <span class="badge badge-success ">default/inside</span>
+                <span class="badge badge-success ">{{ __('inside')}}</span>
                 @break
                 @case(1)
-                <span class="badge badge-warning">close</span>
+                <span class="badge badge-warning">{{ __('close')}}</span>
                 @break
                 @case(2)
-                <span class="badge badge-danger">out of fence</span>
+                <span class="badge badge-danger">{{ __('out of fence')}}</span>
                 @break
                 @case(3)
-                <span class="badge badge-primary">invasion</span>
+                <span class="badge badge-primary">{{ __('invasion')}}</span>
                 @break
                 @case(4)
-                <span class="badge badge-secondary">off</span>
+                <span class="badge badge-secondary">{{ __('off')}}</span>
                 @break
                 @case(5)
-                <span class="badge badge-info">back</span>
+                <span class="badge badge-info">{{ __('back to fence')}}</span>
                 @break
                 @default
-                <span class="badge badge-secondary">default</span>
+                <span class="badge badge-secondary">{{ __('default')}}</span>
                 @endswitch
             </td>
             <td>{{ $alert->fence->name ?? '-' }}</td>
@@ -64,7 +70,7 @@
             <td class="">
                 <a class="btn btn-sm btn-info" data-lat="{{ $alert->lat }}" data-lng="{{ $alert->lng }}"
                     data-cerca="{{ $alert->fence->fence ?? false }}" data-nome_cerca="{{ $alert->fence->name }}"
-                    data-toggle="modal" data-target="#modal">zoom
+                    data-toggle="modal" data-target="#modal">{{ __('map')}}
                 </a>
             </td>
         </tr>
@@ -72,14 +78,14 @@
         @if ($loop->last)
         <tr>
             <td colspan="2">
-                <button class="btn btn-sm btn-outline-danger">del selected</button>
+                <button class="btn btn-sm btn-outline-danger">{{ __('del selected')}}</button>
             </td>
             <td colspan="9"></td>
         </tr>
         @endif
 
         @empty
-        <p><b>No records</b></p>
+        <p><b>{{ __('No records')}}</b></p>
         @endforelse
     </table>
 
@@ -93,7 +99,7 @@
             <tr>
                 <th>Total</th>
                 <th>dd/mm</th>
-                <th>device</th>
+                <th>{{ __('device')}}</th>
             </tr>
             @forelse ($device_days as $day)
             <tr>
@@ -133,7 +139,7 @@
                 <div id="map_modal" class="mb-2" style="width:98%;height:600px; "></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Close*')}}</button>
             </div>
         </div>
     </div>
@@ -185,7 +191,7 @@
         var cerca = button.data('cerca') || false;
         var nome_cerca = button.data('nome_cerca') || false;
         var modal = $(this)
-        modal.find('.modal-title').text(' Details:' + lat + ' / ' + lng)
+        modal.find('.modal-title').text("{{ __('Tracking Details')}}" + lat + ' / ' + lng)
 
         var map = new google.maps.Map(document.getElementById('map_modal'), {
             center: { lat: lat, lng: lng },
@@ -208,7 +214,7 @@
             var div = document.createElement('div');
             var h3 = document.createElement('h3');
 
-            h3.innerHTML = 'Fence Related : ' + nome_cerca + ' ';
+            h3.innerHTML = ' ' + nome_cerca + ' ';
             div.appendChild(h3);
 
             map.controls[google.maps.ControlPosition.RIGHT_TOP].push(div);

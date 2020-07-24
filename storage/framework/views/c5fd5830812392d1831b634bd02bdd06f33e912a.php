@@ -5,14 +5,19 @@
 
 
 <?php if(request()->get('d') > 0 && request()->get('m') > 0): ?>
-<a class="btn btn-sm btn-outline-info" href="<?php echo e(route('alert.hist')); ?>">back</a><br><br>
+<a class="btn btn-sm btn-outline-info" href="<?php echo e(route('alert.hist')); ?>"><?php echo e(__('back')); ?></a><br><br>
 
 <div id="map" class="mb-2" style="width:98%;height:600px;"></div>
 
-<?php $__currentLoopData = $fences; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fence): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-<span class="tem_cerca" data-cercanome="<?php echo e($fence['name']); ?>" data-cerca="<?php echo e($fence['fence']); ?>"></span>
 
-<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+<?php $__empty_1 = true; $__currentLoopData = $fences; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fence): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+    <?php if(isset($fence->name)): ?>
+        <span class="tem_cerca" data-cercanome="<?php echo e($fence->name); ?>" data-cerca="<?php echo e($fence->fence); ?>"></span>
+
+    <?php endif; ?>
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+<?php endif; ?>
 
 
 <form method="POST" name="form_delAll" action="<?php echo e(route('alert.massDestroy')); ?>">
@@ -22,7 +27,8 @@
         <tr>
             <th colspan="3">
                 <input type="checkbox" class="" value="1" id="checkAll" name="checkAll">
-                select all
+                <?php echo e(__('select all')); ?>
+
             </th>
             <th colspan="6"></th>
         </tr>
@@ -36,15 +42,16 @@
             <td><?php echo e($alert->dt->format('l d/M H:i:s')); ?></td>
             <td class="">
                 <a class="btn btn-sm btn-outline-info" data-lat="<?php echo e($alert->lat); ?>" data-lng="<?php echo e($alert->lng); ?>"
-                    data-cerca="<?php echo e($alert->fence->fence ?? false); ?>" data-nome_cerca="<?php echo e($alert->fence->name); ?>"
-                    data-toggle="modal" data-target="#modal">detail</a>
+                    data-cerca="<?php echo e($alert->fence->fence ?? false); ?>"
+                    data-nome_cerca="<?php echo e($alert->fence->name ?? false); ?>"
+                    data-toggle="modal" data-target="#modal"><?php echo e(__('detail')); ?></a>
             </td>
         </tr>
 
         <?php if($loop->last): ?>
         <tr>
             <td colspan="2">
-                <button class="btn btn-sm btn-outline-danger">del selected</button>
+                <button class="btn btn-sm btn-outline-danger"><?php echo e(__('del selected')); ?></button>
             </td>
             <td colspan="7">
 
@@ -53,7 +60,7 @@
         <?php endif; ?>
 
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-        <p><b>No records</b></p>
+        <p><b><?php echo e(__('No records')); ?></b></p>
         <?php endif; ?>
     </table>
 </form>
@@ -67,7 +74,7 @@
             <tr>
                 <th>Total</th>
                 <th>dd/mm</th>
-                <th>device</th>
+                <th><?php echo e(__('device')); ?></th>
             </tr>
             <?php $__empty_1 = true; $__currentLoopData = $device_days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
             <tr>
@@ -78,7 +85,7 @@
                 <td><?php echo e($day->device->name); ?></td>
             </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-            <p><b>No records</b></p>
+            <p><b><?php echo e(__('No records')); ?></b></p>
             <?php endif; ?>
         </table>
 
@@ -90,7 +97,7 @@
             <tr>
                 <th>Total</th>
                 <th>dd/mm</th>
-                <th>fence</th>
+                <th><?php echo e(__('fence')); ?></th>
             </tr>
             <?php $__empty_1 = true; $__currentLoopData = $fence_days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
             <tr>
@@ -111,9 +118,6 @@
 <?php endif; ?>
 
 
-
-
-
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -127,7 +131,8 @@
                 <div id="map_modal" class="mb-2" style="width:98%;height:600px; "></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">
+                    <?php echo e(__('Close*')); ?></button>
             </div>
         </div>
     </div>
@@ -268,7 +273,7 @@
         var button = $(event.relatedTarget)
 
         var modal = $(this)
-        modal.find('.modal-title').text('Tracking Details');
+        modal.find('.modal-title').text("<?php echo e(__('Tracking Details')); ?>");
 
         var lat = parseFloat(button.data('lat')) || -22.90278;
         var lng = parseFloat(button.data('lng')) || -43.2075;
@@ -299,7 +304,7 @@
             var div = document.createElement('div');
             var h3 = document.createElement('h3');
 
-            h3.innerHTML = 'Fence Related : ' + nome_cerca + ' ';
+            h3.innerHTML = ' ' + nome_cerca + ' ';
             div.appendChild(h3);
 
             map_modal.controls[google.maps.ControlPosition.RIGHT_TOP].push(div);

@@ -46,7 +46,7 @@
     <div class="form-group row mb-0">
         <div class="col-md-10 offset-md-2">
             <button class="btn btn-lg btn-outline-primary">
-                Save
+                {{ __('Save') }}
             </button>
         </div>
     </div>
@@ -59,7 +59,7 @@
     @csrf
 
     <div class="form-group row">
-        <label for="email" class="col-md-2 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+        <label for="email" class="col-md-2 col-form-label text-md-right">{{ __('E-Mail') }}</label>
 
         <div class="col-md-10">
             <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email"
@@ -77,7 +77,7 @@
     <div class="form-group row mb-0">
         <div class="col-md-10 offset-md-2">
             <button class="btn btn-lg btn-outline-primary">
-                Save
+                {{ __('Save') }}
             </button>
         </div>
     </div>

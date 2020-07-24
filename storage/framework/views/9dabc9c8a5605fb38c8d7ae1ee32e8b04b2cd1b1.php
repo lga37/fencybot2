@@ -72,7 +72,8 @@ unset($__errorArgs, $__bag); ?>
     <div class="form-group row mb-0">
         <div class="col-md-10 offset-md-2">
             <button class="btn btn-lg btn-outline-primary">
-                Save
+                <?php echo e(__('Save')); ?>
+
             </button>
         </div>
     </div>
@@ -85,7 +86,7 @@ unset($__errorArgs, $__bag); ?>
     <?php echo csrf_field(); ?>
 
     <div class="form-group row">
-        <label for="email" class="col-md-2 col-form-label text-md-right"><?php echo e(__('E-Mail Address')); ?></label>
+        <label for="email" class="col-md-2 col-form-label text-md-right"><?php echo e(__('E-Mail')); ?></label>
 
         <div class="col-md-10">
             <input id="email" type="email" class="form-control <?php $__errorArgs = ['email'];
@@ -117,7 +118,8 @@ unset($__errorArgs, $__bag); ?>
     <div class="form-group row mb-0">
         <div class="col-md-10 offset-md-2">
             <button class="btn btn-lg btn-outline-primary">
-                Save
+                <?php echo e(__('Save')); ?>
+
             </button>
         </div>
     </div>

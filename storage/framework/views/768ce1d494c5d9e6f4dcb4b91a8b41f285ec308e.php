@@ -42,19 +42,24 @@
                 </div>
                 <div class="px-6 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-none">
                     <p class="text-sm font-semibold text-gray-300 uppercase tracking-wider">
-                        CREATE DIGITAL FENCES AND ALERTS
+                        <?php echo e(__('CREATE GEO-FENCES WITH ALERTS')); ?>
+
                     </p>
                     <h1 class="mt-3 text-3xl leading-9 font-semibold font-display text-white
                         sm:mt-6 sm:text-4xl sm:leading-10 xl:text-5xl xl:leading-none">
-                        Monitor people nearby
+                        <?php echo e(__('Monitor people nearby')); ?>
+
                         <br class="hidden sm:inline">
                         <span class="text-teal-400">
-                            Have real-time mapping control
+                            <?php echo e(__('Have real-time alert control')); ?>
+
                         </span>
                     </h1>
                     <p
                         class="mt-2 text-lg leading-7 text-gray-300 sm:mt-3 sm:text-xl sm:max-w-xl xl:mt-4 xl:text-2xl xl:max-w-2xl">
-                        As soon as a person using a mobile phone with our app, you will be notified in real time if the person goes beyond digital fences. You can track contaminated by Covid19
+
+                        <?php echo e(__('You can track contaminated by Covid19')); ?>
+
                     </p>
                     <div class="mt-6 sm:flex sm:mt-8 xl:mt-12">
                         <a href="<?php echo e(route('login')); ?>"
@@ -63,21 +68,26 @@
                             rounded-md text-gray-900 bg-white shadow-sm hover:text-gray-600
                             focus:outline-none focus:text-gray-600 transition ease-in-out
                             duration-150 xl:text-lg xl:py-4">
-                            Login
+                            <?php echo e(__('Login')); ?>
+
                         </a>
                         <a href="<?php echo e(route('register')); ?>"
                             class="w-full mt-4 sm:ml-4 sm:mt-0 sm:w-auto inline-flex items-center justify-center
                             px-6 py-3 border border-transparent text-base leading-6 font-semibold
                             rounded-md text-white bg-gray-800 shadow-sm hover:bg-gray-700 focus:outline-none
                             focus:bg-gray-700 transition ease-in-out duration-150 xl:text-lg xl:py-4">
-                           Register
+                           <?php echo e(__('Register')); ?>
+
                         </a>
                         <a href="<?php echo e(route('register')); ?>"
                             class="w-full mt-4 sm:ml-4 sm:mt-0 sm:w-auto inline-flex items-center justify-center
                             px-6 py-3 border border-transparent text-base leading-6 font-semibold
                             rounded-md text-white bg-gray-800 shadow-sm hover:bg-gray-700 focus:outline-none
                             focus:bg-gray-700 transition ease-in-out duration-150 xl:text-lg xl:py-4">
-                            <span class="text-teal-400">Android AppStore</span>
+                            <span class="text-teal-400">
+                                <?php echo e(__('Android AppStore')); ?>
+
+                            </span>
                         </a>
                     </div>
                 </div>
@@ -88,7 +98,9 @@
                     </div>
                 </div>
                 <div class="px-6 py-8 sm:pt-12 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-full lg:py-0 lg:pt-24">
-                    <p class="text-sm font-semibold text-gray-300 uppercase tracking-wider">Designed and developed by
+                    <p class="text-sm font-semibold text-gray-300 uppercase tracking-wider">
+                        <?php echo e(__('Designed and developed by')); ?>
+
                     </p>
                     <div class="mt-4 sm:flex">
 

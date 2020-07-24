@@ -7,14 +7,19 @@
 
 
 @if (request()->get('d') > 0 && request()->get('m') > 0)
-<a class="btn btn-sm btn-outline-info" href="{{ route('alert.hist') }}">back</a><br><br>
+<a class="btn btn-sm btn-outline-info" href="{{ route('alert.hist') }}">{{ __('back')}}</a><br><br>
 
 <div id="map" class="mb-2" style="width:98%;height:600px;"></div>
 
-@foreach ($fences as $fence)
-<span class="tem_cerca" data-cercanome="{{$fence['name']}}" data-cerca="{{$fence['fence']}}"></span>
 
-@endforeach
+
+@forelse ($fences as $fence)
+    @if (isset($fence->name))
+        <span class="tem_cerca" data-cercanome="{{$fence->name }}" data-cerca="{{$fence->fence }}"></span>
+
+    @endif
+@empty
+@endforelse
 
 
 <form method="POST" name="form_delAll" action="{{ route('alert.massDestroy') }}">
@@ -24,7 +29,7 @@
         <tr>
             <th colspan="3">
                 <input type="checkbox" class="" value="1" id="checkAll" name="checkAll">
-                select all
+                {{ __('select all')}}
             </th>
             <th colspan="6"></th>
         </tr>
@@ -40,14 +45,14 @@
                 <a class="btn btn-sm btn-outline-info" data-lat="{{ $alert->lat }}" data-lng="{{ $alert->lng }}"
                     data-cerca="{{ $alert->fence->fence ?? false }}"
                     data-nome_cerca="{{ $alert->fence->name ?? false }}"
-                    data-toggle="modal" data-target="#modal">detail</a>
+                    data-toggle="modal" data-target="#modal">{{ __('detail')}}</a>
             </td>
         </tr>
 
         @if ($loop->last)
         <tr>
             <td colspan="2">
-                <button class="btn btn-sm btn-outline-danger">del selected</button>
+                <button class="btn btn-sm btn-outline-danger">{{ __('del selected')}}</button>
             </td>
             <td colspan="7">
 
@@ -56,7 +61,7 @@
         @endif
 
         @empty
-        <p><b>No records</b></p>
+        <p><b>{{ __('No records')}}</b></p>
         @endforelse
     </table>
 </form>
@@ -70,7 +75,7 @@
             <tr>
                 <th>Total</th>
                 <th>dd/mm</th>
-                <th>device</th>
+                <th>{{ __('device')}}</th>
             </tr>
             @forelse ($device_days as $day)
             <tr>
@@ -81,7 +86,7 @@
                 <td>{{ $day->device->name }}</td>
             </tr>
             @empty
-            <p><b>No records</b></p>
+            <p><b>{{ __('No records')}}</b></p>
             @endforelse
         </table>
 
@@ -93,7 +98,7 @@
             <tr>
                 <th>Total</th>
                 <th>dd/mm</th>
-                <th>fence</th>
+                <th>{{ __('fence')}}</th>
             </tr>
             @forelse ($fence_days as $day)
             <tr>
@@ -114,9 +119,6 @@
 @endif
 
 
-
-
-
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -130,7 +132,8 @@
                 <div id="map_modal" class="mb-2" style="width:98%;height:600px; "></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">
+                    {{ __('Close*')}}</button>
             </div>
         </div>
     </div>
@@ -271,7 +274,7 @@
         var button = $(event.relatedTarget)
 
         var modal = $(this)
-        modal.find('.modal-title').text('Tracking Details');
+        modal.find('.modal-title').text("{{ __('Tracking Details')}}");
 
         var lat = parseFloat(button.data('lat')) || -22.90278;
         var lng = parseFloat(button.data('lng')) || -43.2075;
@@ -302,7 +305,7 @@
             var div = document.createElement('div');
             var h3 = document.createElement('h3');
 
-            h3.innerHTML = 'Fence Related : ' + nome_cerca + ' ';
+            h3.innerHTML = ' ' + nome_cerca + ' ';
             div.appendChild(h3);
 
             map_modal.controls[google.maps.ControlPosition.RIGHT_TOP].push(div);

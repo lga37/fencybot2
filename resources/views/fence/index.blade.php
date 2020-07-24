@@ -46,10 +46,11 @@
 
 <form>
     <div class="form-group">
-        Adding New Fences
+        {{ __('Adding New Fences') }}
     </div>
     <div class="form-group">
-        <input class="form-control" id="pac-input" class="pac-target-input" placeholder="Enter a Location"
+        <input class="form-control" id="pac-input" class="pac-target-input"
+        placeholder="{{ __('Enter a Location') }}"
             autocomplete="off">
     </div>
     <div id="mapa" class="border border-danger"></div>
@@ -62,22 +63,23 @@
         <input type="hidden" id="user_id" value="{{ Auth()->id() }}">
         <div class="row">
             <div class="col-md-3">
-                <input class="form-control-lg  border border-success" id="nome_cerca" placeholder="Fence Name">
+                <input class="form-control-lg  border border-success" id="nome_cerca"
+                placeholder="{{ __('Fence Name') }}">
             </div>
             <div class="col-md-1">
             </div>
             <div class="col-md-3">
-                <button class="btn  btn-block btn-lg btn-outline-warning " id="limpar">Clean Fence</button>
+                <button class="btn  btn-block btn-lg btn-outline-warning " id="limpar">{{ __('Clean Fence') }}</button>
             </div>
             <div class="col-md-3">
-                <button class="btn  btn-block btn-lg btn-outline-success" id="salvar">Save</button>
+                <button class="btn  btn-block btn-lg btn-outline-success" id="salvar">{{ __('Save') }}</button>
             </div>
         </div>
     </div>
 </div>
 
 <br>
-@include('shared.header', ['name' => 'Edit your Fences'])
+@include('shared.header', ['name' => __('Edit your Fences') ])
 
 
 
@@ -99,7 +101,7 @@
 
 
                         <div class="input-group-append">
-                            <button class="btn btn-sm btn-outline-success">Save</button>
+                            <button class="btn btn-sm btn-outline-success">{{ __('Save') }}</button>
                         </div>
 
                     </div>
@@ -116,7 +118,7 @@
                     @empty
                     @endforelse
                     @if ($tot > 0)
-                    {{ $tot }} device(s) associated
+                    {{ $tot }} {{ __('device(s) associated') }}
                     @else
                     Not associated yet
                     @endif
@@ -131,13 +133,13 @@
                         @csrf
 
                         <a href="{{ route('device.index') }}" class="btn mr-2 btn-sm btn-info">
-                            configure
+                            {{ __('configure') }}
                         </a>
                         <a href="#" class="mr-2 btn btn-sm btn-primary" data-cerca="{{ $fence->fence ?? false }}"
                             data-name="{{ $fence->name }}" data-toggle="modal" data-target="#cerca_modal">
-                            view
+                            {{ __('view') }}
                         </a>
-                        <button class="btn btn-sm btn-danger mr-2">del</button>
+                        <button class="btn btn-sm btn-danger mr-2">{{ __('Del') }}</button>
                     </form>
 
                 </div>
@@ -179,7 +181,7 @@
                 <div id="map_cerca" class="mb-2" style="width:99%;height:600px; "></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Close*') }}</button>
             </div>
         </div>
     </div>

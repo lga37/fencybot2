@@ -268,14 +268,24 @@ class AlertController extends Controller
 
                     ->whereIn('type', [0, 1, 2, 5]);
             })
-                ->select('alerts.id', 'alerts.type', 'alerts.dt', 'alerts.fence_id', 'alerts.device_id', 'alerts.lat', 'alerts.lng')->distinct()
+                ->select('alerts.id', 'alerts.type', 'alerts.dt', 'alerts.fence_id', 'alerts.device_id',
+                'alerts.lat', 'alerts.lng')->distinct()
 
                 ->whereRaw("day(dt) = $d AND month(dt) = $m")
                 ->orderBy('dt')
                 ->get();
+
+            #dump($alerts);
             $fences = $alerts->pluck('fence')->unique();
 
-            #dd($fences);
+            #if($fences->count() < 1){
+            #    $fences = [];
+            #}
+            #dump($fences);
+            #foreach($fences as $fence){
+            #    dd($fence);
+            #}
+
 
             $device_days = $fence_days = [];
         } else {
@@ -420,6 +430,7 @@ class AlertController extends Controller
 
         $devices = $this->getDevicesByTel($tel);
 
+        #dd($devices);
         $lotes = $request->json();
         $errors = [];
 
@@ -427,7 +438,9 @@ class AlertController extends Controller
             $devices->each(function ($item, $key) use ($lotes, &$errors) {
                 foreach ($lotes as $k => $v) {
                     #extract($v);
-
+                    $lat_fence = $v['lat_fence']??null;
+                    $lng_fence = $v['lng_fence']??null;
+                    $dist = $v['dist']??null;
                     if (!$v['fence_id'] > 0) {
                         $errors[] = "fence_id is missing (indice $k)";
                         continue;
@@ -439,8 +452,12 @@ class AlertController extends Controller
                     #dump($exists);
                     #if(!$exists) continue;
                     if (!$exists) {
-                        $errors[] = "device_id/user_id mismatch  (indice $k)";
-                        continue;
+                        #$errors[] = "device_id/user_id mismatch  (indice $k)";
+                        #continue;
+                        $lat_fence = null;
+                        $lng_fence = null;
+                        $dist = null;
+
                     }
 
                     #pegar os times antes do save
@@ -454,9 +471,10 @@ class AlertController extends Controller
                     $alert->fence_id = $v['fence_id'];
                     $alert->lat = $v['lat'];
                     $alert->lng = $v['lng'];
-                    $alert->lat_fence = $v['lat_fence'] ?? null;
-                    $alert->lng_fence = $v['lng_fence'] ?? null;
-                    $alert->dist = $v['dist'] ?? null;
+                    $alert->lat_fence = $lat_fence;
+                    $alert->lng_fence = $lng_fence;
+                    $alert->dist = $dist;
+
                     $alert->type = $v['type'] ?? 0;
                     $alert->dt = $v['dt'] ?? null;
                     #dd($alert);
@@ -488,7 +506,7 @@ class AlertController extends Controller
                         }
                         $msg .= " Click To See on Map: $mapa ";
                         $msg .= "FencyBot Monitor";
-                        #dump('sms');
+                        ##dump('sms');
                         $this->sendMessage($msg, $tel);
                     }
 
@@ -601,8 +619,6 @@ class AlertController extends Controller
                     $alert->lng = $v['lng'];
                     $alert->dt = $v['dt'] ?? null;
                     $alert->save();
-
-                    $user_id = (int) $item->user_id;
                     $user = User::find($user_id);
                     //$user->notify((new AlertEmitted($alert)));
                     //event(new EventAlert($alert));

@@ -138,14 +138,14 @@
 
 <?php $__env->startSection('content'); ?>
 <?php echo $__env->make('shared.msgs', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-<?php echo $__env->make('shared.header', ['name' => 'Drag and Drop to Configure Device'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('shared.header', ['name' => __('Drag and Drop to Configure Device') ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 <p>
-    You are editing <b><?php echo e($device->name); ?></b>. Switch to :
+    <?php echo e(__('You are editing')); ?> <b><?php echo e($device->name); ?></b>. <?php echo e(__('Switch to')); ?> :
 
     <?php $__empty_1 = true; $__currentLoopData = $devices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $d): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
     <?php if($d->id != $device->id): ?>
-    <?php if(!$loop->last && !$loop->first): ?>
+    <?php if(!$loop->first): ?>
     ,
     <?php endif; ?>
     <a href="<?php echo e(route('device.show',['device'=>$d])); ?>"><?php echo e($d->name); ?></a>
@@ -161,9 +161,10 @@
             <form method="POST" id="myForm" action="<?php echo e(route('device.configure')); ?>">
                 <input type="hidden" name="device_id" value="<?php echo e($device->id); ?>">
                 <div class="menu ">
-                    <b>Fences</b> to <?php echo e($device->name); ?> <?php echo e($device->tel); ?>
+                    <b><?php echo e(__('Fences')); ?></b>  <?php echo e($device->name); ?> <?php echo e($device->tel); ?>
 
                     <div class="" data-draggable="target">
+                        <br>
                         <?php $__empty_1 = true; $__currentLoopData = $nao_fencedevices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fence): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
                         <span class="devices" data-fencedevice_id="<?php echo e($fence['id']); ?>" data-draggable="item"><span
@@ -171,14 +172,15 @@
 
 
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                        <p><b>None</b></p>
+
                         <?php endif; ?>
 
 
                     </div>
                     <hr>
-                    <b>Partners Devices</b>
+                    <b><?php echo e(__('Partners Devices')); ?></b>
                     <div class="" data-draggable="target">
+                        <br>
                         <?php $__empty_1 = true; $__currentLoopData = $nao_partners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $nao_partner): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                         <?php if($nao_partner['id'] != $device->id): ?>
                         <span class="fences" data-device_partner_id="<?php echo e($nao_partner['id']); ?>"
@@ -186,7 +188,7 @@
 
                         <?php endif; ?>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                        <p><b>None</b></p>
+
                         <?php endif; ?>
                     </div>
 
@@ -202,7 +204,8 @@
                             <div class="circle1">
                                 <img width="65" style="position:absolute;" src="<?php echo e(asset('images/33308.svg')); ?>" alt="">
                                 <br><br><br><br><br><br>
-                                Partners Devices
+                                <?php echo e(__('Partners Devices')); ?>
+
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -219,7 +222,9 @@
                             <div class="circle3">
                                 <img width="85" style="position:absolute;" src="<?php echo e(asset('images/32441.svg')); ?>" alt="">
                                 <br><br><br><br><br><br>
-                                Strangers
+                                <?php echo e(__('Strangers')); ?>
+
+
                             </div>
                         </div>
                     </div>
@@ -230,7 +235,11 @@
                             <div class="row">
                                 <div class="col-md-4" style="background-color: rgba(0, 255, 0, 0.3);">
                                     <div class="fences_partners">
-                                        <b>Drag and Drop Partners Devices here</b>
+                                        <b>
+                                            <?php echo e(__('Drag and Drop Partners Devices here')); ?>
+
+
+                                        </b>
                                         <div class="box" id="devices_partners" data-draggable="target">
                                             <?php $__empty_1 = true; $__currentLoopData = $partners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $partner): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                             <span class="fences" data-device_partner_id="<?php echo e($partner['id']); ?>"
@@ -242,7 +251,9 @@
                                     </div>
 
                                     <div class="p-1 mt-2">
-                                        Waiting time for alert, in seconds:
+                                        <?php echo e(__('Waiting time for alert, in seconds:')); ?>
+
+
                                         <div class="row">
                                             <div class="col-md-1 pre_range">
                                                 <div class="" data-toggle="tooltip" data-placement="top"
@@ -262,8 +273,9 @@
                                             </div>
                                         </div>
                                         <br>
+                                        <?php echo e(__('Minimal distance to the edge of Associated Fence:')); ?>
 
-                                        Minimal distance to the edge of Associated Fence:
+
                                         <div class="row">
                                             <div class="col-md-1 pre_range">
                                                 <div class="" data-toggle="tooltip" data-placement="top"
@@ -292,7 +304,7 @@
                                 <div class="col-md-4 " style="background-color: rgba(255, 0, 0, 0.3);">
 
                                     <div class="fences_partners">
-                                        <b>Drag and Drop Fences here</b>
+                                        <b><?php echo e(__('Drag and Drop Fences here')); ?></b>
                                         <div class="box" id="associated_fences" data-draggable="target">
                                             <?php $__empty_1 = true; $__currentLoopData = $fencedevices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fencedevice): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                             <span class="devices" data-fencedevice_id="<?php echo e($fencedevice['id']); ?>"
@@ -305,18 +317,22 @@
 
                                 </div>
                                 <div class="col-md-4 pt-1" style="background-color: rgba(0, 0, 255, 0.3);">
-                                    Personal Fence Size
+
+                                    <?php echo e(__('Personal Fence Size')); ?>
+
 
                                     <?php echo e($device->r); ?>
 
 
                                     <div class="custom-control custom-switch">
                                         <input type="radio" id="radius_1" name="r" value="1" <?php echo e($device->r==1? 'checked':''); ?>>
-                                        <label for="radius_1">Close</label>
+                                        <label for="radius_1">
+                                            <?php echo e(__('Close')); ?></label>
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <input type="radio" id="radius_2" name="r" value="2" <?php echo e($device->r==2 || !isset($device->r) ? 'checked':''); ?>>
 
-                                        <label for="radius_2">Very Close</label>
+                                        <label for="radius_2">
+                                            <?php echo e(__('Very Close')); ?></label>
                                     </div>
 
                                 </div>
@@ -332,7 +348,10 @@
         </div>
 
 
-        <button class="btn mt-2 btn-lg btn-block btn-info">SAVE & UPDATE</button>
+        <button class="btn mt-2 btn-lg btn-block btn-info">
+            <?php echo e(__('Save')); ?>
+
+        </button>
         </form>
 
 

@@ -5,49 +5,16 @@
 @include('shared.msgs')
 @include('shared.header', ['name' => __('Invasions')])
 
-<!--
-<form method="POST" action="{{ route('alert.filterTracks') }}">
-    <div class="input-group mb-3">
-        <input type="hidden" name="type" value="3">
-
-        <select class="custom-select" name="device_id">
-            <option selected disabled>Device</option>
-            @forelse ($devices as $device)
-            <option value="{{ $device->id }}">{{ $device->name }}</option>
-            @empty
-
-            @endforelse
-        </select>
-
-
-        <div class="input-group-prepend">
-            <label class="input-group-text" for="dt1">dt1</label>
-        </div>
-        <input class="form-control" type="date"
-        value="{{ \Carbon\Carbon::parse(now()->subDays(7))->format('Y-m-d') }}" id="dt1" name="dt1">
-
-        <div class="input-group-prepend">
-            <label class="input-group-text" for="dt1">dt2</label>
-        </div>
-        <input class="form-control" type="date"
-        value="{{ \Carbon\Carbon::parse(now())->format('Y-m-d') }}" id="dt2" name="dt2">
-
-        <button class="btn btn-outline-secondary">Track</button>
-
-    </div>
-</form>
--->
-
-
 
 <table class="table table-striped table-sm">
     <tr>
         <th>id</th>
-        <th>device</th>
-        <th>time</th>
-        <th>phone</th>
-        <th>map</th>
-        <th>del</th>
+        <th>{{ __('device') }}</th>
+        <th>{{ __('time') }}</th>
+        <th>{{ __('phone') }}</th>
+        <th>{{ __('map') }}</th>
+        <th>{{ __('del') }}</th>
+
     </tr>
     @forelse ($alerts as $alert)
 
@@ -64,20 +31,20 @@
         <td class="">
             <button class="btn btn-sm btn-primary" data-lat="{{ $alert->lat }}" data-lng="{{ $alert->lng }}"
                 data-cerca="{{ $alert->fence->fence ?? false }}"
-                data-toggle="modal" data-target="#modal">map</button>
+                data-toggle="modal" data-target="#modal">{{ __('map') }}</button>
         </td>
         <td class="">
             <form method="POST" action="{{ route('alert.destroy',['alert'=>$alert]) }}">
                 @method('DELETE')
                 @csrf
-                <button class="btn btn-sm btn-danger">del</button>
+                <button class="btn btn-sm btn-danger">{{ __('del') }}</button>
             </form>
         </td>
     </tr>
 
 
     @empty
-    <p><b>No records</b></p>
+    <p><b>{{ __('No records')}}</b></p>
 
 
     @endforelse
@@ -97,7 +64,7 @@
                 <div id="map" class="mb-2" style="width:98%;height:600px; "></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Close*')}}</button>
             </div>
         </div>
     </div>
@@ -121,7 +88,7 @@
         var lng = parseFloat(button.data('lng')) || -43.2075;
         //var cerca = button.data('cerca') || false;
         var modal = $(this)
-        modal.find('.modal-title').text(' Details :' + lat + ' / ' + lng)
+        modal.find('.modal-title').text("{{ __('Tracking Details')}}" +' :'+ lat + ' / ' + lng)
 
         var map = new google.maps.Map(document.getElementById('map'), {
             center: { lat: lat, lng: lng },

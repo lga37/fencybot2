@@ -140,14 +140,14 @@
 
 @section('content')
 @include('shared.msgs')
-@include('shared.header', ['name' => 'Drag and Drop to Configure Device'])
+@include('shared.header', ['name' => __('Drag and Drop to Configure Device') ])
 
 <p>
-    You are editing <b>{{ $device->name }}</b>. Switch to :
+    {{ __('You are editing')}} <b>{{ $device->name }}</b>. {{ __('Switch to')}} :
 
     @forelse ($devices as $d)
     @if ($d->id != $device->id)
-    @if (!$loop->last && !$loop->first)
+    @if (!$loop->first)
     ,
     @endif
     <a href="{{ route('device.show',['device'=>$d]) }}">{{ $d->name }}</a>
@@ -163,8 +163,9 @@
             <form method="POST" id="myForm" action="{{ route('device.configure') }}">
                 <input type="hidden" name="device_id" value="{{ $device->id }}">
                 <div class="menu ">
-                    <b>Fences</b> to {{ $device->name }} {{ $device->tel }}
+                    <b>{{ __('Fences')}}</b>  {{ $device->name }} {{ $device->tel }}
                     <div class="" data-draggable="target">
+                        <br>
                         @forelse ($nao_fencedevices as $fence)
 
                         <span class="devices" data-fencedevice_id="{{ $fence['id'] }}" data-draggable="item"><span
@@ -172,14 +173,15 @@
 
 
                         @empty
-                        <p><b>None</b></p>
+
                         @endforelse
 
 
                     </div>
                     <hr>
-                    <b>Partners Devices</b>
+                    <b>{{ __('Partners Devices')}}</b>
                     <div class="" data-draggable="target">
+                        <br>
                         @forelse ($nao_partners as $nao_partner)
                         @if ($nao_partner['id'] != $device->id)
                         <span class="fences" data-device_partner_id="{{ $nao_partner['id'] }}"
@@ -187,7 +189,7 @@
 
                         @endif
                         @empty
-                        <p><b>None</b></p>
+
                         @endforelse
                     </div>
 
@@ -203,7 +205,7 @@
                             <div class="circle1">
                                 <img width="65" style="position:absolute;" src="{{ asset('images/33308.svg')}}" alt="">
                                 <br><br><br><br><br><br>
-                                Partners Devices
+                                {{ __('Partners Devices')}}
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -220,7 +222,8 @@
                             <div class="circle3">
                                 <img width="85" style="position:absolute;" src="{{ asset('images/32441.svg')}}" alt="">
                                 <br><br><br><br><br><br>
-                                Strangers
+                                {{ __('Strangers')}}
+
                             </div>
                         </div>
                     </div>
@@ -231,7 +234,10 @@
                             <div class="row">
                                 <div class="col-md-4" style="background-color: rgba(0, 255, 0, 0.3);">
                                     <div class="fences_partners">
-                                        <b>Drag and Drop Partners Devices here</b>
+                                        <b>
+                                            {{ __('Drag and Drop Partners Devices here')}}
+
+                                        </b>
                                         <div class="box" id="devices_partners" data-draggable="target">
                                             @forelse ($partners as $partner)
                                             <span class="fences" data-device_partner_id="{{ $partner['id'] }}"
@@ -243,13 +249,16 @@
                                     </div>
 
                                     <div class="p-1 mt-2">
-                                        Waiting time for alert, in seconds:
+                                        {{ __('Waiting time for alert, in seconds:')}}
+
                                         <div class="row">
                                             <div class="col-md-1 pre_range">
                                                 <div class="" data-toggle="tooltip" data-placement="top"
-                                                    title="Time to wait in the app to confirm that the user is really out of the fence.
+                                                    title="
+                                                    Time to wait in the app to confirm that the user is really out of the fence.
                                                     If leaves quickly and returns within that time, the app will disregard the exit.
-                                                    From 0 to 60">0</div>
+                                                    From 0 to 60
+                                                    ">0</div>
                                             </div>
                                             <div class="col-md-9 range">
                                                 <input type="range" class="custom-range" id="time" name="t" min="0"
@@ -263,8 +272,8 @@
                                             </div>
                                         </div>
                                         <br>
+                                        {{ __('Minimal distance to the edge of Associated Fence:')}}
 
-                                        Minimal distance to the edge of Associated Fence:
                                         <div class="row">
                                             <div class="col-md-1 pre_range">
                                                 <div class="" data-toggle="tooltip" data-placement="top"
@@ -293,7 +302,7 @@
                                 <div class="col-md-4 " style="background-color: rgba(255, 0, 0, 0.3);">
 
                                     <div class="fences_partners">
-                                        <b>Drag and Drop Fences here</b>
+                                        <b>{{ __('Drag and Drop Fences here')}}</b>
                                         <div class="box" id="associated_fences" data-draggable="target">
                                             @forelse ($fencedevices as $fencedevice)
                                             <span class="devices" data-fencedevice_id="{{ $fencedevice['id'] }}"
@@ -306,17 +315,20 @@
 
                                 </div>
                                 <div class="col-md-4 pt-1" style="background-color: rgba(0, 0, 255, 0.3);">
-                                    Personal Fence Size
+
+                                    {{ __('Personal Fence Size')}}
 
                                     {{ $device->r }}
 
                                     <div class="custom-control custom-switch">
                                         <input type="radio" id="radius_1" name="r" value="1" {{$device->r==1? 'checked':'' }}>
-                                        <label for="radius_1">Close</label>
+                                        <label for="radius_1">
+                                            {{ __('Close')}}</label>
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <input type="radio" id="radius_2" name="r" value="2" {{$device->r==2 || !isset($device->r) ? 'checked':'' }}>
 
-                                        <label for="radius_2">Very Close</label>
+                                        <label for="radius_2">
+                                            {{ __('Very Close')}}</label>
                                     </div>
 
                                 </div>
@@ -332,7 +344,9 @@
         </div>
 
 
-        <button class="btn mt-2 btn-lg btn-block btn-info">SAVE & UPDATE</button>
+        <button class="btn mt-2 btn-lg btn-block btn-info">
+            {{ __('Save')}}
+        </button>
         </form>
 
 

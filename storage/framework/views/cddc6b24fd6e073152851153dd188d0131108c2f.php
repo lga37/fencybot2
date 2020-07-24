@@ -9,23 +9,29 @@
 
 <div id="map" class="mb-2" style="width:98%;height:600px;"></div>
 
-<?php $__currentLoopData = $fences; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fence): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-<span class="tem_cerca" data-cercanome="<?php echo e($fence['name']); ?>" data-cerca="<?php echo e($fence['fence']); ?>">
-</span>
-<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+<?php $__empty_1 = true; $__currentLoopData = $fences; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fence): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+    <?php if(isset($fence->name)): ?>
+        <span class="tem_cerca" data-cercanome="<?php echo e($fence->name); ?>" data-cerca="<?php echo e($fence->fence); ?>"></span>
+
+    <?php endif; ?>
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+<?php endif; ?>
 
 <form method="POST" name="form_delAll" action="<?php echo e(route('alert.massDestroy')); ?>">
     <?php echo csrf_field(); ?>
     <table class="table table-striped table-sm">
         <tr>
-            <th><input type="checkbox" class="" value="1" id="checkAll" name="checkAll"> select all</th>
+            <th><input type="checkbox" class="" value="1" id="checkAll" name="checkAll"><?php echo e(__('select all')); ?></th>
             <th>id</th>
-            <th>type</th>
-            <th>fence</th>
-            <th>device</th>
-            <th>time</th>
-            <th>dist</th>
-            <th>map</th>
+
+            <th><?php echo e(__('type')); ?></th>
+            <th><?php echo e(__('fence')); ?></th>
+            <th><?php echo e(__('device')); ?></th>
+            <th><?php echo e(__('time')); ?></th>
+            <th><?php echo e(__('dist')); ?></th>
+            <th><?php echo e(__('map')); ?></th>
+
+
         </tr>
         <?php $__empty_1 = true; $__currentLoopData = $alerts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $alert): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
         <tr>
@@ -34,25 +40,25 @@
             <td>
                 <?php switch($alert->type):
                 case (0): ?>
-                <span class="badge badge-success ">default/inside</span>
+                <span class="badge badge-success "><?php echo e(__('inside')); ?></span>
                 <?php break; ?>
                 <?php case (1): ?>
-                <span class="badge badge-warning">close</span>
+                <span class="badge badge-warning"><?php echo e(__('close')); ?></span>
                 <?php break; ?>
                 <?php case (2): ?>
-                <span class="badge badge-danger">out of fence</span>
+                <span class="badge badge-danger"><?php echo e(__('out of fence')); ?></span>
                 <?php break; ?>
                 <?php case (3): ?>
-                <span class="badge badge-primary">invasion</span>
+                <span class="badge badge-primary"><?php echo e(__('invasion')); ?></span>
                 <?php break; ?>
                 <?php case (4): ?>
-                <span class="badge badge-secondary">off</span>
+                <span class="badge badge-secondary"><?php echo e(__('off')); ?></span>
                 <?php break; ?>
                 <?php case (5): ?>
-                <span class="badge badge-info">back</span>
+                <span class="badge badge-info"><?php echo e(__('back to fence')); ?></span>
                 <?php break; ?>
                 <?php default: ?>
-                <span class="badge badge-secondary">default</span>
+                <span class="badge badge-secondary"><?php echo e(__('default')); ?></span>
                 <?php endswitch; ?>
             </td>
             <td><?php echo e($alert->fence->name ?? '-'); ?></td>
@@ -62,7 +68,8 @@
             <td class="">
                 <a class="btn btn-sm btn-info" data-lat="<?php echo e($alert->lat); ?>" data-lng="<?php echo e($alert->lng); ?>"
                     data-cerca="<?php echo e($alert->fence->fence ?? false); ?>" data-nome_cerca="<?php echo e($alert->fence->name); ?>"
-                    data-toggle="modal" data-target="#modal">zoom
+                    data-toggle="modal" data-target="#modal"><?php echo e(__('map')); ?>
+
                 </a>
             </td>
         </tr>
@@ -70,14 +77,14 @@
         <?php if($loop->last): ?>
         <tr>
             <td colspan="2">
-                <button class="btn btn-sm btn-outline-danger">del selected</button>
+                <button class="btn btn-sm btn-outline-danger"><?php echo e(__('del selected')); ?></button>
             </td>
             <td colspan="9"></td>
         </tr>
         <?php endif; ?>
 
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-        <p><b>No records</b></p>
+        <p><b><?php echo e(__('No records')); ?></b></p>
         <?php endif; ?>
     </table>
 
@@ -91,7 +98,7 @@
             <tr>
                 <th>Total</th>
                 <th>dd/mm</th>
-                <th>device</th>
+                <th><?php echo e(__('device')); ?></th>
             </tr>
             <?php $__empty_1 = true; $__currentLoopData = $device_days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
             <tr>
@@ -131,7 +138,7 @@
                 <div id="map_modal" class="mb-2" style="width:98%;height:600px; "></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo e(__('Close*')); ?></button>
             </div>
         </div>
     </div>
@@ -183,7 +190,7 @@
         var cerca = button.data('cerca') || false;
         var nome_cerca = button.data('nome_cerca') || false;
         var modal = $(this)
-        modal.find('.modal-title').text(' Details:' + lat + ' / ' + lng)
+        modal.find('.modal-title').text("<?php echo e(__('Tracking Details')); ?>" + lat + ' / ' + lng)
 
         var map = new google.maps.Map(document.getElementById('map_modal'), {
             center: { lat: lat, lng: lng },

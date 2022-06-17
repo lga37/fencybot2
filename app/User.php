@@ -2,16 +2,18 @@
 
 namespace App;
 
+use App\Traits\Historyable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+
+    use Notifiable, Historyable;
 
     protected $fillable = [
-        'name', 'email', 'password','tel','chat_id',
+        'name', 'email', 'password', 'tel', 'chat_id',
     ];
 
     protected $hidden = [
@@ -28,6 +30,15 @@ class User extends Authenticatable
     }
 
 
+    public function ignoreHistoryColumns()
+    {
+        return [
+            'updated_at',
+            'password',
+        ];
+    }
+
+
     public function routeNotificationForTelegramaaaaaaaaaaaaa()
     {
         #dd(__FUNCTION__);
@@ -40,10 +51,7 @@ class User extends Authenticatable
 
     public function routeNotificationForMail($notification)
     {
-
-
         // Return name and email address...
         return [$this->email => $this->name];
     }
-
 }

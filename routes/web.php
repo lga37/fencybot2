@@ -1,5 +1,8 @@
 <?php
 
+use App\Step;
+use App\User;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -7,21 +10,55 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Session;
 
 
+Route::get('/steps',function(){
+    return Step::orderBy('order','asc')->get();
+});
+Route::get('/steps/refresh',function(){
+    return Step::orderBy('order','asc')->get()->each(function($step,$index){
+        $step->update([
+            'order'=>$index+1
+        ]);
+    });
+});
+
+Route::get('/steps/update',function(){
+    $step = Step::find(1)->ordering()->before();
+    Step::find(4)->update([
+        'title'=> '2222newwwww',
+        'order' => $step,
+    ]);
+});
+
+
+#######################################
+
+Route::get('/u',function(){
+    $u = User::find(5);
+    $u->update([
+        'name'=> Str::random(10),
+    ]);
+    echo 'kkkkkkkkk';
+});
+
+Route::get('/u/{user}/history',function(User $u){
+    $u = User::find(5);
+    return view('user.history',[
+        'histories' => $u->history,
+    ]);
+});
+
+
+
 
 Auth::routes();
-
-
-
-
 
 Route::get('/adm/lang/{locale}',function($lang){
     Session::put('locale',$lang);
 
-    #dd(Session::get('locale'));
-    #$configCache = Artisan::call('config:cache');
-    #$clearCache = Artisan::call('cache:clear');
     return redirect()->back();
 });
+
+
 
 
 #Route::group(['middleware'=>'language'],function (){
@@ -55,6 +92,9 @@ Route::get('/adm/lang/{locale}',function($lang){
         Route::resource('fencedevice', 'FenceDeviceController', [
             'only' => ['destroy', 'update', 'store']
         ]);
+
+        Route::get('/alert/inform', 'AlertController@inform')->name('alert.inform');
+        Route::post('/alert/warn', 'AlertController@warn')->name('alert.warn');
 
         Route::get('/alert/hist', 'AlertController@hist')->name('alert.hist');
         Route::post('/alert/filter', 'AlertController@filter')->name('alert.filter');

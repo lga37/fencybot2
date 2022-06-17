@@ -265,6 +265,16 @@
 
                             </a>
                         </li>
+                        <li class="nav-item
+                         d-flex justify-content-between align-items-center pr-4">
+                            <a class="nav-link
+                                {{ request()->routeIs('alert.inform') ? 'active' : '' }}"
+                                href="{{ route('alert.inform') }}">
+                                <span data-feather="users"></span>
+                                {{ __('Inform') }}
+
+                            </a>
+                        </li>
                     </ul>
 
                     <h6 class="sidebar-heading d-flex justify-content-between
@@ -308,7 +318,7 @@
                             <a href="lang/en">
                                 EN
                             </a>
-                             - 
+                             -
                             <a href="lang/br">
                                 BR
                             </a>

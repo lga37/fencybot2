@@ -10,18 +10,69 @@ use App\Place;
 use App\Visit;
 use Exception;
 use App\Device;
+use App\Warning;
 use App\FenceDevice;
 use Twilio\Rest\Client;
 
 use App\Events\EventAlert;
+use App\Mail\Aproximation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Notifications\AlertEmitted;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use \App\Notifications\TelegramNotification;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class AlertController extends Controller
 {
+
+    public function inform ()
+    {
+        return view('alert.inform');
+
+    }
+
+    public function warn (Request $request)
+    {
+        $phone = $request->post('phone');
+        #dd($request->post('phone'));
+
+        $warn = new Warning();
+        $warn->phone = $phone;
+        $warn->save();
+
+
+        $alerts = Alert::where('phone',$phone)->select('device_id')->distinct()->get()->toArray();
+        foreach($alerts as $alert){
+            $device_id = (int) $alert['device_id'];
+
+            $device = DB::table('devices')->select(DB::raw('name,user_id'))->where('id', '=', $device_id)->get()->toArray();
+            #dd($device);
+            $name = $device[0]->name;
+            $user_id = (int) $device[0]->user_id;
+            $user = User::find($user_id);
+
+            $email = $user->email;
+
+            $alerts = Alert::where('phone',$phone)->where('device_id',$device_id)->select('id')->get()->toArray();
+
+            $tot = count($alerts);
+
+            if($tot > 0){
+
+                Mail::to($email)->send(new Aproximation($name,$tot));
+
+            }
+
+        }
+
+        return back()->withSuccess('Record Inserted with Success');
+
+    }
+
+
+
 
     public function parse(Request $request, int $device_id)
     {
@@ -614,12 +665,15 @@ class AlertController extends Controller
                     $alert = new Alert();
                     $alert->device_id = (int) $item->id;
 
+
                     $alert->fence_id = $v['fence_id'] ?? null;
                     $alert->lat = $v['lat'];
                     $alert->lng = $v['lng'];
                     $alert->dt = $v['dt'] ?? null;
                     $alert->save();
-                    $user = User::find($user_id);
+
+                    //$user_id = (int) $item->user_id;
+                    //$user = User::find($user_id);
                     //$user->notify((new AlertEmitted($alert)));
                     //event(new EventAlert($alert));
 
@@ -657,8 +711,8 @@ class AlertController extends Controller
                     $alert->dt = $v['dt'] ?? null;
                     $alert->save();
 
-                    $user_id = (int) $item->user_id;
-                    $user = User::find($user_id);
+                    //$user_id = (int) $item->user_id;
+                    //$user = User::find($user_id);
                     //$user->notify((new AlertEmitted($alert)));
                     //event(new EventAlert($alert));
 
